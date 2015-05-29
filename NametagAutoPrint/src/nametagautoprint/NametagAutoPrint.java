@@ -11,7 +11,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -22,22 +28,24 @@ public class NametagAutoPrint extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
+        
+        TextField nameField = new TextField("Name");
+        Image image = new Image("file:openscad/out.png");
+        ImageView imageView = new ImageView(image);
+        
+        nameField.setOnKeyTyped((KeyEvent e) -> {
+            OpenscadThread.name = nameField.getText();
+            (new Thread(new OpenscadThread())).start();
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        VBox root = new VBox();
+        root.getChildren().add(imageView);
+        root.getChildren().add(nameField);
         
         Scene scene = new Scene(root, 300, 250);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Nametag Generator");
+        primaryStage.setFullScreen(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
