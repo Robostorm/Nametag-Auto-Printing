@@ -29,8 +29,6 @@ public class NametagAutoPrint extends Application {
     
     public static String name = "tim";
     
-    String pngargs = " -o openscad/out.png -D name=\""+name+"\" -D chars="+name.length()+" --camera=0,0,0,0,0,0,100 openscad/name.scad";
-    
     static Process p;
     
     static TextField nameField = new TextField("Name");
@@ -49,6 +47,12 @@ public class NametagAutoPrint extends Application {
             //(new Thread(new OpenscadThread())).start();
         });
         
+        sumit.setOnAction((ActionEvent e) -> {
+            this.name = nameField.getText();
+            export();
+            //(new Thread(new OpenscadThread())).start();
+        });
+        
         VBox root = new VBox();
         root.getChildren().add(imageView);
         root.getChildren().add(nameBar);
@@ -62,7 +66,7 @@ public class NametagAutoPrint extends Application {
     }
     
     public void preview() {
-        pngargs = " -o openscad/out.png -D name=\""+name+"\" -D chars="+name.length()+" --camera=0,0,0,0,0,0,100 openscad/name.scad";
+        String pngargs = " -o openscad/out.png -D name=\""+name+"\" -D chars="+name.length()+" --camera=0,0,0,0,0,0,100 openscad/name.scad";
         if(p == null || !p.isAlive()){
             try {
 
@@ -92,6 +96,92 @@ public class NametagAutoPrint extends Application {
                 
                 image = new Image("file:openscad/out.png");
                 imageView.setImage(image);
+                
+                System.out.println("Done");
+                
+            }catch (IOException e) {
+                System.out.println("exception happened - here's what I know: ");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }else {
+            System.out.println("Openscad already running. Waiting...");
+        }
+    }
+    
+    public void export() {
+        String stlargs = " -o openscad/out.stl -D name=\""+name+"\" -D chars="+name.length()+" --camera=0,0,0,0,0,0,100 openscad/name.scad";
+        if(p == null || !p.isAlive()){
+            try {
+
+                System.out.println("Args: "+stlargs);
+
+                p = Runtime.getRuntime().exec("openscad" + stlargs);
+
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+                String s = null;  
+                
+                // read the output from the command
+                System.out.println("Here is the standard output of the command:\n");
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+
+                // read any errors from the attempted command
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println(s);
+                }
+                
+                while(p.isAlive())
+                
+                //image = new Image("file:openscad/out.png");
+                //imageView.setImage(image);
+                
+                System.out.println("Done");
+                
+            }catch (IOException e) {
+                System.out.println("exception happened - here's what I know: ");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }else {
+            System.out.println("Openscad already running. Waiting...");
+        }
+        
+        String slic3rargs = " openscad/out.stl";
+        if(p == null || !p.isAlive()){
+            try {
+
+                System.out.println("Args: "+slic3rargs);
+
+                p = Runtime.getRuntime().exec("/home/tim/3dprinter/Slic3r/Slic3r1.2.7/bin/slic3r" + slic3rargs);
+
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+                String s = null;
+                
+                // read the output from the command
+                System.out.println("Here is the standard output of the command:\n");
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+
+                // read any errors from the attempted command
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println(s);
+                }
+                
+                while(p.isAlive())
+                
+                //image = new Image("file:openscad/out.png");
+                //imageView.setImage(image);
                 
                 System.out.println("Done");
                 
