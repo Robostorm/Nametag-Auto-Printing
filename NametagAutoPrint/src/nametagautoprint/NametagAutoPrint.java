@@ -158,7 +158,7 @@ public class NametagAutoPrint extends Application {
 
                 System.out.println("Args: "+slic3rargs);
 
-                p = Runtime.getRuntime().exec("/home/tim/3dprinter/Slic3r/Slic3r1.2.7/bin/slic3r" + slic3rargs);
+                p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
 
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
