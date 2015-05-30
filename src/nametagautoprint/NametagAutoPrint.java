@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author tim
+ * @author Tim, Ben
  */
 public class NametagAutoPrint extends Application {
     
@@ -31,16 +31,25 @@ public class NametagAutoPrint extends Application {
     
     static Process p;
     
-    static TextField nameField = new TextField("Name");
-    static Image image = new Image("file:openscad/out.png");
-    static ImageView imageView = new ImageView(image);
-    static Button preview = new Button("Preview");
-    static Button sumit = new Button("Submit");
-    static HBox buttonBar = new HBox(preview, sumit);
-    static HBox nameBar = new HBox(nameField, buttonBar);
+    static TextField nameField;
+    static Image image;
+    static ImageView imageView;
+    static Button preview;
+    static Button sumit;
+    static HBox buttonBar;
+    static HBox nameBar;
     
     @Override
     public void start(Stage primaryStage) {
+
+        nameField = new TextField("Name");
+        image = new Image("file:openscad/out.png");
+        imageView = new ImageView(image);
+        preview = new Button("Preview");
+        sumit = new Button("Submit");
+        buttonBar = new HBox(preview, sumit);
+        nameBar = new HBox(nameField, buttonBar);
+
         preview.setOnAction((ActionEvent e) -> {
             this.name = nameField.getText();
             preview();
@@ -57,7 +66,7 @@ public class NametagAutoPrint extends Application {
         root.getChildren().add(imageView);
         root.getChildren().add(nameBar);
         
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root, 600, 700);
         
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
@@ -73,24 +82,6 @@ public class NametagAutoPrint extends Application {
                 System.out.println("Args: "+pngargs);
 
                 p = Runtime.getRuntime().exec("openscad" + pngargs);
-
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-
-                String s = null;  
-                
-                // read the output from the command
-                //System.out.println("Here is the standard output of the command:\n");
-                //while ((s = stdInput.readLine()) != null) {
-                    //System.out.println(s);
-                //}
-
-                // read any errors from the attempted command
-                //System.out.println("Here is the standard error of the command (if any):\n");
-               //while ((s = stdError.readLine()) != null) {
-                    //System.out.println(s);
-                //}
                 
                 while(p.isAlive())
                 
