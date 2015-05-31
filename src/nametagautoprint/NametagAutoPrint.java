@@ -78,7 +78,7 @@ public class NametagAutoPrint extends Application {
         Task task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
-                String pngargs = " -o openscad/out.png -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
+                String pngargs = " -o scadOut/out.png -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
                 if (p == null || !p.isAlive())
 
                 {
@@ -90,7 +90,7 @@ public class NametagAutoPrint extends Application {
 
                         while (p.isAlive())
 
-                        image = new Image("file:openscad/out.png");
+                        image = new Image("file:scadOut/out.png");
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -120,7 +120,7 @@ public class NametagAutoPrint extends Application {
             @Override
             protected Void call() throws Exception {
 
-                String stlargs = " -o openscad/out.stl -D name=\""+name+"\" -D chars="+name.length()+" --camera=0,0,0,0,0,0,100 openscad/name.scad";
+                String stlargs = " -o scadOut/out.stl -D name=\""+name+"\" -D chars="+name.length()+" --camera=0,0,0,0,0,0,100 openscad/name.scad";
                 if(p == null || !p.isAlive()){
                     try {
 
@@ -162,7 +162,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
 
-                String slic3rargs = " openscad/out.stl";
+                String slic3rargs = " scadOut/out.stl";
                 if(p == null || !p.isAlive()){
                     try {
 

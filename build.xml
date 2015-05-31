@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Nametag Auto Print" basedir=".">
-    <description>Builds, tests, and runs the project NametagAutoPrint.</description>
+<project name="Nametag Auto Print" basedir="." default="dist">
+    <description>
+        Application that generates gcode files on name tags
+    </description>
 
+    <property name="src.dir" location="src"/>
+    <property name="build.dir" location="build"/>
+    <property name="dist.dir"  location="dist"/>
+
+    <target name="compile" description="compile the source ">
+        <tstamp/>
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}"/>
+    </target>
+
+    <target name="dist" depends="compile" description="generate the distribution">
+        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}/scadOut"/>
+        <copydir src="openscad" dest="${dist.dir}/openscad"/>
+        <jar jarfile="${dist.dir}/nametag-auto-print.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="nametagautoprint.NametagAutoPrint"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean" description="clean up">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
 </project>
