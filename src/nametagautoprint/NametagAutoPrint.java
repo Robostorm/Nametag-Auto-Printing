@@ -1,9 +1,9 @@
 package nametagautoprint;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -21,12 +21,25 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
  *
  * @author Tim, Ben
  */
 public class NametagAutoPrint extends Application {
+
+    public static final String octoPrintHostName = "127.0.0.1:5000";
 
     public static String name = "tim";
 
@@ -53,12 +66,12 @@ public class NametagAutoPrint extends Application {
         buttonBar = new HBox(preview, sumit);
         nameBar = new HBox(nameField, buttonBar);
 
-        preview.setOnAction((ActionEvent e) -> {
+        preview.setOnAction((ActionEvent event) -> {
             name = nameField.getText();
             preview();
         });
 
-        sumit.setOnAction((ActionEvent e) -> {
+        sumit.setOnAction((ActionEvent event) -> {
             name = nameField.getText();
             export();
         });
@@ -70,7 +83,7 @@ public class NametagAutoPrint extends Application {
         root.getChildren().add(nameBar);
         root.getChildren().add(progress);
 
-        Scene scene = new Scene(root, 600, 700);
+        Scene scene = new Scene(root, 510, 560);
 
         final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -153,7 +166,7 @@ public class NametagAutoPrint extends Application {
 
                         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-                        String s = null;
+                        String s;
 
                         // read the output from the command
                         System.out.println("Here is the standard output of the command:\n");
@@ -224,13 +237,36 @@ public class NametagAutoPrint extends Application {
                 }
                 
                 Platform.runLater(() -> progress.setProgress(0));
-                
+
+                try {
+                    upload();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return null;
             }
         };
         Thread thread = new Thread(task);
         thread.setDaemon(true);
         thread.start();
+    }
+
+    public void upload() throws Exception{
+        File file = new File("scadOut/out.gcode");
+        String remotePath = "http://" + octoPrintHostName + "/api/files/local";
+        if(!file.exists()) {
+            System.out.println("File upload failed: file not found");
+        }
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        FileBody fileBody = new FileBody(file);
+        builder.addPart("file", fileBody);
+
+        HttpPost post = new HttpPost(remotePath);
+        post.setEntity(builder.build());
+        HttpClient client = HttpClientBuilder.create().build();
+        HttpResponse response = client.execute(post);
+        System.out.printf("Server Returned Code: %d", response.getStatusLine().getStatusCode());
     }
 
     public static void main(String[] args) {
