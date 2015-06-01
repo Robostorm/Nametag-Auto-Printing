@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
@@ -55,12 +54,12 @@ public class NametagAutoPrint extends Application {
         nameBar = new HBox(nameField, buttonBar);
 
         preview.setOnAction((ActionEvent e) -> {
-            this.name = nameField.getText();
+            name = nameField.getText();
             preview();
         });
 
         sumit.setOnAction((ActionEvent e) -> {
-            this.name = nameField.getText();
+            name = nameField.getText();
             export();
         });
 
@@ -74,13 +73,10 @@ public class NametagAutoPrint extends Application {
         Scene scene = new Scene(root, 600, 700);
 
         final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(exitCombo.match(event)) {
-                    System.out.println("CTRL + W Pressed, Exiting... ");
-                    System.exit(0);
-                }
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if(exitCombo.match(event)) {
+                System.out.println("CTRL + W Pressed, Exiting... ");
+                System.exit(0);
             }
         });
 
@@ -95,12 +91,7 @@ public class NametagAutoPrint extends Application {
             @Override
             public Void call() throws Exception {
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(-1);
-                    }
-                });
+                Platform.runLater(() -> progress.setProgress(-1));
 
                 File scadOut = new File("scadOut");
                 if(!scadOut.exists())
@@ -117,12 +108,7 @@ public class NametagAutoPrint extends Application {
                         while (p.isAlive()) {
                             image = new Image("file:scadOut/out.png");
                         }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setImage(image);
-                            }
-                        });
+                        Platform.runLater(() -> imageView.setImage(image));
                         System.out.println("Done");
 
                     } catch (IOException e) {
@@ -134,12 +120,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
                 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(0);
-                    }
-                });
+                Platform.runLater(() -> progress.setProgress(0));
                 
                 return null;
             }
@@ -154,12 +135,7 @@ public class NametagAutoPrint extends Application {
             @Override
             protected Void call() throws Exception {
                 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(-1);
-                    }
-                });
+                Platform.runLater(() -> progress.setProgress(-1));
 
                 File scadOut = new File("scadOut");
                 if(!scadOut.exists())
@@ -218,7 +194,7 @@ public class NametagAutoPrint extends Application {
 
                         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-                        String s = null;
+                        String s;
 
                         // read the output from the command
                         System.out.println("Here is the standard output of the command:\n");
@@ -247,12 +223,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
                 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(0);
-                    }
-                });
+                Platform.runLater(() -> progress.setProgress(0));
                 
                 return null;
             }
