@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nametagautoprint;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javafx.application.Application;
@@ -89,6 +85,10 @@ public class NametagAutoPrint extends Application {
                     }
                 });
 
+                File scadOut = new File("scadOut");
+                if(!scadOut.exists())
+                    scadOut.mkdir();
+
                 String pngargs = " -o scadOut/out.png -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
                 if (p == null || !p.isAlive()) {
                     try {
@@ -143,7 +143,11 @@ public class NametagAutoPrint extends Application {
                         progress.setProgress(-1);
                     }
                 });
-                
+
+                File scadOut = new File("scadOut");
+                if(!scadOut.exists())
+                    scadOut.mkdir();
+
                 String stlargs = " -o scadOut/out.stl -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
                 if (p == null || !p.isAlive()) {
                     try {
