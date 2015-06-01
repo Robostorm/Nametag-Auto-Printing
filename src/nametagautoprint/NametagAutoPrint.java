@@ -8,12 +8,16 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -60,12 +64,25 @@ public class NametagAutoPrint extends Application {
             export();
         });
 
+
+
         VBox root = new VBox();
         root.getChildren().add(imageView);
         root.getChildren().add(nameBar);
         root.getChildren().add(progress);
 
         Scene scene = new Scene(root, 600, 700);
+
+        final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(exitCombo.match(event)) {
+                    System.out.println("CTRL + W Pressed, Exiting... ");
+                    System.exit(0);
+                }
+            }
+        });
 
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
