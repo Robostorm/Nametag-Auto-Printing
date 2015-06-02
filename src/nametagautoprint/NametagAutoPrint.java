@@ -21,16 +21,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.routing.HttpRoute;
 import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
@@ -252,21 +248,30 @@ public class NametagAutoPrint extends Application {
     }
 
     public void upload() throws Exception{
-        File file = new File("scadOut/out.gcode");
-        String remotePath = "http://" + octoPrintHostName + "/api/files/local";
-        if(!file.exists()) {
-            System.out.println("File upload failed: file not found");
-        }
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        FileBody fileBody = new FileBody(file);
-        builder.addPart("file", fileBody);
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                File file = new File("scadOut/out.gcode");
+                String remotePath = "http://" + octoPrintHostName + "/api/files/local";
+                if(!file.exists()) {
+                    System.out.println("File upload failed: file not found");
+                }
+                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                FileBody fileBody = new FileBody(file);
+                builder.addPart("file", fileBody);
 
-        HttpPost post = new HttpPost(remotePath);
-        post.setEntity(builder.build());
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpResponse response = client.execute(post);
-        System.out.printf("Server Returned Code: %d", response.getStatusLine().getStatusCode());
+                HttpPost post = new HttpPost(remotePath);
+                post.setEntity(builder.build());
+                HttpClient client = HttpClientBuilder.create().build();
+                HttpResponse response = client.execute(post);
+                System.out.printf("Server Returned Code: %d", response.getStatusLine().getStatusCode());
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public static void main(String[] args) {
