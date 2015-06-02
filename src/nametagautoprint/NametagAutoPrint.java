@@ -1,5 +1,6 @@
 package nametagautoprint;
 
+import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -36,6 +37,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 public class NametagAutoPrint extends Application {
 
     public static final String octoPrintHostName = "127.0.0.1:5000";
+    public static final String imagesDirectory = "images";
+    public static final String scadDirectory = "scad";
+    public static final String stlDirectory = "stl";
+    public static final String gcodeDirectory = "gcode";
 
     public static String name = "tim";
 
@@ -102,11 +107,12 @@ public class NametagAutoPrint extends Application {
 
                 Platform.runLater(() -> progress.setProgress(-1));
 
-                File scadOut = new File("scadOut");
-                if(!scadOut.exists())
-                    scadOut.mkdir();
+                File images = new File(imagesDirectory);
+                if(!images.exists())
+                    images.mkdir();
 
-                String pngargs = " -o scadOut/out.png -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
+                String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d " +
+                        "--camera=0,0,0,0,0,0,100 openscad/name.scad", imagesDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -115,7 +121,7 @@ public class NametagAutoPrint extends Application {
                         p = Runtime.getRuntime().exec("openscad" + pngargs);
 
                         while (p.isAlive()) {
-                            image = new Image("file:scadOut/out.png");
+                            image = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
                         }
                         Platform.runLater(() -> imageView.setImage(image));
                         System.out.println("Done");
@@ -130,7 +136,7 @@ public class NametagAutoPrint extends Application {
                 }
                 
                 Platform.runLater(() -> progress.setProgress(0));
-                
+
                 return null;
             }
         };
@@ -146,11 +152,16 @@ public class NametagAutoPrint extends Application {
                 
                 Platform.runLater(() -> progress.setProgress(-1));
 
-                File scadOut = new File("scadOut");
-                if(!scadOut.exists())
-                    scadOut.mkdir();
+                File stl = new File(stlDirectory);
+                if(!stl.exists())
+                    stl.mkdir();
 
-                String stlargs = " -o scadOut/out.stl -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
+                File gcode = new File(gcodeDirectory);
+                if(!gcode.exists())
+                    gcode.mkdir();
+
+                String stlargs = String.format(" -o %s/%s.stl -D name=\"%s\" -D chars=%d " +
+                        "--camera=0,0,0,0,0,0,100 openscad/name.scad", stlDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -191,7 +202,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
 
-                String slic3rargs = " scadOut/out.stl";
+                String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", stlDirectory, name, gcodeDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -233,12 +244,7 @@ public class NametagAutoPrint extends Application {
                 }
                 
                 Platform.runLater(() -> progress.setProgress(0));
-
-                try {
-                    upload();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                upload();
                 return null;
             }
         };
