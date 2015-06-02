@@ -20,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -53,7 +54,18 @@ public class NametagAutoPrint extends Application {
         progress = new ProgressBar(0);
         buttonBar = new HBox(preview, sumit);
         nameBar = new HBox(nameField, buttonBar);
-
+        
+        preview.setMinWidth(100);
+        sumit.setMinWidth(100);
+        
+        progress.setMinWidth(1000);
+        
+        nameField.setMaxWidth(1000);
+        
+        imageView.setId("image");
+        
+        buttonBar.setId("buttonBar");
+        
         preview.setOnAction((ActionEvent e) -> {
             this.name = nameField.getText();
             preview();
@@ -66,10 +78,12 @@ public class NametagAutoPrint extends Application {
 
         VBox root = new VBox();
         root.getChildren().add(imageView);
-        root.getChildren().add(nameBar);
+        root.getChildren().add(nameField);
+        root.getChildren().add(buttonBar);
         root.getChildren().add(progress);
 
         Scene scene = new Scene(root, 600, 700);
+        scene.getStylesheets().add("style.css");
 
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
