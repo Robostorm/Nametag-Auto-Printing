@@ -174,8 +174,8 @@ public class NametagAutoPrint extends Application {
                 if(!gcode.exists())
                     gcode.mkdir();
 
-                String stlargs = String.format(" -o %s/%s.stl -D name=\"%s\" -D chars=%d " +
-                        "--camera=0,0,0,0,0,0,100 openscad/name.scad", stlDirectory, name, name, name.length(), scadDirectory, name);
+                String stlargs = String.format(" -o %s/%s.stl -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 " +
+                        "openscad/name.scad", stlDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -256,21 +256,9 @@ public class NametagAutoPrint extends Application {
                 } else {
                     System.out.println("Openscad already running. Waiting...");
                 }
-                
-                Platform.runLater(() -> progress.setProgress(0));
-                upload();
-                return null;
-            }
-        };
-        Thread thread = new Thread(task);
-        thread.setDaemon(true);
-        thread.start();
-    }
 
-    public void upload() throws Exception{
-        Task task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
+
+                //upload file
                 File file = new File(String.format("%s/%s.gcode", gcodeDirectory, name));
                 String remotePath = "http://" + octoPrintHostName + "/api/files/local";
                 if(!file.exists()) {
@@ -286,6 +274,8 @@ public class NametagAutoPrint extends Application {
                 HttpClient client = HttpClientBuilder.create().build();
                 HttpResponse response = client.execute(post);
                 System.out.printf("Server Returned Code: %d", response.getStatusLine().getStatusCode());
+
+                Platform.runLater(() -> progress.setProgress(0));
                 return null;
             }
         };
