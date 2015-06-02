@@ -98,7 +98,7 @@ public class NametagAutoPrint extends Application {
         root.getChildren().add(progress);
         
         Scene scene = new Scene(root, 1000, 1000);
-
+        
         final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if(exitCombo.match(event)) {
@@ -106,7 +106,9 @@ public class NametagAutoPrint extends Application {
                 System.exit(0);
             }
         });
-
+        
+        scene.getStylesheets().add("style.css");
+        
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
         primaryStage.setScene(scene);
