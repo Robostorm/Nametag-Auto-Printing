@@ -1,10 +1,5 @@
 package nametagautoprint;
 
-import java.awt.*;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -20,7 +15,6 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
@@ -30,6 +24,11 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClientBuilder;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -107,7 +106,7 @@ public class NametagAutoPrint extends Application {
             }
         });
         
-        scene.getStylesheets().add("style.css");
+        scene.getStylesheets().add("res/style.css");
         
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
@@ -272,7 +271,7 @@ public class NametagAutoPrint extends Application {
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                File file = new File("scadOut/out.gcode");
+                File file = new File(String.format("%s/%s.gcode", gcodeDirectory, name));
                 String remotePath = "http://" + octoPrintHostName + "/api/files/local";
                 if(!file.exists()) {
                     System.out.println("File upload failed: file not found");
