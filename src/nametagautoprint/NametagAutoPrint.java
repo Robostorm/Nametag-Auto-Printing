@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package nametagautoprint;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.awt.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -18,17 +15,33 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
  *
  * @author Tim, Ben
  */
 public class NametagAutoPrint extends Application {
+
+    public static final String octoPrintHostName = "127.0.0.1:5000";
+    public static final String imagesDirectory = "images";
+    public static final String scadDirectory = "scad";
+    public static final String stlDirectory = "stl";
+    public static final String gcodeDirectory = "gcode";
 
     public static String name = "tim";
 
@@ -67,23 +80,32 @@ public class NametagAutoPrint extends Application {
         buttonBar.setId("buttonBar");
         
         preview.setOnAction((ActionEvent e) -> {
-            this.name = nameField.getText();
+            name = nameField.getText();
             preview();
         });
 
-        sumit.setOnAction((ActionEvent e) -> {
-            this.name = nameField.getText();
+        sumit.setOnAction((ActionEvent event) -> {
+            name = nameField.getText();
             export();
         });
+
+
 
         VBox root = new VBox();
         root.getChildren().add(imageView);
         root.getChildren().add(nameField);
         root.getChildren().add(buttonBar);
         root.getChildren().add(progress);
+        
+        Scene scene = new Scene(root, 1000, 1000);
 
-        Scene scene = new Scene(root, 600, 700);
-        scene.getStylesheets().add("style.css");
+        final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if(exitCombo.match(event)) {
+                System.out.println("CTRL + W Pressed, Exiting... ");
+                System.exit(0);
+            }
+        });
 
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
@@ -96,14 +118,14 @@ public class NametagAutoPrint extends Application {
             @Override
             public Void call() throws Exception {
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(-1);
-                    }
-                });
+                Platform.runLater(() -> progress.setProgress(-1));
 
-                String pngargs = " -o scadOut/out.png -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
+                File images = new File(imagesDirectory);
+                if(!images.exists())
+                    images.mkdir();
+
+                String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d " +
+                        "--camera=0,0,0,0,0,0,100 openscad/name.scad", imagesDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -112,14 +134,9 @@ public class NametagAutoPrint extends Application {
                         p = Runtime.getRuntime().exec("openscad" + pngargs);
 
                         while (p.isAlive()) {
-                            image = new Image("file:scadOut/out.png");
+                            image = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
                         }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                imageView.setImage(image);
-                            }
-                        });
+                        Platform.runLater(() -> imageView.setImage(image));
                         System.out.println("Done");
 
                     } catch (IOException e) {
@@ -131,13 +148,8 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
                 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(0);
-                    }
-                });
-                
+                Platform.runLater(() -> progress.setProgress(0));
+
                 return null;
             }
         };
@@ -151,14 +163,18 @@ public class NametagAutoPrint extends Application {
             @Override
             protected Void call() throws Exception {
                 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(-1);
-                    }
-                });
-                
-                String stlargs = " -o scadOut/out.stl -D name=\"" + name + "\" -D chars=" + name.length() + " --camera=0,0,0,0,0,0,100 openscad/name.scad";
+                Platform.runLater(() -> progress.setProgress(-1));
+
+                File stl = new File(stlDirectory);
+                if(!stl.exists())
+                    stl.mkdir();
+
+                File gcode = new File(gcodeDirectory);
+                if(!gcode.exists())
+                    gcode.mkdir();
+
+                String stlargs = String.format(" -o %s/%s.stl -D name=\"%s\" -D chars=%d " +
+                        "--camera=0,0,0,0,0,0,100 openscad/name.scad", stlDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -170,7 +186,7 @@ public class NametagAutoPrint extends Application {
 
                         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-                        String s = null;
+                        String s;
 
                         // read the output from the command
                         System.out.println("Here is the standard output of the command:\n");
@@ -199,7 +215,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
 
-                String slic3rargs = " scadOut/out.stl";
+                String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", stlDirectory, name, gcodeDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -211,7 +227,7 @@ public class NametagAutoPrint extends Application {
 
                         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-                        String s = null;
+                        String s;
 
                         // read the output from the command
                         System.out.println("Here is the standard output of the command:\n");
@@ -240,13 +256,35 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
                 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress.setProgress(0);
-                    }
-                });
-                
+                Platform.runLater(() -> progress.setProgress(0));
+                upload();
+                return null;
+            }
+        };
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
+    public void upload() throws Exception{
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                File file = new File("scadOut/out.gcode");
+                String remotePath = "http://" + octoPrintHostName + "/api/files/local";
+                if(!file.exists()) {
+                    System.out.println("File upload failed: file not found");
+                }
+                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                FileBody fileBody = new FileBody(file);
+                builder.addPart("file", fileBody);
+
+                HttpPost post = new HttpPost(remotePath);
+                post.setEntity(builder.build());
+                HttpClient client = HttpClientBuilder.create().build();
+                HttpResponse response = client.execute(post);
+                System.out.printf("Server Returned Code: %d", response.getStatusLine().getStatusCode());
                 return null;
             }
         };

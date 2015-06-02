@@ -8,16 +8,26 @@
 *.war
 *.ear
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+#Exclude libraries
+!lib/*
+
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 /NametagAutoPrint/nbproject/private/
 
-build/
-out/
-dist/
-test/
-scadOut/
-nbproject/
+# Build output
+build
+out
+dist
+test
+
+#Application output
+images
+gcode
+stl
+
+# Project Files
+nbproject
 manifest.mf
-.idea/
+.idea
 *.iml

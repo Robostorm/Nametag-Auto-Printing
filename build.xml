@@ -7,6 +7,9 @@
     <property name="src.dir" location="src"/>
     <property name="build.dir" location="build"/>
     <property name="dist.dir"  location="dist"/>
+    <property name="images.dir" location="images"/>
+    <property name="stl.dir" location="stl"/>
+    <property name="gcode.dir" location="gcode"/>
 
     <target name="compile" description="compile the source ">
         <tstamp/>
@@ -28,5 +31,8 @@
     <target name="clean" description="clean up">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+        <delete dir="${images.dir}"/>
+        <delete dir="${stl.dir}"/>
+        <delete dir="${gcode.dir}"/>
     </target>
 </project>
