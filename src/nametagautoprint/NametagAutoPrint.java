@@ -273,7 +273,18 @@ public class NametagAutoPrint extends Application {
                 post.setEntity(builder.build());
                 HttpClient client = HttpClientBuilder.create().build();
                 HttpResponse response = client.execute(post);
-                System.out.printf("Server Returned Code: %d", response.getStatusLine().getStatusCode());
+                System.out.printf("Server Returned Code: %d\n", response.getStatusLine().getStatusCode());
+                String message;
+                switch (response.getStatusLine().getStatusCode()) {
+                    case 201: message = "Upload Successful"; break;
+                    case 400: message = "File was not uploaded properly"; break;
+                    case 404: message = "Either invalid save location was provided or API key was incorrect"; break;
+                    case 409: message = "Either you are attemping to overwirte a file being printed or printer is not operational"; break;
+                    case 415: message = "You attempting to uplaod a file other than a gcode or stl file"; break;
+                    case 500: message = "Internal server error, upload failed"; break;
+                    default: message = "Unexpected responses"; break;
+                }
+                System.out.println(message);
 
                 Platform.runLater(() -> progress.setProgress(0));
                 return null;
