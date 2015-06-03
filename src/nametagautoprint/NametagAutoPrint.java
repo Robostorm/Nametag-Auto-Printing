@@ -96,7 +96,7 @@ public class NametagAutoPrint extends Application {
         root.getChildren().add(buttonBar);
         root.getChildren().add(progress);
         
-        Scene scene = new Scene(root, 1000, 1000);
+        Scene scene = new Scene(root, 1000, 800);
         
         final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
