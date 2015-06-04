@@ -1,9 +1,14 @@
 package nametagautoprint;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
@@ -15,6 +20,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
@@ -25,23 +31,19 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 /**
  *
  * @author Tim, Ben
  */
 public class NametagAutoPrint extends Application {
 
-    public static final String octoPrintHostName = "127.0.0.1:5000";
+    //public static final String octoPrintHostName = "127.0.0.1:5000";
+    public static final String octoPrintHostName = "192.168.5.36/octoprint";
     public static final String imagesDirectory = "images";
     public static final String scadDirectory = "scad";
     public static final String stlDirectory = "stl";
     public static final String gcodeDirectory = "gcode";
-
+    
     public static String name = "tim";
 
     static Process p;
@@ -55,78 +57,101 @@ public class NametagAutoPrint extends Application {
     static HBox nameBar;
     static ProgressBar progress;
 
+    static RootController rootController = new RootController();
+
+    private static NametagAutoPrint instance;
+
+    public NametagAutoPrint() {
+        instance = this;
+    }
+    // static method to get instance of view
+
+    public static NametagAutoPrint getInstance() {
+        return instance;
+    }
+
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
+        /*
+         nameField = new TextField("Name");
+         image = new Image("file:openscad/out.png");
+         imageView = new ImageView(image);
+         preview = new Button("Preview");
+         sumit = new Button("Submit");
+         progress = new ProgressBar(0);
+         buttonBar = new HBox(preview, sumit);
+         nameBar = new HBox(nameField, buttonBar);
+        
+         preview.setMinWidth(100);
+         sumit.setMinWidth(100);
+        
+         progress.setMinWidth(1000);
+        
+         nameField.setMaxWidth(1000);
+        
+         imageView.setId("image");
+        
+         buttonBar.setId("buttonBar");
+        
+         preview.setOnAction((ActionEvent e) -> {
+         name = nameField.getText();
+         preview();
+         });
 
-        nameField = new TextField("Name");
-        image = new Image("file:openscad/out.png");
-        imageView = new ImageView(image);
-        preview = new Button("Preview");
-        sumit = new Button("Submit");
-        progress = new ProgressBar(0);
-        buttonBar = new HBox(preview, sumit);
-        nameBar = new HBox(nameField, buttonBar);
-        
-        preview.setMinWidth(100);
-        sumit.setMinWidth(100);
-        
-        progress.setMinWidth(1000);
-        
-        nameField.setMaxWidth(1000);
-        
-        imageView.setId("image");
-        
-        buttonBar.setId("buttonBar");
-        
-        preview.setOnAction((ActionEvent e) -> {
-            name = nameField.getText();
-            preview();
-        });
-
-        sumit.setOnAction((ActionEvent event) -> {
-            name = nameField.getText();
-            export();
-        });
+         sumit.setOnAction((ActionEvent event) -> {
+         name = nameField.getText();
+         export();
+         });
 
 
 
-        VBox root = new VBox();
-        root.getChildren().add(imageView);
-        root.getChildren().add(nameField);
-        root.getChildren().add(buttonBar);
-        root.getChildren().add(progress);
+         VBox root = new VBox();
+         root.getChildren().add(imageView);
+         root.getChildren().add(nameField);
+         root.getChildren().add(buttonBar);
+         root.getChildren().add(progress);
         
+         */
+
+        //Pane root = (Pane) FXMLLoader.load(getClass().getResource("root.fxml"));
+        
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("root.fxml"));
+        Pane root = (Pane) fxmlLoader.load();
+        rootController = (RootController) fxmlLoader.getController();
+
         Scene scene = new Scene(root, 1000, 800);
-        
+
         final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            if(exitCombo.match(event)) {
+            if (exitCombo.match(event)) {
                 System.out.println("CTRL + W Pressed, Exiting... ");
                 System.exit(0);
             }
         });
-        
+
         scene.getStylesheets().add("res/style.css");
-        
+
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public void preview() {
+    public static void preview() {
         Task task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
 
-                Platform.runLater(() -> progress.setProgress(-1));
+                Platform.runLater(() -> rootController.setProgress(-1));
 
                 File images = new File(imagesDirectory);
-                if(!images.exists())
+                if (!images.exists()) {
                     images.mkdir();
+                }
 
-                String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d " +
-                        "--camera=0,0,0,0,0,0,100 openscad/name.scad", imagesDirectory, name, name, name.length(), scadDirectory, name);
+                String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
+                        + "--camera=0,0,0,0,0,0,100 openscad/name.scad", imagesDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -137,7 +162,7 @@ public class NametagAutoPrint extends Application {
                         while (p.isAlive()) {
                             image = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
                         }
-                        Platform.runLater(() -> imageView.setImage(image));
+                        Platform.runLater(() -> rootController.refreshImage(image));
                         System.out.println("Done");
 
                     } catch (IOException e) {
@@ -148,8 +173,8 @@ public class NametagAutoPrint extends Application {
                 } else {
                     System.out.println("Openscad already running. Waiting...");
                 }
-                
-                Platform.runLater(() -> progress.setProgress(0));
+
+                Platform.runLater(() -> rootController.setProgress(0));
 
                 return null;
             }
@@ -159,23 +184,25 @@ public class NametagAutoPrint extends Application {
         thread.start();
     }
 
-    public void export() {
+    public static void export() {
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                
-                Platform.runLater(() -> progress.setProgress(-1));
+
+                Platform.runLater(() -> rootController.setProgress(0.1));
 
                 File stl = new File(stlDirectory);
-                if(!stl.exists())
+                if (!stl.exists()) {
                     stl.mkdir();
+                }
 
                 File gcode = new File(gcodeDirectory);
-                if(!gcode.exists())
+                if (!gcode.exists()) {
                     gcode.mkdir();
+                }
 
-                String stlargs = String.format(" -o %s/%s.stl -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 " +
-                        "openscad/name.scad", stlDirectory, name, name, name.length(), scadDirectory, name);
+                String stlargs = String.format(" -o %s/%s.stl -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
+                        + "openscad/name.scad", stlDirectory, name, name, name.length(), scadDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
 
@@ -215,7 +242,9 @@ public class NametagAutoPrint extends Application {
                 } else {
                     System.out.println("Openscad already running. Waiting...");
                 }
-
+                
+                Platform.runLater(() -> rootController.setProgress(0.33));
+                
                 String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", stlDirectory, name, gcodeDirectory, name);
                 if (p == null || !p.isAlive()) {
                     try {
@@ -256,12 +285,13 @@ public class NametagAutoPrint extends Application {
                 } else {
                     System.out.println("Openscad already running. Waiting...");
                 }
-
-
+                
+                Platform.runLater(() -> rootController.setProgress(0.66));
+                
                 //upload file
                 File file = new File(String.format("%s/%s.gcode", gcodeDirectory, name));
                 String remotePath = "http://" + octoPrintHostName + "/api/files/local";
-                if(!file.exists()) {
+                if (!file.exists()) {
                     System.out.println("File upload failed: file not found");
                 }
                 MultipartEntityBuilder builder = MultipartEntityBuilder.create();
@@ -276,17 +306,35 @@ public class NametagAutoPrint extends Application {
                 System.out.printf("Server Returned Code: %d\n", response.getStatusLine().getStatusCode());
                 String message;
                 switch (response.getStatusLine().getStatusCode()) {
-                    case 201: message = "Upload Successful"; break;
-                    case 400: message = "File was not uploaded properly"; break;
-                    case 404: message = "Either invalid save location was provided or API key was incorrect"; break;
-                    case 409: message = "Either you are attemping to overwirte a file being printed or printer is not operational"; break;
-                    case 415: message = "You attempting to uplaod a file other than a gcode or stl file"; break;
-                    case 500: message = "Internal server error, upload failed"; break;
-                    default: message = "Unexpected responses"; break;
+                    case 201:
+                        message = "Upload Successful";
+                        break;
+                    case 400:
+                        message = "File was not uploaded properly";
+                        break;
+                    case 404:
+                        message = "Either invalid save location was provided or API key was incorrect";
+                        break;
+                    case 409:
+                        message = "Either you are attemping to overwirte a file being printed or printer is not operational";
+                        break;
+                    case 415:
+                        message = "You attempting to uplaod a file other than a gcode or stl file";
+                        break;
+                    case 500:
+                        message = "Internal server error, upload failed";
+                        break;
+                    default:
+                        message = "Unexpected responses";
+                        break;
                 }
                 System.out.println(message);
 
-                Platform.runLater(() -> progress.setProgress(0));
+                Platform.runLater(() -> rootController.setProgress(1));
+                
+                Thread.sleep(500);
+                
+                Platform.runLater(() -> rootController.setProgress(0));
                 return null;
             }
         };

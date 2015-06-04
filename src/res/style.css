@@ -7,12 +7,14 @@
 .root{
     -fx-background-color: #4BB648;
     -fx-alignment: top-center;
-    -fx-spacing: 50;
+    -fx-spacing: 10;
 }
 
 .text-field{
     -fx-background-color: #33CC33;
     -fx-alignment: center;
+    -fx-font: 40px "Sans-Serif";
+    -fx-background-radius: 10;
 }
 .button{
     -fx-background-color: yellow;
@@ -26,8 +28,4 @@
     -fx-alignment: center;
     -fx-padding: 5;
     -fx-spacing: 50;
-}
-
-#image{
-    -fx-padding: 200;
 }
