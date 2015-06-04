@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,7 +20,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -130,7 +128,7 @@ public class NametagAutoPrint extends Application {
             }
         });
 
-        scene.getStylesheets().add("res/style.css");
+        scene.getStylesheets().add("nametagautoprint/style.css");
 
         primaryStage.setTitle("Nametag Generator");
         primaryStage.setFullScreen(true);

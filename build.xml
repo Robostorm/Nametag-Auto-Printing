@@ -22,9 +22,8 @@
     <target name="compile" description="compile the source ">
         <tstamp/>
         <mkdir dir="${build.dir}"/>
-        <mkdir dir="${build.dir}/res"/>
-        <copy todir="${build.dir}/res">
-            <fileset dir="${src.dir}/res">
+        <copy todir="${build.dir}">
+            <fileset dir="${src.dir}">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
