@@ -298,7 +298,9 @@ public class NametagAutoPrint extends Application {
                 builder.addPart("file", fileBody);
 
                 HttpPost post = new HttpPost(remotePath);
+                
                 post.setEntity(builder.build());
+                post.addHeader("X-Api-Key", "08723BF9C8EE487pB4B7E3F2D989EA8F");
                 HttpClient client = HttpClientBuilder.create().build();
                 HttpResponse response = client.execute(post);
                 System.out.printf("Server Returned Code: %d\n", response.getStatusLine().getStatusCode());
@@ -309,6 +311,9 @@ public class NametagAutoPrint extends Application {
                         break;
                     case 400:
                         message = "File was not uploaded properly";
+                        break;
+                    case 401:
+                        message = "Incorrect API Key";
                         break;
                     case 404:
                         message = "Either invalid save location was provided or API key was incorrect";

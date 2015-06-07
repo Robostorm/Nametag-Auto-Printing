@@ -44,7 +44,7 @@ public class RootController implements Initializable {
             NametagAutoPrint.getInstance().name = nameField.getText();
             NametagAutoPrint.getInstance().preview();
         });
-
+        
         submitBtn.setOnAction((ActionEvent e) -> {
             NametagAutoPrint.getInstance().name = nameField.getText();
             NametagAutoPrint.getInstance().export();
