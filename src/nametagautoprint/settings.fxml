@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox 
+    xmlns:fx="http://javafx.com/fxml/1"
+    id="AnchorPane"
+    prefHeight="800.0" 
+    prefWidth="100.0" 
+    styleClass="mainFxmlClass" 
+    fx:controller="nametagautoprint.SettingsController"
+    alignment="TOP_CENTER"
+    spacing="10" >
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    
+    <Label text="Printers" minWidth="1000" alignment="CENTER"  ></Label>
+    <VBox fx:id="p"> 
+        <Button text="Hello"></Button>
+    </VBox>
+    
+</VBox>
