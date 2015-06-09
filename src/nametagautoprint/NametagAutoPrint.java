@@ -18,8 +18,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -45,18 +47,16 @@ public class NametagAutoPrint extends Application {
     public static String name = "tim";
 
     static Process p;
+    
+    static BorderPane root;
+    static Pane preview;
+    static Pane settings;
+    
+    static PreviewController previewController;
+    static SettingsController settingsController;
 
-    static TextField nameField;
     static Image image;
-    static ImageView imageView;
-    static Button preview;
-    static Button sumit;
-    static HBox buttonBar;
-    static HBox nameBar;
-    static ProgressBar progress;
-
-    static RootController rootController = new RootController();
-
+                        
     private static NametagAutoPrint instance;
 
     public NametagAutoPrint() {
@@ -70,54 +70,22 @@ public class NametagAutoPrint extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        /*
-         nameField = new TextField("Name");
-         image = new Image("file:openscad/out.png");
-         imageView = new ImageView(image);
-         preview = new Button("Preview");
-         sumit = new Button("Submit");
-         progress = new ProgressBar(0);
-         buttonBar = new HBox(preview, sumit);
-         nameBar = new HBox(nameField, buttonBar);
         
-         preview.setMinWidth(100);
-         sumit.setMinWidth(100);
+        FXMLLoader previewFxmlLoader = new FXMLLoader();
+        previewFxmlLoader.setLocation(getClass().getResource("preview.fxml"));
+        preview = (Pane) previewFxmlLoader.load();
+        previewController = (PreviewController) previewFxmlLoader.getController();
         
-         progress.setMinWidth(1000);
+        FXMLLoader settingsFxmlLoader = new FXMLLoader();
+        settingsFxmlLoader.setLocation(getClass().getResource("settings.fxml"));
+        settings = (Pane) settingsFxmlLoader.load();
+        settingsController = (SettingsController) settingsFxmlLoader.getController();
         
-         nameField.setMaxWidth(1000);
+        root = new BorderPane();
         
-         imageView.setId("image");
+        root.setCenter(preview);
+        //root.setCenter(settings);
         
-         buttonBar.setId("buttonBar");
-        
-         preview.setOnAction((ActionEvent e) -> {
-         name = nameField.getText();
-         preview();
-         });
-
-         sumit.setOnAction((ActionEvent event) -> {
-         name = nameField.getText();
-         export();
-         });
-
-
-
-         VBox root = new VBox();
-         root.getChildren().add(imageView);
-         root.getChildren().add(nameField);
-         root.getChildren().add(buttonBar);
-         root.getChildren().add(progress);
-        
-         */
-
-        //Pane root = (Pane) FXMLLoader.load(getClass().getResource("root.fxml"));
-        
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("root.fxml"));
-        Pane root = (Pane) fxmlLoader.load();
-        rootController = (RootController) fxmlLoader.getController();
-
         Scene scene = new Scene(root, 1000, 800);
 
         final KeyCombination exitCombo = new KeyCodeCombination(KeyCode.W, KeyCombination.CONTROL_DOWN);
@@ -135,13 +103,23 @@ public class NametagAutoPrint extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+    
+    public static void showSettings(boolean sets){
+        if(sets){
+            root.getChildren().remove(preview);
+            root.setCenter(settings);
+        }else{
+            root.getChildren().remove(settings);
+            root.setCenter(preview);
+        }
+    }
+    
     public static void preview() {
         Task task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
 
-                Platform.runLater(() -> rootController.setProgress(-1));
+                Platform.runLater(() -> previewController.setProgress(-1));
 
                 File images = new File(imagesDirectory);
                 if (!images.exists()) {
@@ -156,11 +134,13 @@ public class NametagAutoPrint extends Application {
                         System.out.println("Args: " + pngargs);
 
                         p = Runtime.getRuntime().exec("openscad" + pngargs);
-
-                        while (p.isAlive()) {
+                        
+                        
+                        do {
                             image = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
-                        }
-                        Platform.runLater(() -> rootController.refreshImage(image));
+                        } while(p.isAlive());
+                        
+                        Platform.runLater(() -> previewController.refreshImage(image));
                         System.out.println("Done");
 
                     } catch (IOException e) {
@@ -172,7 +152,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
 
-                Platform.runLater(() -> rootController.setProgress(0));
+                Platform.runLater(() -> previewController.setProgress(0));
 
                 return null;
             }
@@ -187,7 +167,7 @@ public class NametagAutoPrint extends Application {
             @Override
             protected Void call() throws Exception {
 
-                Platform.runLater(() -> rootController.setProgress(0.1));
+                Platform.runLater(() -> previewController.setProgress(0.1));
 
                 File stl = new File(stlDirectory);
                 if (!stl.exists()) {
@@ -241,7 +221,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
                 
-                Platform.runLater(() -> rootController.setProgress(0.33));
+                Platform.runLater(() -> previewController.setProgress(0.33));
                 
                 String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", stlDirectory, name, gcodeDirectory, name);
                 if (p == null || !p.isAlive()) {
@@ -284,7 +264,7 @@ public class NametagAutoPrint extends Application {
                     System.out.println("Openscad already running. Waiting...");
                 }
                 
-                Platform.runLater(() -> rootController.setProgress(0.66));
+                Platform.runLater(() -> previewController.setProgress(0.66));
                 
                 //upload file
                 File file = new File(String.format("%s/%s.gcode", gcodeDirectory, name));
@@ -300,7 +280,7 @@ public class NametagAutoPrint extends Application {
                 HttpPost post = new HttpPost(remotePath);
                 
                 post.setEntity(builder.build());
-                post.addHeader("X-Api-Key", "08723BF9C8EE487pB4B7E3F2D989EA8F");
+                post.addHeader("X-Api-Key", "08723BF9C8EE487CB4B7E3F2D989EA8F");
                 HttpClient client = HttpClientBuilder.create().build();
                 HttpResponse response = client.execute(post);
                 System.out.printf("Server Returned Code: %d\n", response.getStatusLine().getStatusCode());
@@ -333,11 +313,11 @@ public class NametagAutoPrint extends Application {
                 }
                 System.out.println(message);
 
-                Platform.runLater(() -> rootController.setProgress(1));
+                Platform.runLater(() -> previewController.setProgress(1));
                 
                 Thread.sleep(500);
                 
-                Platform.runLater(() -> rootController.setProgress(0));
+                Platform.runLater(() -> previewController.setProgress(0));
                 return null;
             }
         };
