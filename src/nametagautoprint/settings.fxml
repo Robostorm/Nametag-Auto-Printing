@@ -21,8 +21,16 @@
     </stylesheets>
     
     <Label fx:id="printerHeading"  text="Printers" minWidth="1000" alignment="CENTER"  ></Label>
-    <VBox fx:id="printerList" maxWidth="1000" alignment="CENTER"  style="-fx-border-color: black -fx-border-insets: 5; -fx-border-width: 3; -fx-border-style: solid;" spacing="10" > 
-        
-    </VBox>
+    
+    <ScrollPane fx:id="printerList" maxWidth="1000" maxHeight="500" minHeight="500" fitToWidth="true" >
+        <content>
+            <Pane>
+                <VBox fx:id="printerBox" maxWidth="1000" alignment="CENTER" spacing="10" >
+                </VBox>
+            </Pane>
+        </content>
+    </ScrollPane>
+    
+    <Button ></Button>
     
 </VBox>

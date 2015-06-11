@@ -58,6 +58,8 @@ public class NametagAutoPrint extends Application {
     static Image image;
                         
     private static NametagAutoPrint instance;
+    
+    private static Stage stage;
 
     public NametagAutoPrint() {
         instance = this;
@@ -70,6 +72,8 @@ public class NametagAutoPrint extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        
+        stage = primaryStage;
         
         FXMLLoader previewFxmlLoader = new FXMLLoader();
         previewFxmlLoader.setLocation(getClass().getResource("preview.fxml"));
@@ -98,10 +102,10 @@ public class NametagAutoPrint extends Application {
 
         scene.getStylesheets().add("nametagautoprint/style.css");
 
-        primaryStage.setTitle("Nametag Generator");
-        primaryStage.setFullScreen(true);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setTitle("Nametag Generator");
+        stage.setFullScreen(true);
+        stage.setScene(scene);
+        stage.show();
     }
     
     public static void showSettings(boolean sets){
@@ -112,6 +116,10 @@ public class NametagAutoPrint extends Application {
             root.getChildren().remove(settings);
             root.setCenter(preview);
         }
+    }
+    
+    public Stage getStage(){
+        return stage;
     }
     
     public static void preview() {

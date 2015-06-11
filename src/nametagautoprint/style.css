@@ -19,7 +19,13 @@
 }
 
 #printerHeading{
+    -fx-padding: 50 10 10 10;
     -fx-font-size: 40px;
+}
+
+#printerName{
+    -fx-font-size: 25px;
+    -fx-font-weight: bolder;
 }
 
 .text-field{
@@ -33,6 +39,15 @@
     -fx-background-radius: 10;
 }
 
+#printerList{
+    //-fx-border-color: black;
+    //-fx-border-insets: 5;
+    //-fx-border-width: 3;
+    //-fx-border-style: solid;
+    -fx-background: #4BB648;
+    -fx-background-color: #4BB648;
+}
+
 .button{
     -fx-background-color: #33CC33;
 }
@@ -40,14 +55,6 @@
 .button:hover{
     -fx-background-color: yellow;
 }
-
-/*
-#{
-    -fx-fill: yellow;
-    -fx-stroke: green;
-    -fx-stroke-width: 5;
-}
-*/
 
 #buttonBar{
     -fx-alignment: center;

@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -19,15 +21,21 @@ import javafx.scene.layout.VBox;
  */
 public class SettingsController implements Initializable {
 
-    @FXML VBox printerList;
+    @FXML ScrollPane printerList;
+    @FXML VBox printerBox;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        printerList = new ScrollPane() {
+            @Override
+            public void requestFocus() { }
+        };
+
         
-        Printer test = new Printer("Robostorm", "3247215", 1234);
+        Printer test = new Printer("Test", "3247215", 1234);
         Printer test2 = new Printer("Test2", "sdewrqewrvqewr ", 5678);
         
-        printerList.getChildren().addAll(test.getPane(), test2.getPane());
+        printerBox.getChildren().addAll(test.getPane(), test2.getPane());
         
     }    
     

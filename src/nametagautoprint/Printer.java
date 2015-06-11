@@ -7,6 +7,7 @@
 package nametagautoprint;
 
 import java.io.File;
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -23,8 +24,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 
 /**
  *
@@ -106,6 +109,7 @@ public class Printer {
     
     // So that we don't need to repeat this in every constructor
     private void init(){
+        
         this.grid = new GridPane();
         
         this.grid.setHgap(10);
@@ -126,23 +130,41 @@ public class Printer {
         this.grid.getColumnConstraints().addAll(column1, column2, column3, column4);
         
         this.nameLabel = new Label(name);
-        this.nameLabel.setFont(new Font("Sans-Serif", 30));
+        this.nameLabel.setId("printerName");
         this.grid.add(nameLabel, 0, 0, 1, 3);
         
         this.ipField = new TextField(ip);
+        ipField.setOnKeyTyped(e -> {
+            this.ip = ipField.getText();
+        });
         this.grid.add(ipField, 1, 0, 1, 1);
         
         this.portField = new TextField(Integer.toString(port));
+        portField.setOnKeyTyped(e -> {
+            port = Integer.parseInt(portField.getText());
+        });
         this.grid.add(portField, 2, 0, 1, 1);
         
-        this.configField = new TextField(config.getPath());
+        this.configField = new TextField(config.getName());
+        this.configField.setEditable(false);
         this.grid.add(configField, 1, 1, 1, 1);
         
         this.configButton = new Button("Choose");
+        this.configButton.setOnAction((ActionEvent e) -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Config");
+            fileChooser.setInitialDirectory(config.getParentFile());
+            fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Slic3r Config", "ini"));
+            config = fileChooser.showOpenDialog(NametagAutoPrint.getInstance().getStage());
+            configField.setText(config.getName());
+        });
         this.grid.add(configButton, 2, 1, 1, 1);
         
         this.activeBox = new CheckBox();
         this.activeBox.setSelected(active);
+        this.activeBox.setOnAction(e ->{
+            this.active = activeBox.isSelected();
+        });
         this.grid.add(activeBox, 3, 0, 1, 2);
     }
     
