@@ -9,7 +9,7 @@
 <?import javafx.scene.image.*?>
 
 <VBox 
-    xmlns:fx="http://javafx.com/fxml/1" 
+    xmlns:fx="http://javafx.com/fxml/1"
     id="AnchorPane"
     prefHeight="800.0" 
     prefWidth="100.0" 
@@ -22,7 +22,7 @@
     </stylesheets>
     
     <ImageView fx:id="previewImage" ></ImageView>
-    <Label text="Enter Your Name Here:" minWidth="1000" alignment="CENTER"  ></Label> 
+    <Label fx:id="nameHeading" text="Enter Your Name Here:" minWidth="1000" alignment="CENTER"  ></Label> 
     <TextField fx:id="nameField" maxWidth="1000" minHeight="50"   ></TextField>
     <HBox fx:id="buttonBar" minWidth="1000">
         <Button fx:id="previewBtn" text="Preview"></Button>

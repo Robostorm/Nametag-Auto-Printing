@@ -10,29 +10,44 @@
     -fx-spacing: 10;
 }
 
+.label{
+    -fx-font-family: "Sans-Serif";
+}
+
+#nameHeading{
+    -fx-font-size: 40px;
+}
+
+#printerHeading{
+    -fx-font-size: 40px;
+}
+
 .text-field{
     -fx-background-color: #33CC33;
     -fx-alignment: center;
-    -fx-font: 40px "Sans-Serif";
-    -fx-background-radius: 10;
-}
-.button{
-    -fx-background-color: yellow;
+    -fx-font-family: "Sans-Serif";
 }
 
-.button:hover{
+#nameField{
+    -fx-font-size: 40px;
+    -fx-background-radius: 10;
+}
+
+.button{
     -fx-background-color: #33CC33;
 }
 
-.label{
-    -fx-font: 40px "Sans-Serif";
+.button:hover{
+    -fx-background-color: yellow;
 }
 
-#p{
+/*
+#{
     -fx-fill: yellow;
     -fx-stroke: green;
     -fx-stroke-width: 5;
 }
+*/
 
 #buttonBar{
     -fx-alignment: center;

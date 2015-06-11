@@ -20,9 +20,9 @@
         <URL value="@style.css"/>
     </stylesheets>
     
-    <Label text="Printers" minWidth="1000" alignment="CENTER"  ></Label>
-    <VBox fx:id="p"> 
-        <Button text="Hello"></Button>
+    <Label fx:id="printerHeading"  text="Printers" minWidth="1000" alignment="CENTER"  ></Label>
+    <VBox fx:id="printerList" maxWidth="1000" alignment="CENTER"  style="-fx-border-color: black -fx-border-insets: 5; -fx-border-width: 3; -fx-border-style: solid;" spacing="10" > 
+        
     </VBox>
     
 </VBox>
