@@ -64,6 +64,16 @@ public class Printer {
         
         init();
     }
+
+    public Printer(String name, String ip, int port, boolean active){
+        this.name = name;
+        this.ip = ip;
+        this.port = port;
+        this.config = new File("config/slic3r/mendel.ini");
+        this.active = active;
+
+        init();
+    }
     
     public Printer(String name, String ip, int port, String config){
         this.name = name;
