@@ -25,11 +25,30 @@ import javafx.scene.layout.VBox;
  *
  * @author tim
  */
-public class SettingsController implements Initializable {
+public class PrintersController implements Initializable {
+
+    @FXML ScrollPane printerList;
+    @FXML VBox printerBox;
+    @FXML TextField newPrinter;
+    @FXML Button addPrinter;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        printerList = new ScrollPane() {
+            @Override
+            public void requestFocus() { }
+        };
         
+        newPrinter.setOnAction(e -> addPrinter.fire());
+        
+        addPrinter.setOnAction(e -> {
+            PrintMaster.addPrinter(new Printer(newPrinter.getText()));
+            newPrinter.selectAll();
+        });
+    }
+    
+    public ObservableList<Node> getPrinterPanes(){
+        return printerBox.getChildren();
     }
     
 }

@@ -12,21 +12,16 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 /**
@@ -35,7 +30,7 @@ import javafx.stage.FileChooser;
  */
 public class Printer {
     
-    private String name;
+    private final String name;
     private String ip;
     private int port;
     private File config;
@@ -48,6 +43,7 @@ public class Printer {
     private TextField configField;
     private Button configButton;
     private CheckBox activeBox;
+    private Button deleteButton;
     
     public Printer(String name){
         this.name = name;
@@ -55,6 +51,8 @@ public class Printer {
         this.port = 5000;
         this.config = new File("config/slic3r/mendel.ini");
         this.active = false;
+        
+        init();
     }
     
     public Printer(String name, String ip, int port){
@@ -107,7 +105,7 @@ public class Printer {
         init();
     }
     
-    // So that we don't need to repeat this in every constructor
+    // So that we don't need to repeat this in every copnstructor
     private void init(){
         
         this.grid = new GridPane();
@@ -165,7 +163,14 @@ public class Printer {
         this.activeBox.setOnAction(e ->{
             this.active = activeBox.isSelected();
         });
-        this.grid.add(activeBox, 3, 0, 1, 2);
+        Label activeLabel = new Label("Active");
+        activeLabel.setGraphic(activeBox);
+        activeLabel.setContentDisplay(ContentDisplay.RIGHT);
+        this.grid.add(activeLabel, 3, 0, 1, 1);
+        
+        this.deleteButton = new Button("Remove");
+        this.deleteButton.setOnAction(e -> PrintMaster.removePrinter(this));
+        this.grid.add(deleteButton, 3, 1, 1, 1);
     }
     
     public Pane getPane(){

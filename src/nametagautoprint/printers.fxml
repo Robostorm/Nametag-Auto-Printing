@@ -7,23 +7,22 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane 
+<VBox 
     xmlns:fx="http://javafx.com/fxml/1"
     id="AnchorPane"
     prefHeight="800.0" 
     prefWidth="100.0" 
     styleClass="mainFxmlClass" 
-    fx:controller="nametagautoprint.SettingsController">
+    fx:controller="nametagautoprint.PrintersController"
+    alignment="TOP_CENTER"
+    spacing="10" >
     <stylesheets>
         <URL value="@style.css"/>
     </stylesheets>
     
-    <top>
-        <Label text="Password" minWidth="1000" alignment="CENTER"></Label>
-        <PasswordField fx:id="password"></PasswordField>
-    </top>
+    <Label fx:id="printerHeading"  text="Printers" minWidth="1000" alignment="CENTER"  ></Label>
     
-    <ScrollPane fx:id="printerList" maxWidth="1000" maxHeight="500" minHeight="500" fitToWidth="true" visible="false" >
+    <ScrollPane fx:id="printerList" maxWidth="1000" maxHeight="500" minHeight="500" fitToWidth="true" >
         <content>
             <Pane>
                 <VBox fx:id="printerBox" maxWidth="1000" alignment="CENTER" spacing="10" >
@@ -37,4 +36,4 @@
         <Button fx:id="addPrinter" text="Add"></Button> 
     </HBox>
     
-</BorderPane>
+</VBox>

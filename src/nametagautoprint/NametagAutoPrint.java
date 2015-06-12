@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -51,12 +53,17 @@ public class NametagAutoPrint extends Application {
     static BorderPane root;
     static Pane preview;
     static Pane settings;
+    static Pane printers;
     
-    static PreviewController previewController;
-    static SettingsController settingsController;
+    // Remove static after preview and export are moved to printer and/or nametag classes
+    public static PreviewController previewController;
+    public static SettingsController settingsController;
+    public static PrintersController printersController;
+    
+    public static enum Panes{Preview, Settings, Printers};
 
     static Image image;
-                        
+    
     private static NametagAutoPrint instance;
     
     private static Stage stage;
@@ -85,6 +92,11 @@ public class NametagAutoPrint extends Application {
         settings = (Pane) settingsFxmlLoader.load();
         settingsController = (SettingsController) settingsFxmlLoader.getController();
         
+        FXMLLoader printersFxmlLoader = new FXMLLoader();
+        printersFxmlLoader.setLocation(getClass().getResource("printers.fxml"));
+        printers = (Pane) printersFxmlLoader.load();
+        printersController = (PrintersController) printersFxmlLoader.getController();
+        
         root = new BorderPane();
         
         root.setCenter(preview);
@@ -108,13 +120,22 @@ public class NametagAutoPrint extends Application {
         stage.show();
     }
     
-    public static void showSettings(boolean sets){
-        if(sets){
-            root.getChildren().remove(preview);
-            root.setCenter(settings);
-        }else{
-            root.getChildren().remove(settings);
-            root.setCenter(preview);
+    public void setPane(Panes pane){
+        switch(pane){
+            case Preview:
+                root.getChildren().remove(root.getCenter());
+                root.setCenter(preview);
+                break;
+            
+            case Settings:
+                root.getChildren().remove(root.getCenter());
+                root.setCenter(settings);
+                break;
+                
+            case Printers:
+                root.getChildren().remove(root.getCenter());
+                root.setCenter(printers);
+                break;
         }
     }
     
