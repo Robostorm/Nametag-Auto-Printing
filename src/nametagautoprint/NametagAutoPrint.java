@@ -125,11 +125,13 @@ public class NametagAutoPrint extends Application {
             case Preview:
                 root.getChildren().remove(root.getCenter());
                 root.setCenter(preview);
+                settingsController.resetLogin();
                 break;
             
             case Settings:
                 root.getChildren().remove(root.getCenter());
                 root.setCenter(settings);
+                settingsController.init();
                 break;
                 
             case Printers:

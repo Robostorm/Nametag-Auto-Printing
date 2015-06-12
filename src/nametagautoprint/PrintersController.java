@@ -31,6 +31,7 @@ public class PrintersController implements Initializable {
     @FXML VBox printerBox;
     @FXML TextField newPrinter;
     @FXML Button addPrinter;
+    @FXML Button printersBack;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -40,6 +41,7 @@ public class PrintersController implements Initializable {
         };
         
         newPrinter.setOnAction(e -> addPrinter.fire());
+        printersBack.setOnAction(e -> NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings));
         
         addPrinter.setOnAction(e -> {
             PrintMaster.addPrinter(new Printer(newPrinter.getText()));

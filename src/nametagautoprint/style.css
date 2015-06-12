@@ -61,3 +61,11 @@
     -fx-padding: 5;
     -fx-spacing: 50;
 }
+
+#passBox{
+    -fx-padding: 50 10 10 10;
+}
+
+#footer{
+    -fx-padding: 10 10 50 10;
+}

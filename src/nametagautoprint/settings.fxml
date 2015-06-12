@@ -19,22 +19,23 @@
     </stylesheets>
     
     <top>
-        <Label text="Password" minWidth="1000" alignment="CENTER"></Label>
-        <PasswordField fx:id="password"></PasswordField>
+        <VBox fx:id="passBox" alignment="CENTER">
+            <Label text="Password" minWidth="100" alignment="CENTER"></Label>
+            <PasswordField fx:id="password" maxWidth="100"></PasswordField>
+        </VBox>
     </top>
     
-    <ScrollPane fx:id="printerList" maxWidth="1000" maxHeight="500" minHeight="500" fitToWidth="true" visible="false" >
-        <content>
-            <Pane>
-                <VBox fx:id="printerBox" maxWidth="1000" alignment="CENTER" spacing="10" >
-                </VBox>
-            </Pane>
-        </content>
-    </ScrollPane>
+    <center>
+        <HBox fx:id="settings" alignment="CENTER" spacing="10" visible="false" >
+            <Button fx:id="printersBtn" text="Printers"></Button>
+            <Button fx:id="queueBtn" text="Queue"></Button>  
+        </HBox>
+    </center>
     
-    <HBox alignment="CENTER" HBox.hgrow="ALWAYS" spacing="10" >
-        <TextField fx:id="newPrinter"></TextField>
-        <Button fx:id="addPrinter" text="Add"></Button> 
-    </HBox>
+    <bottom>
+        <HBox id="footer" alignment="TOP_CENTER"> 
+            <Button fx:id="settingsBack" text="Back"></Button>
+        </HBox>
+    </bottom>
     
 </BorderPane>

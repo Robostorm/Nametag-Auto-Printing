@@ -51,7 +51,7 @@ public class PreviewController implements Initializable {
         });
         
         settingsBtn.setOnAction((ActionEvent e) -> {
-            NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Printers);
+            NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);
         });
     }
     
