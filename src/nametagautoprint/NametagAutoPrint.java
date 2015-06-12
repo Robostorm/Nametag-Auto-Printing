@@ -47,6 +47,9 @@ public class NametagAutoPrint extends Application {
     public static String name = "tim";
 
     static Process p;
+
+    public static File configFile = new File("config.xml");
+    public static File queueFile = new File("queue.xml");
     
     static BorderPane root;
     static Pane preview;
@@ -99,6 +102,13 @@ public class NametagAutoPrint extends Application {
                 System.exit(0);
             }
         });
+
+        if(!configFile.exists()) {
+            configFile.createNewFile();
+            SettingsController.build();
+        }
+        if(!queueFile.exists())
+            queueFile.createNewFile();
 
         scene.getStylesheets().add("nametagautoprint/style.css");
 
