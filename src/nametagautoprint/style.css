@@ -28,6 +28,16 @@
     -fx-font-weight: bolder;
 }
 
+#queueHeading{
+    -fx-padding: 50 10 10 10;
+    -fx-font-size: 40px;
+}
+
+#tagName{
+    -fx-font-size: 25px;
+    -fx-font-weight: bolder;
+}
+
 .text-field{
     -fx-background-color: #33CC33;
     -fx-alignment: center;
@@ -40,6 +50,15 @@
 }
 
 #printerList{
+    //-fx-border-color: black;
+    //-fx-border-insets: 5;
+    //-fx-border-width: 3;
+    //-fx-border-style: solid;
+    -fx-background: #4BB648;
+    -fx-background-color: #4BB648;
+}
+
+#queueList{
     //-fx-border-color: black;
     //-fx-border-insets: 5;
     //-fx-border-width: 3;

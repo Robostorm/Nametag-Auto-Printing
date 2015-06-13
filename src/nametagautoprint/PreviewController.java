@@ -31,11 +31,17 @@ public class PreviewController implements Initializable {
     @FXML private Button settingsBtn;
     @FXML private ProgressBar progressBar;
     
+    private Nametag currentTag = new Nametag("");
+    
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
         previewImage.setImage(new Image("file:openscad/out.png"));
         
         setProgress(0);
@@ -44,11 +50,11 @@ public class PreviewController implements Initializable {
             NametagAutoPrint.getInstance().name = nameField.getText();
             NametagAutoPrint.getInstance().preview();
         });
-        
         submitBtn.setOnAction((ActionEvent e) -> {
             NametagAutoPrint.getInstance().name = nameField.getText();
             NametagAutoPrint.getInstance().export();
         });
+        
         
         settingsBtn.setOnAction((ActionEvent e) -> {
             NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);

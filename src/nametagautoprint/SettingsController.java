@@ -26,10 +26,10 @@ import javafx.scene.layout.VBox;
  */
 public class SettingsController implements Initializable {
     
-    @FXML private VBox passBox;
     @FXML private PasswordField password;
     @FXML private HBox settings;
     @FXML private Button printersBtn;
+    @FXML private Button queueBtn;
     @FXML private Button settingsBack;
     
     //Not meant to be secure- just to keep stray kids from screwing with things
@@ -48,6 +48,7 @@ public class SettingsController implements Initializable {
         });
         
         printersBtn.setOnAction(e -> NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Printers));
+        queueBtn.setOnAction(e -> NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Queue));
         settingsBack.setOnAction(e -> NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Preview));
         
     }

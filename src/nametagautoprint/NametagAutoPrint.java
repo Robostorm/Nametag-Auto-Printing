@@ -4,27 +4,20 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import static nametagautoprint.NametagAutoPrint.queueController;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -32,6 +25,7 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.jdom2.JDOMException;
 
 /**
  *
@@ -57,13 +51,15 @@ public class NametagAutoPrint extends Application {
     static Pane preview;
     static Pane settings;
     static Pane printers;
+    static Pane queue;
     
     // Remove static after preview and export are moved to printer and/or nametag classes
     public static PreviewController previewController;
     public static SettingsController settingsController;
     public static PrintersController printersController;
+    public static QueueController queueController;
     
-    public static enum Panes{Preview, Settings, Printers};
+    public static enum Panes{Preview, Settings, Printers, Queue};
 
     static Image image;
     
@@ -100,6 +96,11 @@ public class NametagAutoPrint extends Application {
         printers = (Pane) printersFxmlLoader.load();
         printersController = (PrintersController) printersFxmlLoader.getController();
         
+        FXMLLoader queueFxmlLoader = new FXMLLoader();
+        queueFxmlLoader.setLocation(getClass().getResource("queue.fxml"));
+        queue = (Pane) queueFxmlLoader.load();
+        queueController = (QueueController) queueFxmlLoader.getController();
+        
         root = new BorderPane();
         
         root.setCenter(preview);
@@ -117,11 +118,21 @@ public class NametagAutoPrint extends Application {
 
         if(!configFile.exists()) {
             configFile.createNewFile();
-            SettingsController.build();
+            PrintersController.build();
         }
         if(!queueFile.exists())
             queueFile.createNewFile();
-
+        
+        try {
+            printersController.loadPrinters();
+        } catch (JDOMException | IOException e) {
+            System.err.println("Could not load printers!");
+        }
+        
+        PrintMaster.addToQueue(new Nametag("Test"));
+        PrintMaster.addToQueue(new Nametag("Test2"));
+        PrintMaster.addToQueue(new Nametag("Test3"));
+        
         scene.getStylesheets().add("nametagautoprint/style.css");
 
         stage.setTitle("Nametag Generator");
@@ -147,6 +158,11 @@ public class NametagAutoPrint extends Application {
             case Printers:
                 root.getChildren().remove(root.getCenter());
                 root.setCenter(printers);
+                break;
+                
+            case Queue:
+                root.getChildren().remove(root.getCenter());
+                root.setCenter(queue);
                 break;
         }
     }
