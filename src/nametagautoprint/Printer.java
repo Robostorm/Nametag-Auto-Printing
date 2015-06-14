@@ -207,6 +207,7 @@ public class Printer {
         printerElement.setAttribute("name", name);
         printerElement.setAttribute("ip", ip);
         printerElement.setAttribute("port", Integer.toString(port));
+        printerElement.setAttribute("file", config.getPath());
         printerElement.setAttribute("active", Boolean.toString(active));
         return printerElement;
     }

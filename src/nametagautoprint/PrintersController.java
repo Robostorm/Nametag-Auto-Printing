@@ -71,7 +71,8 @@ public class PrintersController implements Initializable {
         List<Printer> list = new ArrayList<>();
         for(Element printer : printers.getChildren()) {
             list.add(new Printer(printer.getAttributeValue("name"), printer.getAttributeValue("ip"),
-                    printer.getAttribute("port").getIntValue(), printer.getAttribute("active").getBooleanValue()));
+                    printer.getAttribute("port").getIntValue(), printer.getAttributeValue("file"),
+                    printer.getAttribute("active").getBooleanValue()));
         }
         
         PrintMaster.addAllPrinters(list);
