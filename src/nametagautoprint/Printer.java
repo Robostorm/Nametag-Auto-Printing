@@ -217,6 +217,7 @@ public class Printer {
 
     public void setIp(String ip) {
         this.ip = ip;
+        ipField.setText(ip);
     }
 
     public int getPort() {
@@ -225,6 +226,7 @@ public class Printer {
 
     public void setPort(int port) {
         this.port = port;
+        portField.setText(Integer.toString(port));
     }
 
     public File getConfig() {
@@ -233,6 +235,7 @@ public class Printer {
 
     public void setConfig(File config) {
         this.config = config;
+        configField.setText(config.getName());
     }
 
     public boolean isActive() {
@@ -241,5 +244,6 @@ public class Printer {
 
     public void setActive(boolean active) {
         this.active = active;
+        activeBox.setSelected(active);
     }
 }
