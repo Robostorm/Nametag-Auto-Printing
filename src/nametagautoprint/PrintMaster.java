@@ -6,6 +6,8 @@
 
 package nametagautoprint;
 
+import org.jdom2.Element;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -58,7 +60,7 @@ public class PrintMaster {
         nameTags.forEach(p -> {
             NametagAutoPrint.getInstance().queueController.getPrinterPanes().add(p.getPane());
             System.out.println(NametagAutoPrint.getInstance().queueController);
-        System.out.println("Added Nametag to queue: " + p);
+            System.out.println("Added Nametag to queue: " + p);
         });
         System.out.println("Added to queue: " + nameTags);
         System.out.println("Queue: " + queue);
@@ -70,5 +72,21 @@ public class PrintMaster {
         System.out.println("Removed Nametag from queue: " + tag);
         System.out.println("Queue: " + printers);
     }
-    
+
+    public static Printer getPrinter(int i) {
+        return printers.get(i);
+    }
+
+    public static List<Printer> getAllPrinters() {
+        return printers;
+    }
+
+    public static Element printerToElement(Printer printer) {
+        Element printerElement = new Element("printer");
+        printerElement.setAttribute("name", printer.getName());
+        printerElement.setAttribute("ip", printer.getIp());
+        printerElement.setAttribute("port", Integer.toString(printer.getPort()));
+        printerElement.setAttribute("active", Boolean.toString(printer.isActive()));
+        return printerElement;
+    }
 }

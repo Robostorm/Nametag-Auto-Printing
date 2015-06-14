@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <printers>
-        <printer name="Test1" ip="192.168.1.2" port="5000" active="true"/>
-        <printer name="Test2" ip="192.168.1.3" port="5000" active="false"/>
-    </printers>
+  <printers>
+    <printer name="Test1" ip="192.168.1.2" port="5000" active="true" />
+    <printer name="Test2" ip="192.168.1.3" port="5000" active="false" />
+  </printers>
 </config>

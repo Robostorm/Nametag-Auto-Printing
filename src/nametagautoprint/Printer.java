@@ -192,5 +192,40 @@ public class Printer {
     public String toString(){
         return name;
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public File getConfig() {
+        return config;
+    }
+
+    public void setConfig(File config) {
+        this.config = config;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
