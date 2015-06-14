@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
+import org.jdom2.Element;
 
 /**
  *
@@ -195,6 +196,15 @@ public class Printer {
 
     public String getName() {
         return name;
+    }
+
+    public Element toElement() {
+        Element printerElement = new Element("printer");
+        printerElement.setAttribute("name", name);
+        printerElement.setAttribute("ip", ip);
+        printerElement.setAttribute("port", Integer.toString(port));
+        printerElement.setAttribute("active", Boolean.toString(active));
+        return printerElement;
     }
 
     public String getIp() {

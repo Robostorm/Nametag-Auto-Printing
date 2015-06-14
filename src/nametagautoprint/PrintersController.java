@@ -82,7 +82,7 @@ public class PrintersController implements Initializable {
         Document config = new Document(root);
         Element printers = new Element("printers");
         for(Printer printer : PrintMaster.getAllPrinters())
-            printers.addContent(PrintMaster.printerToElement(printer));
+            printers.addContent(printer.toElement());
         config.getRootElement().addContent(printers);
         XMLOutputter xmlOutputter = new XMLOutputter();
         xmlOutputter.output(config, System.out);

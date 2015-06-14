@@ -80,13 +80,4 @@ public class PrintMaster {
     public static List<Printer> getAllPrinters() {
         return printers;
     }
-
-    public static Element printerToElement(Printer printer) {
-        Element printerElement = new Element("printer");
-        printerElement.setAttribute("name", printer.getName());
-        printerElement.setAttribute("ip", printer.getIp());
-        printerElement.setAttribute("port", Integer.toString(printer.getPort()));
-        printerElement.setAttribute("active", Boolean.toString(printer.isActive()));
-        return printerElement;
-    }
 }
