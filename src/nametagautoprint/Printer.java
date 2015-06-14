@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
+import org.jdom2.Element;
 
 /**
  *
@@ -196,5 +197,49 @@ public class Printer {
     public static void slice(Nametag tag){
         
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public Element toElement() {
+        Element printerElement = new Element("printer");
+        printerElement.setAttribute("name", name);
+        printerElement.setAttribute("ip", ip);
+        printerElement.setAttribute("port", Integer.toString(port));
+        printerElement.setAttribute("active", Boolean.toString(active));
+        return printerElement;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public File getConfig() {
+        return config;
+    }
+
+    public void setConfig(File config) {
+        this.config = config;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

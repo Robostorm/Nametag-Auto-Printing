@@ -47,10 +47,17 @@ public class PrintersController implements Initializable {
             public void requestFocus() { }
         };
         
-        newPrinter.setOnAction(e -> addPrinter.fire());
-        printersBack.setOnAction(e -> NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings));
+        newPrinter.setOnAction(event -> addPrinter.fire());
+        printersBack.setOnAction(event -> {
+            NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);
+            try {
+                savePrinters();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         
-        addPrinter.setOnAction(e -> {
+        addPrinter.setOnAction(event -> {
             PrintMaster.addPrinter(new Printer(newPrinter.getText()));
             newPrinter.selectAll();
         });
@@ -68,6 +75,19 @@ public class PrintersController implements Initializable {
         }
         
         PrintMaster.addAllPrinters(list);
+    }
+
+    public void savePrinters() throws IOException {
+        Element root = new Element("config");
+        Document config = new Document(root);
+        Element printers = new Element("printers");
+        for(Printer printer : PrintMaster.getAllPrinters())
+            printers.addContent(printer.toElement());
+        config.getRootElement().addContent(printers);
+        XMLOutputter xmlOutputter = new XMLOutputter();
+        xmlOutputter.output(config, System.out);
+        xmlOutputter.setFormat(Format.getPrettyFormat());
+        xmlOutputter.output(config, new FileWriter(NametagAutoPrint.configFile.getName()));
     }
 
     public static void build() throws IOException {
