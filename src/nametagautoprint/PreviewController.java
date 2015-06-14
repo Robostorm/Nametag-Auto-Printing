@@ -8,6 +8,8 @@ package nametagautoprint;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +18,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import static nametagautoprint.NametagAutoPrint.previewController;
 
 /**
  * FXML Controller class
@@ -41,7 +44,49 @@ public class PreviewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        setProgress(0);
         
+        currentTag.preview();
+        
+        previewBtn.setOnAction(e -> {
+            currentTag.setName(nameField.getText());
+            Task task = new Task() {
+
+                @Override
+                protected Object call() throws Exception {
+                    Platform.runLater(() -> setProgress(0.5));
+                    currentTag.preview();
+                    Platform.runLater(() -> previewController.setProgress(1));
+                    Thread.sleep(500);
+                    Platform.runLater(() -> previewController.setProgress(0));
+                    return null;
+                }
+            };
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
+        });
+        
+        submitBtn.setOnAction(e -> {
+            Task task = new Task() {
+
+                @Override
+                protected Object call() throws Exception {
+                    Platform.runLater(() -> setProgress(0.5));
+                    currentTag.export();
+                    Platform.runLater(() -> previewController.setProgress(1));
+                    PrintMaster.addToQueue(currentTag);
+                    Thread.sleep(500);
+                    Platform.runLater(() -> previewController.setProgress(0));
+                    return null;
+                }
+            };
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
+        });
+        
+        /*
         previewImage.setImage(new Image("file:openscad/out.png"));
         
         setProgress(0);
@@ -54,7 +99,7 @@ public class PreviewController implements Initializable {
             NametagAutoPrint.getInstance().name = nameField.getText();
             NametagAutoPrint.getInstance().export();
         });
-        
+        */
         
         settingsBtn.setOnAction((ActionEvent e) -> {
             NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);

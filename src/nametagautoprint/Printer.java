@@ -193,4 +193,8 @@ public class Printer {
         return name;
     }
     
+    public static void slice(Nametag tag){
+        
+    }
+    
 }
