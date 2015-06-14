@@ -34,6 +34,7 @@ public class Printer {
     private final String name;
     private String ip;
     private int port;
+    private String apiKey;
     private File config;
     private boolean active;
     
@@ -41,6 +42,7 @@ public class Printer {
     private Label nameLabel;
     private TextField ipField;
     private TextField portField;
+    private TextField apiKeyField;
     private TextField configField;
     private Button configButton;
     private CheckBox activeBox;
@@ -50,66 +52,73 @@ public class Printer {
         this.name = name;
         ip = "127.0.0.1";
         port = 5000;
+        apiKey = "ApiKey";
         config = new File("config/slic3r/mendel.ini");
         active = false;
         
         init();
     }
     
-    public Printer(String name, String ip, int port){
+    public Printer(String name, String ip, int port, String apiKey){
         this.name = name;
         this.ip = ip;
         this.port = port;
+        this.apiKey = apiKey;
         config = new File("config/slic3r/mendel.ini");
         active = false;
         
         init();
     }
 
-    public Printer(String name, String ip, int port, boolean active){
+    public Printer(String name, String ip, int port, String apiKey, boolean active){
         this.name = name;
         this.ip = ip;
         this.port = port;
+        this.apiKey = apiKey;
         this.config = new File("config/slic3r/mendel.ini");
         this.active = active;
 
         init();
     }
     
-    public Printer(String name, String ip, int port, String config){
+    public Printer(String name, String ip, int port, String apiKey, String config){
         this.name = name;
         this.ip = ip;
         this.port = port;
+        this.apiKey = apiKey;
         this.config = new File(config);
         this.active = false;
         
         init();
     }
     
-    public Printer(String name, String ip, int port, File config){
+    public Printer(String name, String ip, int port, String apiKey, File config){
         this.name = name;
         this.ip = ip;
         this.port = port;
+        this.apiKey = apiKey;
         this.config = config;
         this.active = false;
         
         init();
     }
     
-    public Printer(String name, String ip, int port, String config, boolean active){
+    public Printer(String name, String ip, int port, String apiKey, String config, boolean active){
         this.name = name;
         this.ip = ip;
         this.port = port;
+        this.apiKey = apiKey;
         this.config = new File(config);
         this.active = active;
         
         init();
     }
     
-    public Printer(String name, String ip, int port, File config, boolean active){
+    public Printer(String name, String ip, int port, String apiKey, File config, boolean active){
         this.name = name;
         this.ip = ip;
         this.port = port;
+        this.apiKey = apiKey;
         this.config = config;
         this.active = active;
         
@@ -135,9 +144,11 @@ public class Printer {
         ColumnConstraints column3 = new ColumnConstraints();
         column3.setPercentWidth(7);
         ColumnConstraints column4 = new ColumnConstraints();
-        column4.setPercentWidth(100-(column1.getPercentWidth()+column2.getPercentWidth()+column3.getPercentWidth()));
-        column4.setHalignment(HPos.RIGHT);
-        grid.getColumnConstraints().addAll(column1, column2, column3, column4);
+        column4.setPercentWidth(30);
+        ColumnConstraints column5 = new ColumnConstraints();
+        column5.setPercentWidth(100-(column1.getPercentWidth()+column2.getPercentWidth()+column3.getPercentWidth()+column4.getPercentWidth()));
+        column5.setHalignment(HPos.RIGHT);
+        grid.getColumnConstraints().addAll(column1, column2, column3, column4, column5);
         
         nameLabel = new Label(name);
         nameLabel.setId("printerName");
@@ -145,13 +156,13 @@ public class Printer {
         
         ipField = new TextField(ip);
         ipField.setOnKeyTyped(e -> {
-            ip = ipField.getText();
+            ip = e.getText();
         });
         grid.add(ipField, 1, 0, 1, 1);
         
         portField = new TextField(Integer.toString(port));
         portField.setOnKeyTyped(e -> {
-            port = Integer.parseInt(portField.getText());
+            port = Integer.parseInt(e.getText());
         });
         grid.add(portField, 2, 0, 1, 1);
         
@@ -170,6 +181,12 @@ public class Printer {
         });
         grid.add(configButton, 2, 1, 1, 1);
         
+        apiKeyField = new TextField(apiKey);
+        apiKeyField.setOnKeyTyped(e -> {
+            apiKey = e.getText();
+        });
+        grid.add(apiKeyField, 3, 0, 1, 1);
+        
         activeBox = new CheckBox();
         activeBox.setSelected(active);
         activeBox.setOnAction(e ->{
@@ -178,11 +195,11 @@ public class Printer {
         Label activeLabel = new Label("Active");
         activeLabel.setGraphic(activeBox);
         activeLabel.setContentDisplay(ContentDisplay.RIGHT);
-        grid.add(activeLabel, 3, 0, 1, 1);
+        grid.add(activeLabel, 4, 0, 1, 1);
         
         deleteButton = new Button("Remove");
         deleteButton.setOnAction(e -> PrintMaster.removePrinter(this));
-        grid.add(deleteButton, 3, 1, 1, 1);
+        grid.add(deleteButton, 4, 1, 1, 1);
     }
     
     public Pane getPane(){
@@ -207,6 +224,7 @@ public class Printer {
         printerElement.setAttribute("name", name);
         printerElement.setAttribute("ip", ip);
         printerElement.setAttribute("port", Integer.toString(port));
+        printerElement.setAttribute("apiKey", apiKey);
         printerElement.setAttribute("active", Boolean.toString(active));
         return printerElement;
     }
