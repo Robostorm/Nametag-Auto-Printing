@@ -8,6 +8,12 @@ public class PrinterQueue {
     private List<Printer> printers = new ArrayList<>();
     int position = 0;
 
+    public PrinterQueue(){}
+
+    public PrinterQueue(List<Printer> printers) {
+        this.printers = printers;
+    }
+
     public void add(Printer printer) {
         printers.add(printer);
     }
