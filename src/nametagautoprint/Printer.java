@@ -36,6 +36,7 @@ public class Printer {
     private int port;
     private File config;
     private boolean active;
+    private boolean available;
     
     private GridPane grid;
     private Label nameLabel;
@@ -246,5 +247,13 @@ public class Printer {
     public void setActive(boolean active) {
         this.active = active;
         activeBox.setSelected(active);
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
