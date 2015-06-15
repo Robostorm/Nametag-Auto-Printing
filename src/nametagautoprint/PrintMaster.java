@@ -6,7 +6,6 @@
 
 package nametagautoprint;
 
-import org.jdom2.Element;
 
 import java.util.ArrayList;
 import java.util.Collection;

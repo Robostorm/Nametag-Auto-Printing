@@ -202,7 +202,6 @@ public class NametagAutoPrint extends Application {
 
                     } catch (IOException e) {
                         System.out.println("exception happened - here's what I know: ");
-                        e.printStackTrace();
                         System.exit(-1);
                     }
                 } else {
@@ -271,7 +270,6 @@ public class NametagAutoPrint extends Application {
 
                     } catch (IOException e) {
                         System.out.println("exception happened - here's what I know: ");
-                        e.printStackTrace();
                         System.exit(-1);
                     }
                 } else {
@@ -314,7 +312,6 @@ public class NametagAutoPrint extends Application {
 
                     } catch (IOException e) {
                         System.out.println("exception happened - here's what I know: ");
-                        e.printStackTrace();
                         System.exit(-1);
                     }
                 } else {

@@ -5,18 +5,12 @@
  */
 package nametagautoprint;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -27,9 +21,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
-import javafx.stage.FileChooser;
 import static nametagautoprint.NametagAutoPrint.imagesDirectory;
-import static nametagautoprint.NametagAutoPrint.name;
 import static nametagautoprint.NametagAutoPrint.p;
 import static nametagautoprint.NametagAutoPrint.previewController;
 import static nametagautoprint.NametagAutoPrint.scadDirectory;
