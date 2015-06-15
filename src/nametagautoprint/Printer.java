@@ -37,6 +37,7 @@ public class Printer {
     private String apiKey;
     private File config;
     private boolean active;
+    private boolean available;
     
     private GridPane grid;
     private Label nameLabel;
@@ -225,6 +226,7 @@ public class Printer {
         printerElement.setAttribute("ip", ip);
         printerElement.setAttribute("port", Integer.toString(port));
         printerElement.setAttribute("apiKey", apiKey);
+        printerElement.setAttribute("file", config.getPath());
         printerElement.setAttribute("active", Boolean.toString(active));
         return printerElement;
     }
@@ -263,5 +265,13 @@ public class Printer {
     public void setActive(boolean active) {
         this.active = active;
         activeBox.setSelected(active);
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
