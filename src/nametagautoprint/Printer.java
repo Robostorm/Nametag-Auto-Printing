@@ -59,17 +59,6 @@ public class Printer {
         
         init();
     }
-    
-    public Printer(String name, String ip, int port, String apiKey){
-        this.name = name;
-        this.ip = ip;
-        this.port = port;
-        this.apiKey = apiKey;
-        config = new File("config/slic3r/mendel.ini");
-        active = false;
-        
-        init();
-    }
 
     public Printer(String name, String ip, int port, String apiKey, boolean active){
         this.name = name;
@@ -79,50 +68,6 @@ public class Printer {
         this.config = new File("config/slic3r/mendel.ini");
         this.active = active;
 
-        init();
-    }
-    
-    public Printer(String name, String ip, int port, String apiKey, String config){
-        this.name = name;
-        this.ip = ip;
-        this.port = port;
-        this.apiKey = apiKey;
-        this.config = new File(config);
-        this.active = false;
-        
-        init();
-    }
-    
-    public Printer(String name, String ip, int port, String apiKey, File config){
-        this.name = name;
-        this.ip = ip;
-        this.port = port;
-        this.apiKey = apiKey;
-        this.config = config;
-        this.active = false;
-        
-        init();
-    }
-    
-    public Printer(String name, String ip, int port, String apiKey, String config, boolean active){
-        this.name = name;
-        this.ip = ip;
-        this.port = port;
-        this.apiKey = apiKey;
-        this.config = new File(config);
-        this.active = active;
-        
-        init();
-    }
-    
-    public Printer(String name, String ip, int port, String apiKey, File config, boolean active){
-        this.name = name;
-        this.ip = ip;
-        this.port = port;
-        this.apiKey = apiKey;
-        this.config = config;
-        this.active = active;
-        
         init();
     }
     
@@ -211,13 +156,9 @@ public class Printer {
     public String toString(){
         return name;
     }
-    
-    public static void slice(Nametag tag){
-        
-    }
 
-    public String getName() {
-        return name;
+    public void slice(Nametag tag){
+
     }
 
     public Element toElement() {

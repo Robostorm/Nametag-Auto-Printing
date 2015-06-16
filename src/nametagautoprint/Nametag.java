@@ -64,7 +64,6 @@ public class Nametag {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setBackground(new Background(new BackgroundFill(Paint.valueOf("yellow"), CornerRadii.EMPTY, Insets.EMPTY)));
         grid.setPrefWidth(1000);
-        //grid.setGridLinesVisible(true);
 
         ColumnConstraints column1 = new ColumnConstraints();
         column1.setPercentWidth(20);
@@ -113,7 +112,8 @@ public class Nametag {
     public void preview() {
         
         String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
-                + "--camera=0,0,0,0,0,0,100 openscad/name.scad", NametagAutoPrint.imagesDirectory, name, name, name.equals("") ? 4 : name.length(), scadDirectory, name);
+                + "--camera=0,0,0,0,0,0,100 openscad/name.scad", NametagAutoPrint.imagesDirectory,
+                name, name, name.equals("") ? 4 : name.length(), scadDirectory, name);
         if (p == null || !p.isAlive()) {
             try {
 
@@ -152,9 +152,7 @@ public class Nametag {
 
                 p = Runtime.getRuntime().exec("openscad" + stlargs);
 
-                while (p.isAlive()) //image = new Image("file:openscad/out.png");
-                //imageView.setImage(image);
-                {
+                while (p.isAlive()) {
                     System.out.println("Done");
                 }
 

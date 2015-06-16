@@ -86,21 +86,6 @@ public class PreviewController implements Initializable {
             thread.start();
         });
         
-        /*
-        previewImage.setImage(new Image("file:openscad/out.png"));
-        
-        setProgress(0);
-        
-        previewBtn.setOnAction((ActionEvent e) -> {
-            NametagAutoPrint.getInstance().name = nameField.getText();
-            NametagAutoPrint.getInstance().preview();
-        });
-        submitBtn.setOnAction((ActionEvent e) -> {
-            NametagAutoPrint.getInstance().name = nameField.getText();
-            NametagAutoPrint.getInstance().export();
-        });
-        */
-        
         settingsBtn.setOnAction((ActionEvent e) -> {
             NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);
         });

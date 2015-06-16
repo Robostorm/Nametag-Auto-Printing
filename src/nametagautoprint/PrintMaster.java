@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class PrintMaster {
     
-    private static PrinterQueue printers = new PrinterQueue();
+    private static List<Printer> printers = new ArrayList<>();
     private static List<Nametag> queue = new ArrayList<>();
     
     public static void addPrinter(Printer printer){
@@ -77,6 +77,6 @@ public class PrintMaster {
     }
 
     public static List<Printer> getAllPrinters() {
-        return printers.getList();
+        return printers;
     }
 }

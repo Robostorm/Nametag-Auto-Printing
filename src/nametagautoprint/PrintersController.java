@@ -51,7 +51,7 @@ public class PrintersController implements Initializable {
         printersBack.setOnAction(event -> {
             NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);
             try {
-                savePrinters();
+                XML.savePrinters();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -62,49 +62,9 @@ public class PrintersController implements Initializable {
             newPrinter.selectAll();
         });
     }
-    
-    public void loadPrinters() throws JDOMException, IOException {
-        SAXBuilder saxBuilder = new SAXBuilder();
-        Document document = saxBuilder.build(NametagAutoPrint.configFile);
-        Element config = document.getRootElement();
-        Element printers = config.getChild("printers");
-        List<Printer> list = new ArrayList<>();
-        for(Element printer : printers.getChildren()) {
-            list.add(new Printer(printer.getAttributeValue("name"), printer.getAttributeValue("ip"),
-                    printer.getAttribute("port").getIntValue(), printer.getAttributeValue("apiKey"),
-                    printer.getAttribute("active").getBooleanValue()));
-        }
-        
-        PrintMaster.addAllPrinters(list);
-    }
 
-    public void savePrinters() throws IOException {
-        Element root = new Element("config");
-        Document config = new Document(root);
-        Element printers = new Element("printers");
-        for(Printer printer : PrintMaster.getAllPrinters())
-            printers.addContent(printer.toElement());
-        config.getRootElement().addContent(printers);
-        XMLOutputter xmlOutputter = new XMLOutputter();
-        xmlOutputter.output(config, System.out);
-        xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(NametagAutoPrint.configFile.getName()));
-    }
-
-    public static void build() throws IOException {
-        Element root = new Element("config");
-        Document config = new Document(root);
-        Element printers = new Element("printers");
-        config.getRootElement().addContent(printers);
-        XMLOutputter xmlOutputter = new XMLOutputter();
-        xmlOutputter.output(config, System.out);
-        xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(NametagAutoPrint.configFile.getName()));
-
-    }
-    
     public ObservableList<Node> getPrinterPanes(){
         return printerBox.getChildren();
     }
-    
+
 }
