@@ -50,6 +50,7 @@ public class PreviewController implements Initializable {
         
         previewBtn.setOnAction(e -> {
             currentTag.setName(nameField.getText());
+            System.out.println(nameField.getText());
             Task task = new Task() {
 
                 @Override
@@ -68,14 +69,15 @@ public class PreviewController implements Initializable {
         });
         
         submitBtn.setOnAction(e -> {
+            Nametag nametag = new Nametag(currentTag);
             Task task = new Task() {
 
                 @Override
                 protected Object call() throws Exception {
                     Platform.runLater(() -> setProgress(0.5));
-                    currentTag.export();
+                    nametag.export();
                     Platform.runLater(() -> previewController.setProgress(1));
-                    PrintMaster.addToQueue(currentTag);
+                    PrintMaster.addToQueue(nametag);
                     Thread.sleep(500);
                     Platform.runLater(() -> previewController.setProgress(0));
                     return null;

@@ -21,10 +21,9 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
-import static nametagautoprint.NametagAutoPrint.imagesDirectory;
-import static nametagautoprint.NametagAutoPrint.p;
-import static nametagautoprint.NametagAutoPrint.previewController;
-import static nametagautoprint.NametagAutoPrint.scadDirectory;
+import org.jdom2.Element;
+
+import static nametagautoprint.NametagAutoPrint.*;
 
 /**
  *
@@ -52,6 +51,20 @@ public class Nametag {
         this.name = name;
 
         init();
+    }
+
+    public Nametag(String name, String stl, String gcode) {
+        this.name = name;
+        this.stl = new File(scadDirectory + stl);
+        this.gcode = new File(gcodeDirectory + gcode);
+
+        init();
+    }
+
+    public Nametag(Nametag nametag) {
+        this.name = nametag.name;
+        this.stl = nametag.stl;
+        this.gcode = nametag.gcode;
     }
 
     // So that we don't need to repeat this in every copnstructor
@@ -168,6 +181,20 @@ public class Nametag {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Element toElement() {
+        Element nametagElement = new Element("nametag");
+        nametagElement.setAttribute("name", name);
+        if (stl != null)
+            nametagElement.setAttribute("stl", stl.getName());
+        else
+            nametagElement.setAttribute("stl", "");
+        if (gcode != null)
+            nametagElement.setAttribute("gcode", gcode.getName());
+        else
+            nametagElement.setAttribute("gcode", "");
+        return nametagElement;
     }
 
 }

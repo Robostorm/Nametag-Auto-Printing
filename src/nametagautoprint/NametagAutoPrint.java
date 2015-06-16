@@ -35,10 +35,10 @@ public class NametagAutoPrint extends Application {
 
     //public static final String octoPrintHostName = "127.0.0.1:5000";
     public static final String octoPrintHostName = "192.168.5.36/octoprint";
-    public static final String imagesDirectory = "images";
-    public static final String scadDirectory = "scad";
-    public static final String stlDirectory = "stl";
-    public static final String gcodeDirectory = "gcode";
+    public static final String imagesDirectory = "images/";
+    public static final String scadDirectory = "scad/";
+    public static final String stlDirectory = "stl/";
+    public static final String gcodeDirectory = "gcode/";
     
     public static String name = "tim";
 
@@ -120,18 +120,24 @@ public class NametagAutoPrint extends Application {
             configFile.createNewFile();
             XML.buildConfig();
         }
-        if(!queueFile.exists())
+        if(!queueFile.exists()) {
             queueFile.createNewFile();
-        
+            XML.buildQueue();
+        }
         try {
             XML.loadPrinters();
         } catch (JDOMException | IOException e) {
             System.err.println("Could not load printers!");
         }
+        try {
+            XML.loadQueue();
+        } catch (JDOMException e) {
+            System.err.println("Could not load queue!");
+        }
         
-        PrintMaster.addToQueue(new Nametag("Test"));
+        /*PrintMaster.addToQ*ueue(new Nametag("Test"));
         PrintMaster.addToQueue(new Nametag("Test2"));
-        PrintMaster.addToQueue(new Nametag("Test3"));
+        PrintMaster.addToQueue(new Nametag("Test3"));*/
         
         scene.getStylesheets().add("nametagautoprint/style.css");
 
