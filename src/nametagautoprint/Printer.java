@@ -28,6 +28,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import org.jdom2.Element;
+import static nametagautoprint.NametagAutoPrint.*;
 
 /**
  *
@@ -162,17 +163,17 @@ public class Printer {
     }
 
     public void slice(Nametag tag){
-        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString(), NametagAutoPrint.gcodeDirectory, tag.toString());
-        if (NametagAutoPrint.p == null || !NametagAutoPrint.p.isAlive()) {
+        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", stlDirectory, tag.toString(), gcodeDirectory, tag.toString());
+        if (p == null || !p.isAlive()) {
             try {
 
                 System.out.println("Args: " + slic3rargs);
 
-                NametagAutoPrint.p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
+                p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
 
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getInputStream()));
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getErrorStream()));
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
                 String s;
 
@@ -188,7 +189,7 @@ public class Printer {
                     System.out.println(s);
                 }
 
-                while (NametagAutoPrint.p.isAlive()){}
+                while (p.isAlive()){}
                 System.out.println("Done");
 
             } catch (IOException e) {

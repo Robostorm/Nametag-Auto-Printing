@@ -125,11 +125,6 @@ public class Nametag {
 
     public void preview() {
 
-        File images = new File(imagesDirectory);
-        if (!images.exists()) {
-            images.mkdir();
-        }
-
         String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
                 + "--camera=0,0,0,0,0,0,100 openscad/name.scad", NametagAutoPrint.imagesDirectory,
                 name, name, name.equals("") ? 4 : name.length(), scadDirectory, name);
@@ -157,16 +152,6 @@ public class Nametag {
     }
 
     public void export() {
-
-        File stl = new File(stlDirectory);
-        if (!stl.exists()) {
-            stl.mkdir();
-        }
-
-        File gcode = new File(gcodeDirectory);
-        if (!gcode.exists()) {
-            gcode.mkdir();
-        }
 
         stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
         
