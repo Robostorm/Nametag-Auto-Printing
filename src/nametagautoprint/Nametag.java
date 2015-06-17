@@ -134,9 +134,9 @@ public class Nametag {
 
                 p = Runtime.getRuntime().exec("openscad" + pngargs);
 
-                do {
-                    preview = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
-                } while (p.isAlive());
+                while (p.isAlive()){};
+
+                preview = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
 
                 Platform.runLater(() -> previewController.refreshImage(preview));
                 System.out.println("Done");
@@ -165,9 +165,8 @@ public class Nametag {
 
                 p = Runtime.getRuntime().exec("openscad" + stlargs);
 
-                while (p.isAlive()) {
-                    System.out.println("Done");
-                }
+                while (p.isAlive()) {}
+                System.out.println("Done");
 
             } catch (IOException e) {
                 System.err.println("Could not generate stl!");

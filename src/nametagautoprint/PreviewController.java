@@ -69,7 +69,7 @@ public class PreviewController implements Initializable {
         });
         
         submitBtn.setOnAction(e -> {
-            Nametag nametag = new Nametag(currentTag);
+            Nametag nametag = new Nametag(currentTag.toString());
             Task task = new Task() {
 
                 @Override

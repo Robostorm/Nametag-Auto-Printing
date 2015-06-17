@@ -75,7 +75,7 @@ public class XML {
             list.add(new Nametag(nametag.getAttributeValue("name"), nametag.getAttributeValue("stl"),
                     nametag.getAttributeValue("gcode")));
         }
-        System.out.println("Built read queue file");
+        System.out.println("Read queue file");
         PrintMaster.addAllToQueue(list);
     }
 
@@ -85,7 +85,7 @@ public class XML {
         for(Nametag nametag : PrintMaster.getAllNametags())
             queue.getRootElement().addContent(nametag.toElement());
         XMLOutputter xmlOutputter = new XMLOutputter();
-        System.out.println("Built wrote config file");
+        System.out.println("Wrote config file");
         xmlOutputter.output(queue, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
         xmlOutputter.output(queue, new FileWriter(NametagAutoPrint.queueFile.getName()));
