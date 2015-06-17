@@ -18,7 +18,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import static nametagautoprint.NametagAutoPrint.previewController;
 
 /**
  * FXML Controller class
@@ -56,9 +55,9 @@ public class PreviewController implements Initializable {
                 protected Object call() throws Exception {
                     Platform.runLater(() -> setProgress(0.5));
                     currentTag.preview();
-                    Platform.runLater(() -> previewController.setProgress(1));
+                    Platform.runLater(() -> setProgress(1));
                     Thread.sleep(500);
-                    Platform.runLater(() -> previewController.setProgress(0));
+                    Platform.runLater(() -> setProgress(0));
                     return null;
                 }
             };
@@ -74,10 +73,11 @@ public class PreviewController implements Initializable {
                 protected Object call() throws Exception {
                     Platform.runLater(() -> setProgress(0.5));
                     currentTag.export();
-                    Platform.runLater(() -> previewController.setProgress(1));
+                    Platform.runLater(() -> setProgress(1));
                     PrintMaster.addToQueue(currentTag);
+                    currentTag = new Nametag("");
                     Thread.sleep(500);
-                    Platform.runLater(() -> previewController.setProgress(0));
+                    Platform.runLater(() -> setProgress(0));
                     return null;
                 }
             };

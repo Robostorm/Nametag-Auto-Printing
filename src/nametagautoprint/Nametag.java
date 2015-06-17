@@ -107,6 +107,7 @@ public class Nametag {
 
     public void setName(String name) {
         this.name = name;
+        nameLabel.setText(name);
     }
 
     public void preview() {

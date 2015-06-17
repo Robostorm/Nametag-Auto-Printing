@@ -1,12 +1,8 @@
 package nametagautoprint;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,14 +13,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import static nametagautoprint.NametagAutoPrint.queueController;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.jdom2.JDOMException;
 
 /**
@@ -52,8 +40,7 @@ public class NametagAutoPrint extends Application {
     static Pane settings;
     static Pane printers;
     static Pane queue;
-    
-    // Remove static after preview and export are moved to printer and/or nametag classes
+
     public static PreviewController previewController;
     public static SettingsController settingsController;
     public static PrintersController printersController;
