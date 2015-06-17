@@ -46,7 +46,7 @@ public class PreviewController implements Initializable {
         
         setProgress(0);
         
-        currentTag.preview();
+        previewImage.setImage(new Image("file:openscad/out.png"));
         
         previewBtn.setOnAction(e -> {
             currentTag.setName(nameField.getText());
