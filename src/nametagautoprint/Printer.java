@@ -6,7 +6,11 @@
 
 package nametagautoprint;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -158,6 +162,43 @@ public class Printer {
     }
 
     public void slice(Nametag tag){
+        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString(), NametagAutoPrint.gcodeDirectory, tag.toString());
+        if (NametagAutoPrint.p == null || !NametagAutoPrint.p.isAlive()) {
+            try {
+
+                System.out.println("Args: " + slic3rargs);
+
+                NametagAutoPrint.p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
+
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getInputStream()));
+
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getErrorStream()));
+
+                String s;
+
+                // read the output from the command
+                System.out.println("Here is the standard output of the command:\n");
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+
+                // read any errors from the attempted command
+                System.out.println("Here is the standard error of the command (if any):\n");
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println(s);
+                }
+
+                while (NametagAutoPrint.p.isAlive()){}
+                System.out.println("Done");
+
+            } catch (IOException e) {
+                System.out.println("exception happened - here's what I know: ");
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        } else {
+            System.out.println("Slic3r already running. Waiting...");
+        }
 
     }
 
