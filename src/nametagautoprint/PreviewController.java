@@ -69,6 +69,7 @@ public class PreviewController implements Initializable {
         });
         
         submitBtn.setOnAction(e -> {
+            currentTag.setName(nameField.getText());
             Nametag nametag = new Nametag(currentTag.toString());
             Task task = new Task() {
 

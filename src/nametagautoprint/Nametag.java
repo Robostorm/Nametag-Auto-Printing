@@ -156,7 +156,7 @@ public class Nametag {
         
         stlField.setText(stl.getName());
         
-        String stlargs = String.format(" -o %s.stl -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
+        String stlargs = String.format(" -o %s -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
                 + "openscad/name.scad", stl, name, name.length(), scadDirectory, name);
         if (p == null || !p.isAlive()) {
             try {
