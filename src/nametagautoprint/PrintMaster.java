@@ -7,6 +7,7 @@
 package nametagautoprint;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -46,8 +47,9 @@ public class PrintMaster {
         System.out.println("All Printers: " + printers);
     }
     
-    public static void addToQueue(Nametag tag){
+    public static void addToQueue(Nametag tag) throws IOException {
         queue.add(tag);
+        XML.saveQueue();
         NametagAutoPrint.getInstance().queueController.getPrinterPanes().add(tag.getPane());
         System.out.println("Added Nametag to queue: " + tag);
         System.out.println("Queue: " + queue);
@@ -78,5 +80,9 @@ public class PrintMaster {
 
     public static List<Printer> getAllPrinters() {
         return printers;
+    }
+
+    public static List<Nametag> getAllNametags() {
+        return queue;
     }
 }

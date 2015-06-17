@@ -45,10 +45,11 @@ public class PreviewController implements Initializable {
         
         setProgress(0);
         
-        currentTag.preview();
+        previewImage.setImage(new Image("file:openscad/out.png"));
         
         previewBtn.setOnAction(e -> {
             currentTag.setName(nameField.getText());
+            System.out.println(nameField.getText());
             Task task = new Task() {
 
                 @Override
@@ -67,15 +68,16 @@ public class PreviewController implements Initializable {
         });
         
         submitBtn.setOnAction(e -> {
+            currentTag.setName(nameField.getText());
+            Nametag nametag = new Nametag(currentTag.toString());
             Task task = new Task() {
 
                 @Override
                 protected Object call() throws Exception {
                     Platform.runLater(() -> setProgress(0.5));
-                    currentTag.export();
+                    nametag.export();
                     Platform.runLater(() -> setProgress(1));
-                    PrintMaster.addToQueue(currentTag);
-                    currentTag = new Nametag("");
+                    PrintMaster.addToQueue(nametag);
                     Thread.sleep(500);
                     Platform.runLater(() -> setProgress(0));
                     return null;

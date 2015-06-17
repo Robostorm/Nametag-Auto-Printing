@@ -21,10 +21,9 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
-import static nametagautoprint.NametagAutoPrint.imagesDirectory;
-import static nametagautoprint.NametagAutoPrint.p;
-import static nametagautoprint.NametagAutoPrint.previewController;
-import static nametagautoprint.NametagAutoPrint.scadDirectory;
+import org.jdom2.Element;
+
+import static nametagautoprint.NametagAutoPrint.*;
 
 /**
  *
@@ -52,6 +51,20 @@ public class Nametag {
         this.name = name;
 
         init();
+    }
+
+    public Nametag(String name, String stl, String gcode) {
+        this.name = name;
+        this.stl = new File(scadDirectory + stl);
+        this.gcode = new File(gcodeDirectory + gcode);
+
+        init();
+    }
+
+    public Nametag(Nametag nametag) {
+        this.name = nametag.name;
+        this.stl = nametag.stl;
+        this.gcode = nametag.gcode;
     }
 
     // So that we don't need to repeat this in every copnstructor
@@ -111,7 +124,12 @@ public class Nametag {
     }
 
     public void preview() {
-        
+
+        File images = new File(imagesDirectory);
+        if (!images.exists()) {
+            images.mkdir();
+        }
+
         String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
                 + "--camera=0,0,0,0,0,0,100 openscad/name.scad", NametagAutoPrint.imagesDirectory,
                 name, name, name.equals("") ? 4 : name.length(), scadDirectory, name);
@@ -122,9 +140,9 @@ public class Nametag {
 
                 p = Runtime.getRuntime().exec("openscad" + pngargs);
 
-                do {
-                    preview = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
-                } while (p.isAlive());
+                while (p.isAlive()){};
+
+                preview = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
 
                 Platform.runLater(() -> previewController.refreshImage(preview));
                 System.out.println("Done");
@@ -139,12 +157,22 @@ public class Nametag {
     }
 
     public void export() {
-        
+
+        File stl = new File(stlDirectory);
+        if (!stl.exists()) {
+            stl.mkdir();
+        }
+
+        File gcode = new File(gcodeDirectory);
+        if (!gcode.exists()) {
+            gcode.mkdir();
+        }
+
         stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
         
         stlField.setText(stl.getName());
         
-        String stlargs = String.format(" -o %s.stl -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
+        String stlargs = String.format(" -o %s -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
                 + "openscad/name.scad", stl, name, name.length(), scadDirectory, name);
         if (p == null || !p.isAlive()) {
             try {
@@ -153,9 +181,8 @@ public class Nametag {
 
                 p = Runtime.getRuntime().exec("openscad" + stlargs);
 
-                while (p.isAlive()) {
-                    System.out.println("Done");
-                }
+                while (p.isAlive()) {}
+                System.out.println("Done");
 
             } catch (IOException e) {
                 System.err.println("Could not generate stl!");
@@ -169,6 +196,20 @@ public class Nametag {
     @Override
     public String toString() {
         return name;
+    }
+
+    public Element toElement() {
+        Element nametagElement = new Element("nametag");
+        nametagElement.setAttribute("name", name);
+        if (stl != null)
+            nametagElement.setAttribute("stl", stl.getName());
+        else
+            nametagElement.setAttribute("stl", "");
+        if (gcode != null)
+            nametagElement.setAttribute("gcode", gcode.getName());
+        else
+            nametagElement.setAttribute("gcode", "");
+        return nametagElement;
     }
 
 }

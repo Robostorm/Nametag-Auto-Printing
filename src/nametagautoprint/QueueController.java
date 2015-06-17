@@ -6,6 +6,7 @@
 
 package nametagautoprint;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -39,7 +40,14 @@ public class QueueController implements Initializable {
             public void requestFocus() { }
         };
         
-        queueBack.setOnAction(e -> NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings));
+        queueBack.setOnAction(event -> {
+            NametagAutoPrint.getInstance().setPane(NametagAutoPrint.Panes.Settings);
+            try {
+                XML.saveQueue();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         
     }
     
