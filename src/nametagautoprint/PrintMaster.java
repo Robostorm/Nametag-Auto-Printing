@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -20,6 +23,8 @@ public class PrintMaster {
     
     private static List<Printer> printers = new ArrayList<>();
     private static List<Nametag> queue = new ArrayList<>();
+    
+    private static final long delay = 30000;
     
     public static void addPrinter(Printer printer){
         printers.add(printer);
@@ -84,5 +89,51 @@ public class PrintMaster {
 
     public static List<Nametag> getAllNametags() {
         return queue;
+    }
+    
+    public static void start(){
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+                 System.out.println("Running");
+                 
+                 for (Printer printer : printers) {
+                    
+                    System.out.println("Printer: " + printer);
+                    
+                    Nametag currentTag = null;
+                    
+                    for (Nametag tempTag : queue) {
+                        System.out.print(queue.indexOf(tempTag) + " - " + tempTag.toString() + " - ");
+                        
+                        if(!tempTag.isPrinting()){
+                            currentTag = tempTag;
+                            System.out.println("Good");
+                            break;
+                        }else{
+                            System.out.println("Printing");
+                        }
+                    }
+                    
+                    if(printer.isAvailable()){
+                        if(currentTag != null){
+                            if(!currentTag.isGenerated()) currentTag.export();
+                            if(!currentTag.isSliced()) printer.slice(currentTag);
+                            printer.upload(currentTag);
+                            currentTag.setPrinter(printer);
+                            currentTag.setPrinting(true);
+                        }else{
+                            System.out.println("No nametags to print!");
+                        }
+                    }else{
+                        System.out.println("Printer is not available");
+                    }
+                }
+            }
+        };
+        
+        Timer timer = new Timer(true);
+        timer.schedule(task, 0, delay);
     }
 }

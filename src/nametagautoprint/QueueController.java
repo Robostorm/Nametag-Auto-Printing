@@ -45,7 +45,7 @@ public class QueueController implements Initializable {
             try {
                 XML.saveQueue();
             } catch (IOException e) {
-                e.printStackTrace();
+                
             }
         });
         

@@ -74,10 +74,10 @@ public class PreviewController implements Initializable {
 
                 @Override
                 protected Object call() throws Exception {
-                    Platform.runLater(() -> setProgress(0.5));
-                    nametag.export();
-                    Platform.runLater(() -> setProgress(1));
+                    //Platform.runLater(() -> setProgress(0.5));
+                    //nametag.export();
                     PrintMaster.addToQueue(nametag);
+                    Platform.runLater(() -> setProgress(1));
                     Thread.sleep(500);
                     Platform.runLater(() -> setProgress(0));
                     return null;

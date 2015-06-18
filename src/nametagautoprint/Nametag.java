@@ -5,8 +5,10 @@
  */
 package nametagautoprint;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -124,23 +126,20 @@ public class Nametag {
     }
 
     public void preview() {
-
-        File images = new File(imagesDirectory);
-        if (!images.exists()) {
-            images.mkdir();
-        }
-
+        
+        System.out.println("Exporting " + this);
+        
         String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
                 + "--camera=0,0,0,0,0,0,100 openscad/name.scad", NametagAutoPrint.imagesDirectory,
                 name, name, name.equals("") ? 4 : name.length(), scadDirectory, name);
         if (p == null || !p.isAlive()) {
             try {
 
-                System.out.println("Args: " + pngargs);
+                //System.out.println("Args: " + pngargs);
 
                 p = Runtime.getRuntime().exec("openscad" + pngargs);
 
-                while (p.isAlive()){};
+                while (p.isAlive());
 
                 preview = new Image(String.format("file:%s/%s.png", imagesDirectory, name));
 
@@ -157,17 +156,9 @@ public class Nametag {
     }
 
     public void export() {
-
-        File stl = new File(stlDirectory);
-        if (!stl.exists()) {
-            stl.mkdir();
-        }
-
-        File gcode = new File(gcodeDirectory);
-        if (!gcode.exists()) {
-            gcode.mkdir();
-        }
-
+        
+        System.out.println("Exporting " + this);
+        
         stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
         
         stlField.setText(stl.getName());
@@ -181,6 +172,22 @@ public class Nametag {
 
                 p = Runtime.getRuntime().exec("openscad" + stlargs);
 
+
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getInputStream()));
+
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getErrorStream()));
+
+                String s;
+
+                // read the output from the command
+                while ((s = stdInput.readLine()) != null) {
+                    System.out.println(s);
+                }
+
+                // read any errors from the attempted command
+                while ((s = stdError.readLine()) != null) {
+                    System.out.println(s);
+                }
                 while (p.isAlive()) {}
                 System.out.println("Done");
 
@@ -210,6 +217,32 @@ public class Nametag {
         else
             nametagElement.setAttribute("gcode", "");
         return nametagElement;
+    }
+    
+    public boolean isPrinting(){
+        return printing;
+    }
+    
+    public void setPrinting(boolean printing){
+        this.printing = printing;
+        printingField.setText(printing ? "Printing..." : "In Queue");
+    }
+    
+    public Printer getPrinter(){
+        return printer;
+    }
+    
+    public void setPrinter(Printer printer){
+        this.printer = printer;
+        printerField.setText(printer == null ? "No Printer" : printer.toString());
+    }
+    
+    public boolean isGenerated(){
+        return stl == null;
+    }
+    
+    public boolean isSliced(){
+        return gcode == null;
     }
 
 }

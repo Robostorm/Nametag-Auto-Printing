@@ -111,6 +111,22 @@ public class NametagAutoPrint extends Application {
             queueFile.createNewFile();
             XML.buildQueue();
         }
+        
+        File images = new File(imagesDirectory);
+        if (!images.exists()) {
+            images.mkdir();
+        }
+        
+        File stls = new File(stlDirectory);
+        if (!stls.exists()) {
+            stls.mkdir();
+        }
+        
+        File scads = new File(scadDirectory);
+        if (!scads.exists()) {
+            scads.mkdir();
+        }
+        
         try {
             XML.loadPrinters();
         } catch (JDOMException | IOException e) {
@@ -122,9 +138,13 @@ public class NametagAutoPrint extends Application {
             System.err.println("Could not load queue!");
         }
         
-        /*PrintMaster.addToQ*ueue(new Nametag("Test"));
+        /*
+        PrintMaster.addToQueue(new Nametag("Test"));
         PrintMaster.addToQueue(new Nametag("Test2"));
-        PrintMaster.addToQueue(new Nametag("Test3"));*/
+        PrintMaster.addToQueue(new Nametag("Test3"));
+        */
+        
+        PrintMaster.start();
         
         scene.getStylesheets().add("nametagautoprint/style.css");
 

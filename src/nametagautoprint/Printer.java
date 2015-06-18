@@ -43,6 +43,9 @@ public class Printer {
     private boolean active;
     private boolean available;
     
+    private boolean isPrinting;
+    private Nametag nametag;
+    
     private GridPane grid;
     private Label nameLabel;
     private TextField ipField;
@@ -162,7 +165,8 @@ public class Printer {
     }
 
     public void slice(Nametag tag){
-        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString(), NametagAutoPrint.gcodeDirectory, tag.toString());
+        System.out.println(this + " is slicing " + tag);
+        String slic3rargs = String.format(" %s%s.stl --output %s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString(), NametagAutoPrint.gcodeDirectory, tag.toString());
         if (NametagAutoPrint.p == null || !NametagAutoPrint.p.isAlive()) {
             try {
 
@@ -177,13 +181,11 @@ public class Printer {
                 String s;
 
                 // read the output from the command
-                System.out.println("Here is the standard output of the command:\n");
                 while ((s = stdInput.readLine()) != null) {
                     System.out.println(s);
                 }
 
                 // read any errors from the attempted command
-                System.out.println("Here is the standard error of the command (if any):\n");
                 while ((s = stdError.readLine()) != null) {
                     System.out.println(s);
                 }
@@ -200,6 +202,10 @@ public class Printer {
             System.out.println("Slic3r already running. Waiting...");
         }
 
+    }
+    
+    public void upload(Nametag tag){
+        System.out.println(this + " is uploading " + tag);
     }
 
     public Element toElement() {
@@ -250,7 +256,8 @@ public class Printer {
     }
 
     public boolean isAvailable() {
-        return available;
+        //return available;
+        return isActive();
     }
 
     public void setAvailable(boolean available) {

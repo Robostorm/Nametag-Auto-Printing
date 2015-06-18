@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 public class XML {
 
@@ -72,8 +74,9 @@ public class XML {
         Element queue = document.getRootElement();
         List<Nametag> list = new ArrayList<>();
         for(Element nametag : queue.getChildren()) {
-            list.add(new Nametag(nametag.getAttributeValue("name"), nametag.getAttributeValue("stl"),
-                    nametag.getAttributeValue("gcode")));
+            Nametag tag = new Nametag(nametag.getAttributeValue("name"), nametag.getAttributeValue("stl"),
+                    nametag.getAttributeValue("gcode"));
+            list.add(tag);
         }
         System.out.println("Read queue file");
         PrintMaster.addAllToQueue(list);
