@@ -103,6 +103,21 @@ public class NametagAutoPrint extends Application {
             }
         });
 
+        File images = new File(imagesDirectory);
+        if (!images.exists()) {
+            images.mkdir();
+        }
+
+        File stl = new File(stlDirectory);
+        if (!stl.exists()) {
+            stl.mkdir();
+        }
+
+        File gcode = new File(gcodeDirectory);
+        if (!gcode.exists()) {
+            gcode.mkdir();
+        }
+
         if(!configFile.exists()) {
             configFile.createNewFile();
             XML.buildConfig();

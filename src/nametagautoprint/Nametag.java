@@ -126,9 +126,7 @@ public class Nametag {
     }
 
     public void preview() {
-        
         System.out.println("Exporting " + this);
-        
         String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
                 + "--camera=0,0,0,0,0,0,100 openscad/name.scad", NametagAutoPrint.imagesDirectory,
                 name, name, name.equals("") ? 4 : name.length(), scadDirectory, name);
@@ -156,9 +154,13 @@ public class Nametag {
     }
 
     public void export() {
+<<<<<<< HEAD
         
         System.out.println("Exporting " + this);
         
+=======
+
+>>>>>>> 1783a9c7ca7c6189220c68145c6d518c115ce27d
         stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
         
         stlField.setText(stl.getName());
