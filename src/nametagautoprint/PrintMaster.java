@@ -20,6 +20,7 @@ public class PrintMaster {
     
     private static List<Printer> printers = new ArrayList<>();
     private static List<Nametag> queue = new ArrayList<>();
+    private int position = 0;
     
     public static void addPrinter(Printer printer){
         printers.add(printer);
@@ -46,7 +47,22 @@ public class PrintMaster {
         System.out.println("Removed Printer: " + printer);
         System.out.println("All Printers: " + printers);
     }
-    
+
+    public Printer getNextPrinter() {
+        int i = position, checked = 0;
+        for(;;) {
+            if(printers.get(i).isActive() && printers.get(i).isAvailable())
+                return printers.get(i);
+            checked++;
+            if(checked == printers.size())
+                return null;
+            if(i >= printers.size())
+                i = 0;
+            else
+                i++;
+        }
+    }
+
     public static void addToQueue(Nametag tag) throws IOException {
         queue.add(tag);
         XML.saveQueue();

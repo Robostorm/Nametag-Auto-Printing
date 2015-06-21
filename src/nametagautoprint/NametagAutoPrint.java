@@ -65,10 +65,13 @@ public class NametagAutoPrint extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        
+
+        //Initialize GUI
         stage = primaryStage;
         stage.getIcons().add(new Image("file:res/icon.png"));
-        
+        stage.setTitle("Nametag Generator");
+        stage.setFullScreen(true);
+
         FXMLLoader previewFxmlLoader = new FXMLLoader();
         previewFxmlLoader.setLocation(getClass().getResource("preview.fxml"));
         preview = (Pane) previewFxmlLoader.load();
@@ -103,6 +106,13 @@ public class NametagAutoPrint extends Application {
                 System.exit(0);
             }
         });
+
+
+        scene.getStylesheets().add("nametagautoprint/style.css");
+
+        stage.setScene(scene);
+
+        //Generate files
 
         File images = new File(imagesDirectory);
         if (!images.exists()) {
@@ -141,12 +151,8 @@ public class NametagAutoPrint extends Application {
         /*PrintMaster.addToQ*ueue(new Nametag("Test"));
         PrintMaster.addToQueue(new Nametag("Test2"));
         PrintMaster.addToQueue(new Nametag("Test3"));*/
-        
-        scene.getStylesheets().add("nametagautoprint/style.css");
 
-        stage.setTitle("Nametag Generator");
-        stage.setFullScreen(true);
-        stage.setScene(scene);
+        //Display GUI
         stage.show();
     }
     
