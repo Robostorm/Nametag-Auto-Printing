@@ -67,6 +67,7 @@ public class NametagAutoPrint extends Application {
     public void start(Stage primaryStage) throws IOException {
         
         stage = primaryStage;
+        stage.getIcons().add(new Image("file:res/icon.png"));
         
         FXMLLoader previewFxmlLoader = new FXMLLoader();
         previewFxmlLoader.setLocation(getClass().getResource("preview.fxml"));

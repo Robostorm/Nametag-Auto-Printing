@@ -48,6 +48,10 @@ public class PreviewController implements Initializable {
         previewImage.setImage(new Image("file:openscad/out.png"));
         
         previewBtn.setOnAction(e -> {
+            if(nameField.getText().equals("")) {
+                System.err.println("Preview attempted : No name entered");
+                return;
+            }
             currentTag.setName(nameField.getText());
             System.out.println(nameField.getText());
             Task task = new Task() {
@@ -68,6 +72,10 @@ public class PreviewController implements Initializable {
         });
         
         submitBtn.setOnAction(e -> {
+            if(nameField.getText().equals("")) {
+                System.err.println("Submit attempted : No name entered");
+                return;
+            }
             currentTag.setName(nameField.getText());
             Nametag nametag = new Nametag(currentTag.toString());
             Task task = new Task() {
