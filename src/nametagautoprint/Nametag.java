@@ -55,8 +55,10 @@ public class Nametag {
 
     public Nametag(String name, String stl, String gcode) {
         this.name = name;
-        this.stl = new File(scadDirectory + stl);
-        this.gcode = new File(gcodeDirectory + gcode);
+        if(!stl.equals(""))
+            this.stl = new File(scadDirectory + stl);
+        if(!gcode.equals(""))
+            this.gcode = new File(gcodeDirectory + gcode);
 
         init();
     }

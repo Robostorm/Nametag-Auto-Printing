@@ -80,7 +80,7 @@ public class XML {
     }
 
     public static void saveQueue() throws IOException {
-        Element root = new Element("config");
+        Element root = new Element("queue");
         Document queue = new Document(root);
         for(Nametag nametag : PrintMaster.getAllNametags())
             queue.getRootElement().addContent(nametag.toElement());
