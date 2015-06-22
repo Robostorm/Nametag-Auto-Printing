@@ -109,25 +109,27 @@ public class PrintMaster {
                         
                         if(!tempTag.isPrinting()){
                             currentTag = tempTag;
-                            System.out.println("Good");
+                            System.out.println("Selected");
                             break;
                         }else{
                             System.out.println("Printing");
                         }
                     }
                     
-                    if(printer.isAvailable()){
-                        if(currentTag != null){
+                    if(currentTag != null){
+                        if(printer.isAvailable()){
                             if(!currentTag.isGenerated()) currentTag.export();
                             if(!currentTag.isSliced()) printer.slice(currentTag);
                             printer.upload(currentTag);
+                            printer.setNametag(currentTag);
+                            printer.setPrinting(true);
                             currentTag.setPrinter(printer);
                             currentTag.setPrinting(true);
                         }else{
-                            System.out.println("No nametags to print!");
+                            System.out.println("Printer is not available");
                         }
                     }else{
-                        System.out.println("Printer is not available");
+                        System.out.println("No nametags to print!");
                     }
                 }
             }

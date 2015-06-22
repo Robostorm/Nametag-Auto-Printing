@@ -157,12 +157,11 @@ public class Nametag {
         
         System.out.println("Exporting " + this);
         
-        stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
-        
-        stlField.setText(stl.getName());
+        setStl(new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name)));
         
         String stlargs = String.format(" -o %s -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
-                + "openscad/name.scad", stl, name, name.length(), scadDirectory, name);
+                + "openscad/name.scad", getStl().getAbsolutePath(), name, name.length(), scadDirectory, name);
+        
         if (p == null || !p.isAlive()) {
             try {
 
@@ -179,12 +178,12 @@ public class Nametag {
 
                 // read the output from the command
                 while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
+                    System.out.println("Scad: " + s);
                 }
 
                 // read any errors from the attempted command
                 while ((s = stdError.readLine()) != null) {
-                    System.out.println(s);
+                    System.out.println("Scad: " + s);
                 }
                 while (p.isAlive()) {}
                 System.out.println("Done");
@@ -223,7 +222,7 @@ public class Nametag {
     
     public void setPrinting(boolean printing){
         this.printing = printing;
-        printingField.setText(printing ? "Printing..." : "In Queue");
+        Platform.runLater(() -> printingField.setText(printing ? "Printing..." : "In Queue"));
     }
     
     public Printer getPrinter(){
@@ -232,7 +231,7 @@ public class Nametag {
     
     public void setPrinter(Printer printer){
         this.printer = printer;
-        printerField.setText(printer == null ? "No Printer" : printer.toString());
+        Platform.runLater(() -> printerField.setText(printer == null ? "No Printer" : printer.toString()));
     }
     
     public boolean isGenerated(){
@@ -241,6 +240,24 @@ public class Nametag {
     
     public boolean isSliced(){
         return gcode == null;
+    }
+    
+    public void setGcode(File gcode){
+        this.gcode = gcode;
+        Platform.runLater(() -> gcodeField.setText(this.gcode.getName()));
+    }
+    
+    public File getGcode(){
+        return gcode;
+    }
+    
+    public void setStl(File stl){
+        this.stl = stl;
+        Platform.runLater(() -> stlField.setText(this.stl.getName()));
+    }
+    
+    public File getStl(){
+        return stl;
     }
 
 }

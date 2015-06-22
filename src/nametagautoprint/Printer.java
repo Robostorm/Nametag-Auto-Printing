@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import javafx.application.Platform;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
@@ -44,7 +45,7 @@ public class Printer {
     private boolean active;
     private boolean available;
     
-    private boolean isPrinting;
+    private boolean printing;
     private Nametag nametag;
     
     private GridPane grid;
@@ -167,7 +168,11 @@ public class Printer {
 
     public void slice(Nametag tag){
         System.out.println(this + " is slicing " + tag);
-        String slic3rargs = String.format(" %s%s.stl --output %s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString(), NametagAutoPrint.gcodeDirectory, tag.toString());
+        
+        tag.setGcode(new File(String.format("%s/%s.gcode", NametagAutoPrint.gcodeDirectory, tag.toString())));
+        
+        String slic3rargs = String.format(" %s --output %s", tag.getStl().getAbsolutePath(), tag.getGcode().getAbsolutePath());
+        
         if (p == null || !p.isAlive()) {
             try {
 
@@ -183,12 +188,12 @@ public class Printer {
 
                 // read the output from the command
                 while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
+                    System.out.println("Slic3r: " + s);
                 }
 
                 // read any errors from the attempted command
                 while ((s = stdError.readLine()) != null) {
-                    System.out.println(s);
+                    System.out.println("Slic3r: " + s);
                 }
 
                 while (p.isAlive()){}
@@ -258,10 +263,26 @@ public class Printer {
 
     public boolean isAvailable() {
         //return available;
-        return isActive();
+        return isActive() && !isPrinting();
     }
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+    
+    public boolean isPrinting(){
+        return printing;
+    }
+    
+    public void setPrinting(boolean printing){
+        this.printing = printing;
+    }
+    
+    public Nametag getNametag(){
+        return nametag;
+    }
+    
+    public void setNametag(Nametag nametag){
+        this.nametag = nametag;
     }
 }

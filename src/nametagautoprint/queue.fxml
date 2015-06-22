@@ -22,7 +22,7 @@
         <VBox alignment="TOP_CENTER" spacing="10">
             <Label fx:id="queueHeading"  text="Queue" minWidth="1000" alignment="CENTER"  ></Label>
     
-            <ScrollPane fx:id="queueList" maxWidth="1000" minWidth="1000" maxHeight="500" minHeight="500" fitToWidth="true" >
+            <ScrollPane fx:id="queueList" maxWidth="1000" minWidth="1000" fitToWidth="true" >
                 <content>
                     <Pane>
                         <VBox fx:id="queueBox" maxWidth="1000" alignment="CENTER" spacing="10" >
