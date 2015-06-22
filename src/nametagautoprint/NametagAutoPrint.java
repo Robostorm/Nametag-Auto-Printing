@@ -3,6 +3,7 @@ package nametagautoprint;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -13,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.jdom2.JDOMException;
 
 /**
@@ -103,6 +105,8 @@ public class NametagAutoPrint extends Application {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (exitCombo.match(event)) {
                 System.out.println("CTRL + W Pressed, Exiting... ");
+                PrintServer.stop();
+                Platform.exit();
                 System.exit(0);
             }
         });
@@ -151,6 +155,14 @@ public class NametagAutoPrint extends Application {
         /*PrintMaster.addToQ*ueue(new Nametag("Test"));
         PrintMaster.addToQueue(new Nametag("Test2"));
         PrintMaster.addToQueue(new Nametag("Test3"));*/
+
+        //Start Print server
+        PrintServer.start();
+        stage.setOnCloseRequest((WindowEvent event ) ->{
+            PrintServer.stop();
+            Platform.exit();
+            System.exit(0);
+        });
 
         //Display GUI
         stage.show();

@@ -199,4 +199,11 @@ public class Nametag {
         return nametagElement;
     }
 
+    public Printer getPrinter() {
+        return printer;
+    }
+
+    public void setPrinter(Printer printer) {
+        this.printer = printer;
+    }
 }

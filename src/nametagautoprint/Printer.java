@@ -28,7 +28,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
 import org.jdom2.Element;
-import static nametagautoprint.NametagAutoPrint.*;
 
 /**
  *
@@ -163,17 +162,17 @@ public class Printer {
     }
 
     public void slice(Nametag tag){
-        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", stlDirectory, tag.toString(), gcodeDirectory, tag.toString());
-        if (p == null || !p.isAlive()) {
+        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString(), NametagAutoPrint.gcodeDirectory, tag.toString());
+        if (NametagAutoPrint.p == null || !NametagAutoPrint.p.isAlive()) {
             try {
 
                 System.out.println("Args: " + slic3rargs);
 
-                p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
+                NametagAutoPrint.p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
 
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getInputStream()));
 
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+                BufferedReader stdError = new BufferedReader(new InputStreamReader(NametagAutoPrint.p.getErrorStream()));
 
                 String s;
 
@@ -189,7 +188,8 @@ public class Printer {
                     System.out.println(s);
                 }
 
-                while (p.isAlive()){}
+                while (NametagAutoPrint.p.isAlive()){}
+                tag.setPrinter(this);
                 System.out.println("Done");
 
             } catch (IOException e) {
@@ -230,6 +230,14 @@ public class Printer {
     public void setPort(int port) {
         this.port = port;
         portField.setText(Integer.toString(port));
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
     public File getConfig() {

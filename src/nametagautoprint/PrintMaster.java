@@ -8,9 +8,7 @@ package nametagautoprint;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -19,8 +17,8 @@ import java.util.List;
 public class PrintMaster {
     
     private static List<Printer> printers = new ArrayList<>();
-    private static List<Nametag> queue = new ArrayList<>();
-    private int position = 0;
+    private static Queue<Nametag> queue = new LinkedList<>();
+    private static int position = 0;
     
     public static void addPrinter(Printer printer){
         printers.add(printer);
@@ -48,8 +46,10 @@ public class PrintMaster {
         System.out.println("All Printers: " + printers);
     }
 
-    public Printer getNextPrinter() {
+    public static Printer getNextPrinter() {
         int i = position, checked = 0;
+        if(printers.size() == 0)
+            return null;
         for(;;) {
             if(printers.get(i).isActive() && printers.get(i).isAvailable())
                 return printers.get(i);
@@ -90,6 +90,10 @@ public class PrintMaster {
         System.out.println("Queue: " + printers);
     }
 
+    public static Nametag pullNextNametag() {
+        return queue.poll();
+    }
+
     public static Printer getPrinter(int i) {
         return printers.get(i);
     }
@@ -98,7 +102,11 @@ public class PrintMaster {
         return printers;
     }
 
-    public static List<Nametag> getAllNametags() {
+    public static Queue<Nametag> getAllNametags() {
         return queue;
+    }
+
+    public static Iterator getQueueIterator() {
+        return queue.iterator();
     }
 }
