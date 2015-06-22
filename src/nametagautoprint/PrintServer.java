@@ -43,9 +43,8 @@ public class PrintServer {
             while (!isStopped()) {
                 Printer printer = PrintMaster.getNextPrinter();
                 if(printer != null) {
-                    Nametag nametag = PrintMaster.pullNextNametag();
-                    printer.slice(nametag);
-                    slicerPool.execute(new Slicer(printer, nametag));
+                    printer.setAvailable(false);
+                    slicerPool.execute(new Slicer(printer, PrintMaster.pullNextNametag()));
                 }
             }
         }
