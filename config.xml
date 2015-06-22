@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <printers>
-    <printer name="Robostorm" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="true" />
-    <printer name="Tim" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="true" />
-    <printer name="Ben" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="true" />
-    <printer name="Mike" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" />
+    <printer name="Robostorm" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" available="true" />
+    <printer name="Tim" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" available="true" />
+    <printer name="Ben" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" available="true" />
+    <printer name="Mike" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" available="true" />
+    <printer name="Test" ip="127.0.0.1" port="5000" apiKey="88730606C84C40DD9D552DDB583B9E07" file="config\slic3r\mendel.ini" active="true" available="true" />
   </printers>
 </config>

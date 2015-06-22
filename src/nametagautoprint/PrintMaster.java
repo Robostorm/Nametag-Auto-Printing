@@ -90,6 +90,22 @@ public class PrintMaster {
         System.out.println("Queue: " + printers);
     }
 
+    public static Nametag getNextNameToSlicer() {
+        for(Nametag nametag: queue) {
+            if(!nametag.isSliced() && nametag.isGenerated())
+                return nametag;
+        }
+        return null;
+    }
+
+    public static Nametag getNextNameToUpload() {
+        for(Nametag nametag: queue) {
+            if(nametag.isSliced() && nametag.isGenerated())
+                return nametag;
+        }
+        return null;
+    }
+
     public static Nametag pullNextNametag() {
         return queue.poll();
     }

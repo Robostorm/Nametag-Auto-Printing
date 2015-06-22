@@ -72,7 +72,7 @@ public class NametagAutoPrint extends Application {
         stage = primaryStage;
         stage.getIcons().add(new Image("file:res/icon.png"));
         stage.setTitle("Nametag Generator");
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
 
         FXMLLoader previewFxmlLoader = new FXMLLoader();
         previewFxmlLoader.setLocation(getClass().getResource("preview.fxml"));

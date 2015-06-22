@@ -23,7 +23,7 @@ public class XML {
         for(Element printer : printers.getChildren()) {
             list.add(new Printer(printer.getAttributeValue("name"), printer.getAttributeValue("ip"),
                     printer.getAttribute("port").getIntValue(), printer.getAttributeValue("apiKey"),
-                    printer.getAttribute("active").getBooleanValue()));
+                    printer.getAttribute("active").getBooleanValue(), printer.getAttribute("available").getBooleanValue()));
         }
         System.out.println("Built read config file");
         PrintMaster.addAllPrinters(list);

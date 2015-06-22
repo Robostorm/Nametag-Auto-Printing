@@ -16,22 +16,24 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import static nametagautoprint.NametagAutoPrint.gcodeDirectory;
+import static nametagautoprint.NametagAutoPrint.p;
 
 public class PrintServer {
 
     private static PrinterManager printerManager = new PrinterManager();
     private static Distributor distributor = new Distributor();
-    private static Queue<Nametag> sliced = new LinkedList<>();
     private static ExecutorService slicerPool = Executors.newFixedThreadPool(5);
 
     public static void start() {
         new Thread(printerManager).start();
         new Thread(distributor).start();
+        System.out.println("Starting Print Server");
     }
 
     public static void stop() {
         printerManager.stop();
         distributor.stop();
+        System.out.println("Stoppping Print Server");
     }
 
     static class PrinterManager implements Runnable {
@@ -40,17 +42,21 @@ public class PrintServer {
 
         @Override
         public void run() {
+            System.out.println("Starting Printer Manager");
             while (!isStopped()) {
                 Printer printer = PrintMaster.getNextPrinter();
                 if(printer != null) {
+                    Nametag nametag = PrintMaster.getNextNameToSlicer();
+                    System.out.printf("Assigning nametag %s to Printer %s\n", nametag.toString(), printer.getName());
                     printer.setAvailable(false);
-                    slicerPool.execute(new Slicer(printer, PrintMaster.pullNextNametag()));
+                    slicerPool.execute(new Slicer(printer, nametag));
                 }
             }
         }
 
         public void stop() {
             isStopped = true;
+            System.out.println("Stopping Printer Manager");
         }
 
         public boolean isStopped() {
@@ -70,8 +76,8 @@ public class PrintServer {
 
         @Override
         public void run() {
+            System.out.printf("Slicing nametag %s for printer %s\n", nametag.toString(), printer.getName());
             printer.slice(nametag);
-            sliced.add(nametag);
         }
     }
 
@@ -81,14 +87,17 @@ public class PrintServer {
 
         @Override
         public void run() {
+            System.out.println("Starting Distributor");
             while (!isStopped()) {
-                Nametag nametag = sliced.poll();
+                Nametag nametag = PrintMaster.getNextNameToUpload();
                 if(nametag != null) {
+                    System.out.printf("uploading nametag %s to printer %s\n", nametag.toString(), nametag.getPrinter().getName());
                     try {
                         upload(nametag.getPrinter(), nametag);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    PrintMaster.removeFromQueue(nametag);
                 }
             }
         }
@@ -144,6 +153,7 @@ public class PrintServer {
 
         public void stop() {
             isStopped = true;
+            System.out.println("Stopping Distributor");
         }
 
         public boolean isStopped() {

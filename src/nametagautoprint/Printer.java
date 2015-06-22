@@ -60,17 +60,19 @@ public class Printer {
         apiKey = "ApiKey";
         config = new File("config/slic3r/mendel.ini");
         active = false;
+        available = true;
         
         init();
     }
 
-    public Printer(String name, String ip, int port, String apiKey, boolean active){
+    public Printer(String name, String ip, int port, String apiKey, boolean active, boolean available){
         this.name = name;
         this.ip = ip;
         this.port = port;
         this.apiKey = apiKey;
         this.config = new File("config/slic3r/mendel.ini");
         this.active = active;
+        this.available = available;
 
         init();
     }
@@ -189,6 +191,7 @@ public class Printer {
                 }
 
                 while (NametagAutoPrint.p.isAlive()){}
+                tag.setGcode(new File(String.format("%s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString())));
                 tag.setPrinter(this);
                 System.out.println("Done");
 
@@ -211,7 +214,12 @@ public class Printer {
         printerElement.setAttribute("apiKey", apiKey);
         printerElement.setAttribute("file", config.getPath());
         printerElement.setAttribute("active", Boolean.toString(active));
+        printerElement.setAttribute("available", Boolean.toString(available));
         return printerElement;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getIp() {

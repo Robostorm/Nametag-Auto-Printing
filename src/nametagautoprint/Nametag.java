@@ -155,7 +155,7 @@ public class Nametag {
 
     public void export() {
 
-        stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
+        setStl(new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name)));
         
         stlField.setText(stl.getName());
         
@@ -205,5 +205,29 @@ public class Nametag {
 
     public void setPrinter(Printer printer) {
         this.printer = printer;
+    }
+
+    public boolean isGenerated(){
+        return stl != null;
+    }
+
+    public boolean isSliced(){
+        return gcode != null;
+    }
+
+    public File getGcode() {
+        return gcode;
+    }
+
+    public void setGcode(File gcode) {
+        this.gcode = gcode;
+    }
+
+    public File getStl() {
+        return stl;
+    }
+
+    public void setStl(File stl) {
+        this.stl = stl;
     }
 }
