@@ -127,21 +127,6 @@ public class NametagAutoPrint extends Application {
             XML.buildQueue();
         }
         
-        File images = new File(imagesDirectory);
-        if (!images.exists()) {
-            images.mkdir();
-        }
-        
-        File stls = new File(stlDirectory);
-        if (!stls.exists()) {
-            stls.mkdir();
-        }
-        
-        File scads = new File(scadDirectory);
-        if (!scads.exists()) {
-            scads.mkdir();
-        }
-        
         try {
             XML.loadPrinters();
         } catch (JDOMException | IOException e) {

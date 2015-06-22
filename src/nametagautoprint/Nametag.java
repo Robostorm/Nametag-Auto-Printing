@@ -154,13 +154,9 @@ public class Nametag {
     }
 
     public void export() {
-<<<<<<< HEAD
         
         System.out.println("Exporting " + this);
         
-=======
-
->>>>>>> 1783a9c7ca7c6189220c68145c6d518c115ce27d
         stl = new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name));
         
         stlField.setText(stl.getName());
