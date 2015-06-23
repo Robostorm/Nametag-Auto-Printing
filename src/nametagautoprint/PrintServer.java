@@ -3,6 +3,7 @@ package nametagautoprint;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -47,9 +48,11 @@ public class PrintServer {
                 Printer printer = PrintMaster.getNextPrinter();
                 if(printer != null) {
                     Nametag nametag = PrintMaster.getNextNameToSlicer();
-                    System.out.printf("Assigning nametag %s to Printer %s\n", nametag.toString(), printer.getName());
-                    printer.setAvailable(false);
-                    slicerPool.execute(new Slicer(printer, nametag));
+                    if(nametag != null) {
+                        System.out.printf("Assigning nametag %s to Printer %s\n", nametag.toString(), printer.getName());
+                        printer.setAvailable(false);
+                        slicerPool.execute(new Slicer(printer, nametag));
+                    }
                 }
             }
         }
@@ -90,14 +93,13 @@ public class PrintServer {
             System.out.println("Starting Distributor");
             while (!isStopped()) {
                 Nametag nametag = PrintMaster.getNextNameToUpload();
-                if(nametag != null) {
+                if(nametag != null && nametag.getPrinter() != null) {
                     System.out.printf("uploading nametag %s to printer %s\n", nametag.toString(), nametag.getPrinter().getName());
                     try {
                         upload(nametag.getPrinter(), nametag);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    PrintMaster.removeFromQueue(nametag);
                 }
             }
         }
@@ -119,12 +121,19 @@ public class PrintServer {
             post.setEntity(builder.build());
             post.addHeader("X-Api-Key", printer.getApiKey());
             HttpClient client = HttpClientBuilder.create().build();
-            HttpResponse response = client.execute(post);
+            HttpResponse response = null;
+            try {
+                response = client.execute(post);
+            } catch (HttpHostConnectException e) {
+                System.err.println("Could not connect to printer");
+                return;
+            }
             System.out.printf("Server Returned Code: %d\n", response.getStatusLine().getStatusCode());
             String message;
             switch (response.getStatusLine().getStatusCode()) {
                 case 201:
                     message = "Upload Successful";
+                    PrintMaster.removeFromQueue(nametag);
                     break;
                 case 400:
                     message = "File was not uploaded properly";

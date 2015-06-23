@@ -53,13 +53,13 @@ public class Nametag {
         init();
     }
 
-    public Nametag(String name, String stl, String gcode) {
+    public Nametag(String name, Printer printer, String stl, String gcode) {
         this.name = name;
         if(!stl.equals(""))
             this.stl = new File(scadDirectory + stl);
         if(!gcode.equals(""))
             this.gcode = new File(gcodeDirectory + gcode);
-
+        this.printer = printer;
         init();
     }
 
@@ -112,7 +112,13 @@ public class Nametag {
         grid.add(printingField, 2, 1, 1, 1);
 
         deleteButton = new Button("Remove");
-        deleteButton.setOnAction(e -> PrintMaster.removeFromQueue(this));
+        deleteButton.setOnAction(e -> {
+            try {
+                PrintMaster.removeFromQueue(this);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
         grid.add(deleteButton, 3, 1, 1, 1);
     }
 
@@ -153,11 +159,9 @@ public class Nametag {
         }
     }
 
-    public void export() {
+    public void export() throws IOException {
 
         setStl(new File(String.format("%s/%s.stl", NametagAutoPrint.stlDirectory, name)));
-        
-        stlField.setText(stl.getName());
         
         String stlargs = String.format(" -o %s -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
                 + "openscad/name.scad", stl, name, name.length(), scadDirectory, name);
@@ -196,15 +200,31 @@ public class Nametag {
             nametagElement.setAttribute("gcode", gcode.getName());
         else
             nametagElement.setAttribute("gcode", "");
+        if (printer != null)
+            nametagElement.setAttribute("printer", printer.getName());
+        else
+            nametagElement.setAttribute("printer", "");
         return nametagElement;
+    }
+
+    public boolean isPrinting(){
+        return printing;
+    }
+
+    public void setPrinting(boolean printing) throws IOException {
+        this.printing = printing;
+        XML.saveQueue();
+        Platform.runLater(() -> printingField.setText(printing ? "Printing..." : "In Queue"));
     }
 
     public Printer getPrinter() {
         return printer;
     }
 
-    public void setPrinter(Printer printer) {
+    public void setPrinter(Printer printer) throws IOException {
         this.printer = printer;
+        XML.saveQueue();
+        Platform.runLater(() -> printerField.setText(printer == null ? "No Printer" : printer.toString()));
     }
 
     public boolean isGenerated(){
@@ -219,15 +239,21 @@ public class Nametag {
         return gcode;
     }
 
-    public void setGcode(File gcode) {
+    public void setGcode(File gcode) throws IOException {
         this.gcode = gcode;
+        XML.saveQueue();
+        Platform.runLater(() -> gcodeField.setText(this.gcode.getName()));
     }
 
     public File getStl() {
         return stl;
     }
 
-    public void setStl(File stl) {
+    public void setStl(File stl) throws IOException {
         this.stl = stl;
+        XML.saveQueue();
+        Platform.runLater(() -> stlField.setText(this.stl.getName()));
     }
+
+
 }

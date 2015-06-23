@@ -191,8 +191,8 @@ public class Printer {
                 }
 
                 while (NametagAutoPrint.p.isAlive()){}
-                tag.setGcode(new File(String.format("%s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString())));
                 tag.setPrinter(this);
+                tag.setGcode(new File(String.format("%s/%s.gcode", NametagAutoPrint.stlDirectory, tag.toString())));
                 System.out.println("Done");
 
             } catch (IOException e) {

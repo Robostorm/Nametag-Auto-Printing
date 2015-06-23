@@ -72,7 +72,7 @@ public class XML {
         Element queue = document.getRootElement();
         List<Nametag> list = new ArrayList<>();
         for(Element nametag : queue.getChildren()) {
-            list.add(new Nametag(nametag.getAttributeValue("name"), nametag.getAttributeValue("stl"),
+            list.add(new Nametag(nametag.getAttributeValue("name"), PrintMaster.getPrinter(nametag.getAttributeValue("printer")), nametag.getAttributeValue("stl"),
                     nametag.getAttributeValue("gcode")));
         }
         System.out.println("Read queue file");

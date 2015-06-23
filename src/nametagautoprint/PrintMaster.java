@@ -17,7 +17,7 @@ import java.util.*;
 public class PrintMaster {
     
     private static List<Printer> printers = new ArrayList<>();
-    private static Queue<Nametag> queue = new LinkedList<>();
+    private static List<Nametag> queue = new ArrayList<>();
     private static int position = 0;
     
     public static void addPrinter(Printer printer){
@@ -71,9 +71,10 @@ public class PrintMaster {
         System.out.println("Queue: " + queue);
     }
     
-    public static void addAllToQueue(Collection<Nametag> nameTags){
+    public static void addAllToQueue(Collection<Nametag> nameTags) throws IOException {
         System.out.println("New Printers: " + nameTags);
         queue.addAll(nameTags);
+        XML.saveQueue();
         nameTags.forEach(p -> {
             NametagAutoPrint.getInstance().queueController.getPrinterPanes().add(p.getPane());
             System.out.println(NametagAutoPrint.getInstance().queueController);
@@ -83,42 +84,47 @@ public class PrintMaster {
         System.out.println("Queue: " + queue);
     }
     
-    public static void removeFromQueue(Nametag tag){
+    public static void removeFromQueue(Nametag tag) throws IOException {
         queue.remove(tag);
+        XML.saveQueue();
         NametagAutoPrint.getInstance().queueController.getPrinterPanes().remove(tag.getPane());
         System.out.println("Removed Nametag from queue: " + tag);
         System.out.println("Queue: " + printers);
     }
 
     public static Nametag getNextNameToSlicer() {
-        for(Nametag nametag: queue) {
-            if(!nametag.isSliced() && nametag.isGenerated())
-                return nametag;
+        for(int i = 0; i < queue.size() && queue.size() > 0; i++) {
+            if(!queue.get(i).isSliced() && queue.get(i).isGenerated())
+                return queue.get(i);
         }
         return null;
     }
 
     public static Nametag getNextNameToUpload() {
-        for(Nametag nametag: queue) {
-            if(nametag.isSliced() && nametag.isGenerated())
-                return nametag;
+        for(int i = 0; i < queue.size() && queue.size() > 0; i++) {
+            if(queue.get(i).isSliced() && queue.get(i).isGenerated())
+                return queue.get(i);
         }
         return null;
-    }
-
-    public static Nametag pullNextNametag() {
-        return queue.poll();
     }
 
     public static Printer getPrinter(int i) {
         return printers.get(i);
     }
 
+    public static Printer getPrinter(String name) {
+        for(Printer printer : printers) {
+            if(printer.getName().equals(name))
+                return printer;
+        }
+        return null;
+    }
+
     public static List<Printer> getAllPrinters() {
         return printers;
     }
 
-    public static Queue<Nametag> getAllNametags() {
+    public static List<Nametag> getAllNametags() {
         return queue;
     }
 
