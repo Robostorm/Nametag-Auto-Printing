@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="configFile" class="java.io.File">
+        <constructor-arg value="config.xml"/>
+    </bean>
+
+    <bean id="queueFile" class="java.io.File">
+        <constructor-arg value="queue.xml"/>
+    </bean>
+
+    <bean id="config" class="org.robostorm.config.ConfigImpl">
+        <property name="octoPrintHostName" value="192.168.5.36/octoprint"/>
+        <property name="imagesDirectory" value="images/"/>
+        <property name="scadDirectory" value="openscad/"/>
+        <property name="stlDirectory" value="stl/"/>
+        <property name="gcodeDirectory" value="gcode/"/>
+        <property name="configFile" ref="configFile"/>
+        <property name="queueFile" ref="queueFile"/>
+    </bean>
+
+</beans>
