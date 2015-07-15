@@ -2,5 +2,6 @@
 ### Java template
 *.class
 
+out/
 .idea
 Nametag-Auto-Printing2.iml
