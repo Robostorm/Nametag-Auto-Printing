@@ -13,10 +13,11 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand page-scroll" href="${pageContext.request.contextPath}/">Team 3637 Scouting App</a>
+            <a class="navbar-brand page-scroll" href="${pageContext.request.contextPath}/">Robostorm Name Tag Auto Printing</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
+                <li><a class="page-scroll" href="#form">Get A Name Tag</a></li>
             </ul>
         </div>
     </div>
@@ -37,13 +38,13 @@
                            placeholder="Enter your name"/>
                 </div>
                 <button type="button" class="btn btn-info" id="preview">Preview</button>
-                <button type="button" class="btn btn-success" id="sumbit">Submit</button>
+                <button type="button" class="btn btn-success" id="submit">Submit</button>
             </form>
         </div>
     </section>
     <section>
         <hr/>
-        <button class="btn btn-default" id="toTop">Back to top</button>
+        <a class="btn btn-default page-scroll" href="#page-top">Back to top</a>
     </section>
 </div>
 </body>

@@ -1,8 +1,10 @@
 package org.robostorm.controller;
 
+import org.jdom2.JDOMException;
 import org.json.simple.JSONArray;
 import org.robostorm.config.Config;
 import org.robostorm.model.NameTag;
+import org.robostorm.model.Printer;
 import org.robostorm.queue.NameTagQueue;
 import org.robostorm.queue.PrinterQueue;
 import org.robostorm.service.PreviewService;
@@ -40,6 +42,19 @@ public class MainController {
 
     @PostConstruct
     public void init() {
+        try {
+            if(!config.getConfigFile().exists())
+                config.buildConfig();
+            else
+                config.loadPrinters(printerQueue);
+            if(!config.getQueueFile().exists())
+                config.buildQueue();
+            else
+                config.loadQueue(nameTagQueue, printerQueue);
+        } catch (IOException | JDOMException e) {
+            e.printStackTrace();
+        }
+
 /*        if(!printService.isRunning()) {
             printService.start();
         }*/
@@ -64,7 +79,7 @@ public class MainController {
 
     @RequestMapping(value = "/queue/add.json", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> queueAdd(@RequestParam("name") String name) {
+    public ResponseEntity<String> addToQueue(@RequestParam("name") String name) {
         if (name != null && !name.equals("")) {
             try {
                 nameTagQueue.addToQueue(new NameTag(name));
@@ -79,10 +94,19 @@ public class MainController {
 
     @RequestMapping("/queue/view.json")
     @ResponseBody
-    public ResponseEntity<String> queueView() {
+    public ResponseEntity<String> viewQueue() {
         JSONArray list = new JSONArray();
         for(NameTag nameTag : nameTagQueue.getAllNametags())
             list.add(nameTag.toString());
+        return new ResponseEntity<>(config.getQueueFile().getAbsolutePath() + list.toJSONString(), HttpStatus.OK);
+    }
+
+    @RequestMapping("/printers/view.json")
+    @ResponseBody
+    public ResponseEntity<String> viewPrinter() {
+        JSONArray list = new JSONArray();
+        for(Printer printer : printerQueue.getAllPrinters())
+            list.add(printer.toString());
         return new ResponseEntity<>(list.toJSONString(), HttpStatus.OK);
     }
 

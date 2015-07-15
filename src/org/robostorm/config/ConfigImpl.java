@@ -10,7 +10,9 @@ import org.robostorm.model.NameTag;
 import org.robostorm.model.Printer;
 import org.robostorm.queue.NameTagQueue;
 import org.robostorm.queue.PrinterQueue;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -68,14 +70,6 @@ public class ConfigImpl implements Config {
         return loopTime;
     }
 
-    public void setConfigFile(File configFile) {
-        this.configFile = configFile;
-    }
-
-    public void setQueueFile(File queueFile) {
-        this.queueFile = queueFile;
-    }
-
     public void setOctoPrintHostName(String octoPrintHostName) {
         this.octoPrintHostName = octoPrintHostName;
     }
@@ -100,6 +94,14 @@ public class ConfigImpl implements Config {
         this.loopTime = loopTime;
     }
 
+    public ConfigImpl(ServletContext servletContext, String configFileName, String queueFileName) {
+        File dataDirectory = new File(servletContext.getRealPath("/") + "../data");
+        if(!dataDirectory.exists())
+            dataDirectory.mkdir();
+        configFile = new File(dataDirectory.getAbsolutePath() + "/" + configFileName);
+        queueFile = new File(dataDirectory.getAbsolutePath() + "/" + queueFileName);
+    }
+
     @Override
     public void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();
@@ -112,7 +114,7 @@ public class ConfigImpl implements Config {
                     printer.getAttribute("port").getIntValue(), printer.getAttributeValue("apiKey"),
                     printer.getAttribute("active").getBooleanValue(), printer.getAttribute("available").getBooleanValue()));
         }
-        System.out.println("Built read config file");
+        System.out.println("Read config file");
         printerQueue.addAllPrinters(list);
     }
 
@@ -125,10 +127,10 @@ public class ConfigImpl implements Config {
             printers.addContent(printer.toElement());
         config.getRootElement().addContent(printers);
         XMLOutputter xmlOutputter = new XMLOutputter();
-        System.out.println("Built wrote config file");
+        System.out.println("Wrote config file");
         //xmlOutputter.output(config, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(configFile.getName()));
+        xmlOutputter.output(config, new FileWriter(configFile.getAbsolutePath()));
     }
 
     @Override
@@ -141,7 +143,7 @@ public class ConfigImpl implements Config {
         System.out.println("Built queue config file");
         //xmlOutputter.output(config, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(configFile.getName()));
+        xmlOutputter.output(config, new FileWriter(configFile.getAbsolutePath()));
 
     }
 
@@ -166,10 +168,10 @@ public class ConfigImpl implements Config {
         for(NameTag nameTag : nameTagQueue.getAllNametags())
             queue.getRootElement().addContent(nameTag.toElement());
         XMLOutputter xmlOutputter = new XMLOutputter();
-        System.out.println("Wrote config file");
+        System.out.println("Wrote queue file");
         //xmlOutputter.output(queue, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(queue, new FileWriter(queueFile.getName()));
+        xmlOutputter.output(queue, new FileWriter(queueFile.getAbsolutePath()));
     }
 
     @Override
@@ -180,6 +182,6 @@ public class ConfigImpl implements Config {
         System.out.println("Built queue file");
         //xmlOutputter.output(config, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(queueFile.getName()));
+        xmlOutputter.output(config, new FileWriter(queueFile.getAbsolutePath()));
     }
 }
