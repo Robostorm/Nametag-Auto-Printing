@@ -3,7 +3,6 @@ package org.robostorm.queue;
 import org.robostorm.config.Config;
 import org.robostorm.model.Printer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class PrinterQueue {
         if(printers.size() == 0)
             return null;
         for(;;) {
-            if(printers.get(i).isActive() && printers.get(i).isAvailable()) {
+            if(printers.get(i).isActive() && !printers.get(i).isPrinting()) {
                 if(position >= printers.size() - 1)
                     position = 0;
                 else

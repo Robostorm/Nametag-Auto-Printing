@@ -1,63 +1,33 @@
 package org.robostorm.service;
 
-import org.robostorm.model.NameTag;
-import org.robostorm.model.Printer;
-import org.robostorm.queue.NameTagQueue;
-import org.robostorm.queue.PrinterQueue;
+import org.robostorm.server.PrintServer;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.IOException;
-import java.util.List;
 
 public class PrintServiceImpl implements PrintService {
 
     @Autowired
-    PrinterQueue printerQueue;
-    @Autowired
-    NameTagQueue nameTagQueue;
+    private PrintServer printServer;
 
     @Override
-    public String print(String name) {
-        return null;
+    public void start() {
+        new Thread(printServer).start();
     }
 
     @Override
-    public void addPrinter(Printer printer) throws IOException {
-        printerQueue.addPrinter(printer);
+    public void stop() {
+        printServer.stop();
     }
 
     @Override
-    public void updatePrinter(Printer oldPrinter, Printer newPrinter) throws IOException {
-        printerQueue.updatePrinter(oldPrinter, newPrinter);
+    public boolean isStopped() {
+        return printServer.isStopped();
     }
 
     @Override
-    public void removePrinter(Printer printer) throws IOException {
-        printerQueue.removePrinter(printer);
-    }
-
-    @Override
-    public void addNameTag(NameTag nameTag) throws IOException {
-        nameTagQueue.addToQueue(nameTag);
-    }
-
-    @Override
-    public void updateNameTag(NameTag oldNameTag, NameTag newNameTag) throws IOException {
-        nameTagQueue.updateNameTag(oldNameTag, newNameTag);
-    }
-
-    @Override
-    public void removeNameTag(NameTag nameTag) throws IOException {
-        nameTagQueue.removeFromQueue(nameTag);
-    }
-
-    @Override
-    public List<Printer> getPrinters() {
-        return printerQueue.getAllPrinters();
-    }
-
-    @Override
-    public List<NameTag> getQueue() {
-        return nameTagQueue.getAllNametags();
+    public boolean isRunning() {
+        if(printServer.getThread() != null)
+            return printServer.getThread().isAlive();
+        else
+            return false;
     }
 }

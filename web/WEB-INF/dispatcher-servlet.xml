@@ -8,36 +8,37 @@
                http://www.springframework.org/schema/context
                http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-       <bean id="configFile" class="java.io.File">
-              <constructor-arg value="config.xml"/>
-       </bean>
+    <bean id="configFile" class="java.io.File">
+        <constructor-arg value="config.xml"/>
+    </bean>
 
-       <bean id="queueFile" class="java.io.File">
-              <constructor-arg value="queue.xml"/>
-       </bean>
+    <bean id="queueFile" class="java.io.File">
+        <constructor-arg value="queue.xml"/>
+    </bean>
 
-       <bean id="config" class="org.robostorm.config.ConfigImpl">
-              <property name="octoPrintHostName" value="192.168.5.36/octoprint"/>
-              <property name="imagesDirectory" value="images/"/>
-              <property name="scadDirectory" value="openscad/"/>
-              <property name="stlDirectory" value="stl/"/>
-              <property name="gcodeDirectory" value="gcode/"/>
-              <property name="configFile" ref="configFile"/>
-              <property name="queueFile" ref="queueFile"/>
-       </bean>
+    <bean id="config" class="org.robostorm.config.ConfigImpl">
+        <property name="octoPrintHostName" value="192.168.5.36/octoprint"/>
+        <property name="imagesDirectory" value="images/"/>
+        <property name="scadDirectory" value="openscad/"/>
+        <property name="stlDirectory" value="stl/"/>
+        <property name="gcodeDirectory" value="gcode/"/>
+        <property name="configFile" ref="configFile"/>
+        <property name="queueFile" ref="queueFile"/>
+        <property name="loopTime" value="5000"/>
+    </bean>
 
-        <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
+    <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>
 
-        <bean id="nameTagQueue" class="org.robostorm.queue.NameTagQueue"/>
+    <bean id="nameTagQueue" class="org.robostorm.queue.NameTagQueue"/>
 
-        <bean id="printerQueue" class="org.robostorm.queue.PrinterQueue"/>
+    <bean id="printerQueue" class="org.robostorm.queue.PrinterQueue"/>
 
-       <bean id="previewService" class="org.robostorm.service.PreviewServiceImpl"/>
+    <bean id="previewService" class="org.robostorm.service.PreviewServiceImpl"/>
 
-        <bean id="printService" class="org.robostorm.service.PrintServiceImpl"/>
+    <bean id="printService" class="org.robostorm.service.PrintServiceImpl"/>
 
-        <bean id="printServer" class="org.robostorm.server.PrintServer"/>
+    <bean id="printServer" class="org.robostorm.server.PrintServer"/>
 
-       <context:component-scan base-package="org.robostorm"/>
+    <context:component-scan base-package="org.robostorm"/>
 
 </beans>

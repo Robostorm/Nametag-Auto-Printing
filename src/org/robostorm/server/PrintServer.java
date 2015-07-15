@@ -23,7 +23,7 @@ import java.io.IOException;
 @Component
 public class PrintServer implements Runnable {
 
-    private boolean isStopped = false;
+    private boolean isStopped = true;
 
     @Autowired
     private Config config;
@@ -39,93 +39,105 @@ public class PrintServer implements Runnable {
 
     @Override
     public void run() {
+        isStopped = false;
         synchronized (this) {
             thread = Thread.currentThread();
         }
         System.out.println("Starting print server");
+        long time = System.currentTimeMillis();
+        long oldTime = time;
         while (!isStopped()) {
-            Printer printer = printerQueue.getNextPrinter();
-            NameTag nameTag = nameTagQueue.getNextNameTag();
-            if (printer != null && nameTag != null) {
-                System.out.printf("Assigning name tag %s to Printer %s\n", nameTag.toString(), printer.getName());
-                printer.setAvailable(false);
-                System.out.printf("Rendering name tag %s for printer %s\n", nameTag.toString(), printer.getName());
-                if (!nameTag.isGenerated())
-                    nameTag.export();
-                System.out.printf("Slicing name tag %s for printer %s\n", nameTag.toString(), printer.getName());
-                if (!nameTag.isSliced())
-                    printer.slice(nameTag);
-                if (!nameTag.isPrinting()) {
-                    File file = new File(String.format("%s/%s.gcode", config.getGcodeDirectory(), nameTag.toString()));
-                    if (!file.exists()) {
-                        System.err.println("Attempting to upload file that does not exist from nametag " + nameTag.toString());
-                        return;
+            time = System.currentTimeMillis();
+            if(time - oldTime >= config.getLoopTime()) {
+                Printer printer = printerQueue.getNextPrinter();
+                NameTag nameTag = nameTagQueue.getNextNameTag();
+                if (printer != null && nameTag != null) {
+                    System.out.printf("Assigning name tag %s to Printer %s\n", nameTag.toString(), printer.getName());
+                    printer.setPrinting(false);
+                    System.out.printf("Rendering name tag %s for printer %s\n", nameTag.toString(), printer.getName());
+                    if (!nameTag.isGenerated())
+                        nameTag.export();
+                    System.out.printf("Slicing name tag %s for printer %s\n", nameTag.toString(), printer.getName());
+                    if (!nameTag.isSliced())
+                        printer.slice(nameTag);
+                    if (!nameTag.isPrinting()) {
+                        File file = new File(String.format("%s/%s.gcode", config.getGcodeDirectory(), nameTag.toString()));
+                        if (!file.exists()) {
+                            System.err.println("Attempting to upload file that does not exist from nametag " + nameTag.toString());
+                            return;
+                        }
+                        String remotePath = String.format("http://%s:%s/api/files/local", printer.getIp(), Integer.toString(printer.getPort()));
+                        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+                        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+                        FileBody fileBody = new FileBody(file);
+                        builder.addPart("file", fileBody);
+
+                        HttpPost post = new HttpPost(remotePath);
+
+                        post.setEntity(builder.build());
+                        post.addHeader("X-Api-Key", printer.getApiKey());
+                        HttpClient client = HttpClientBuilder.create().build();
+                        HttpResponse response = null;
+                        try {
+                            response = client.execute(post);
+                        } catch (HttpHostConnectException e) {
+                            throw new RuntimeException("Could not connect to printer", e);
+                        } catch (ClientProtocolException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.printf("Server Returned Code: %d\n", response != null ? response.getStatusLine().getStatusCode() : -1);
+                        String message;
+                        if (response != null) {
+                            switch (response.getStatusLine().getStatusCode()) {
+                                case 201:
+                                    message = "Upload Successful";
+                                    try {
+                                        nameTagQueue.removeFromQueue(nameTag);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
+                                case 400:
+                                    message = "File was not uploaded properly";
+                                    break;
+                                case 401:
+                                    message = "Incorrect API Key";
+                                    break;
+                                case 404:
+                                    message = "Either invalid save location was provided or API key was incorrect";
+                                    break;
+                                case 409:
+                                    message = "Either you are attemping to overwirte a file being printed or printer is not operational";
+                                    break;
+                                case 415:
+                                    message = "You attempting to uplaod a file other than a gcode or stl file";
+                                    break;
+                                case 500:
+                                    message = "Internal server error, upload failed";
+                                    break;
+                                case -1:
+                                    message = "Received null response";
+                                    break;
+                                default:
+                                    message = "Unexpected responses";
+                                    break;
+                            }
+                        } else {
+                            message = "Response was null";
+                        }
+                        System.out.println(message);
+                        nameTag.setPrinting(true);
                     }
-                    String remotePath = String.format("http://%s:%s/api/files/local", printer.getIp(), Integer.toString(printer.getPort()));
-                    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-                    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-                    FileBody fileBody = new FileBody(file);
-                    builder.addPart("file", fileBody);
-
-                    HttpPost post = new HttpPost(remotePath);
-
-                    post.setEntity(builder.build());
-                    post.addHeader("X-Api-Key", printer.getApiKey());
-                    HttpClient client = HttpClientBuilder.create().build();
-                    HttpResponse response = null;
                     try {
-                        response = client.execute(post);
-                    } catch (HttpHostConnectException e) {
-                        throw new RuntimeException("Could not connect to printer", e);
-                    } catch (ClientProtocolException e) {
-                        e.printStackTrace();
+                        config.saveQueue(nameTagQueue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    System.out.printf("Server Returned Code: %d\n", response != null ? response.getStatusLine().getStatusCode() : -1);
-                    String message;
-                    switch (response.getStatusLine().getStatusCode()) {
-                        case 201:
-                            message = "Upload Successful";
-                            try {
-                                nameTagQueue.removeFromQueue(nameTag);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                        case 400:
-                            message = "File was not uploaded properly";
-                            break;
-                        case 401:
-                            message = "Incorrect API Key";
-                            break;
-                        case 404:
-                            message = "Either invalid save location was provided or API key was incorrect";
-                            break;
-                        case 409:
-                            message = "Either you are attemping to overwirte a file being printed or printer is not operational";
-                            break;
-                        case 415:
-                            message = "You attempting to uplaod a file other than a gcode or stl file";
-                            break;
-                        case 500:
-                            message = "Internal server error, upload failed";
-                            break;
-                        case -1:
-                            message = "Received null response";
-                            break;
-                        default:
-                            message = "Unexpected responses";
-                            break;
-                    }
-                    System.out.println(message);
-                    nameTag.setPrinting(true);
                 }
-                try {
-                    config.saveQueue(nameTagQueue);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                time = System.currentTimeMillis();
+                oldTime = time;
             }
         }
     }

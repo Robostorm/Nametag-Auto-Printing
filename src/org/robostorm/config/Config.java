@@ -16,6 +16,7 @@ public interface Config {
     String getScadDirectory();
     String getStlDirectory();
     String getGcodeDirectory();
+    long getLoopTime();
 
     void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException;
     void savePrinters(PrinterQueue printerQueue) throws IOException;

@@ -24,9 +24,19 @@ public class PreviewServiceImpl implements PreviewService {
             return null;
         }
 
+        JSONObject json = new JSONObject();
+
         File imagesDir = new File(path + config.getImagesDirectory());
         if(!imagesDir.exists())
             imagesDir.mkdir();
+
+        File image = new File(imagesDir.getAbsolutePath() + "/" + name + ".png");
+
+        if(image.exists()) {
+            json.put("code", 0);
+            json.put("image", config.getImagesDirectory() + name + ".png");
+            return json.toJSONString();
+        }
 
         File scadDir = new File(path + config.getScadDirectory());
 
@@ -35,8 +45,6 @@ public class PreviewServiceImpl implements PreviewService {
                 name, name, name.equals("") ? 4 : name.length(), scadDir.getAbsolutePath());
 
         System.out.println(pngargs);
-
-        JSONObject json = new JSONObject();
 
         try {
             System.out.println("Args: " + pngargs);

@@ -10,21 +10,11 @@ import java.util.List;
 
 public interface PrintService {
 
-    String print(String name);
+    void start();
 
-    void addPrinter(Printer printer) throws IOException;
+    void stop();
 
-    void updatePrinter(Printer oldPrinter, Printer newPrinter) throws IOException;
+    boolean isStopped();
 
-    void removePrinter(Printer printer) throws IOException;
-
-    void addNameTag(NameTag nameTag) throws IOException;
-
-    void updateNameTag(NameTag oldNameTag, NameTag newNameTag) throws IOException;
-
-    void removeNameTag(NameTag nameTag) throws IOException;
-
-    List<Printer> getPrinters();
-
-    List<NameTag> getQueue();
+    boolean isRunning();
 }

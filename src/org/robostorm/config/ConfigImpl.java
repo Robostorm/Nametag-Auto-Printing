@@ -26,6 +26,7 @@ public class ConfigImpl implements Config {
     private String scadDirectory;
     private String stlDirectory;
     private String gcodeDirectory;
+    private long loopTime;
 
     @Override
     public File getConfigFile() {
@@ -62,6 +63,11 @@ public class ConfigImpl implements Config {
         return gcodeDirectory;
     }
 
+    @Override
+    public long getLoopTime() {
+        return loopTime;
+    }
+
     public void setConfigFile(File configFile) {
         this.configFile = configFile;
     }
@@ -88,6 +94,10 @@ public class ConfigImpl implements Config {
 
     public void setGcodeDirectory(String gcodeDirectory) {
         this.gcodeDirectory = gcodeDirectory;
+    }
+
+    public void setLoopTime(long loopTime) {
+        this.loopTime = loopTime;
     }
 
     @Override
@@ -172,5 +182,4 @@ public class ConfigImpl implements Config {
         xmlOutputter.setFormat(Format.getPrettyFormat());
         xmlOutputter.output(config, new FileWriter(queueFile.getName()));
     }
-
 }

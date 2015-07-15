@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 
 import org.jdom2.Element;
 import org.robostorm.config.Config;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 public class Printer {
 
@@ -20,7 +17,7 @@ public class Printer {
     private String apiKey;
     private File configFile;
     private boolean active;
-    private boolean available;
+    private boolean printing;
 
     private Config config;
 
@@ -35,18 +32,17 @@ public class Printer {
         apiKey = "ApiKey";
         configFile = new File("config/slic3r/mendel.ini");
         active = false;
-        available = true;
+        printing = true;
     }
 
-    public Printer(String name, String ip, int port, String apiKey, boolean active, boolean available){
-        this.id = id;
+    public Printer(String name, String ip, int port, String apiKey, boolean active, boolean printing){
         this.name = name;
         this.ip = ip;
         this.port = port;
         this.apiKey = apiKey;
         this.configFile = new File("config/slic3r/mendel.ini");
         this.active = active;
-        this.available = available;
+        this.printing = printing;
     }
     
 
@@ -101,7 +97,7 @@ public class Printer {
         printerElement.setAttribute("apiKey", apiKey);
         printerElement.setAttribute("file", configFile.getPath());
         printerElement.setAttribute("active", Boolean.toString(active));
-        printerElement.setAttribute("available", Boolean.toString(available));
+        printerElement.setAttribute("printing", Boolean.toString(printing));
         return printerElement;
     }
 
@@ -157,11 +153,11 @@ public class Printer {
         this.active = active;
     }
 
-    public boolean isAvailable() {
-        return available;
+    public boolean isPrinting() {
+        return printing;
     }
 
-    public void setAvailable(boolean available) {
-        this.available = available;
+    public void setPrinting(boolean printing) {
+        this.printing = printing;
     }
 }
