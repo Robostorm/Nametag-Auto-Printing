@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane
+    xmlns:fx="http://javafx.com/fxml/1"
+    id="AnchorPane"
+    prefHeight="800.0" 
+    prefWidth="100.0" 
+    styleClass="mainFxmlClass" 
+    fx:controller="nametagautoprint.PrintersController" >
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="10">
+            <Label fx:id="printerHeading"  text="Printers" minWidth="1000" alignment="CENTER"  ></Label>
+    
+            <ScrollPane fx:id="printerList" maxWidth="1000" maxHeight="500" minHeight="500" fitToWidth="true" >
+                <content>
+                    <Pane>
+                        <VBox fx:id="printerBox" maxWidth="1000" alignment="CENTER" spacing="10" >
+                        </VBox>
+                    </Pane>
+                </content>
+            </ScrollPane>
+    
+            <HBox alignment="CENTER" HBox.hgrow="ALWAYS" spacing="10" >
+                <TextField fx:id="newPrinter"></TextField>
+                <Button fx:id="addPrinter" text="Add"></Button> 
+            </HBox>
+        </VBox>
+    </center>
+    
+    <bottom>
+        <HBox id="footer" alignment="TOP_CENTER"> 
+            <Button fx:id="printersBack" text="Back"></Button>
+        </HBox>
+    </bottom>
+    
+</BorderPane>

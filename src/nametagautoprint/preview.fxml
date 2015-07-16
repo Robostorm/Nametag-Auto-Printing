@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<VBox 
+    xmlns:fx="http://javafx.com/fxml/1"
+    id="AnchorPane"
+    prefHeight="800.0" 
+    prefWidth="100.0" 
+    styleClass="mainFxmlClass" 
+    fx:controller="nametagautoprint.PreviewController"
+    alignment="TOP_CENTER"
+    spacing="10" >
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    
+    <ImageView fx:id="previewImage" ></ImageView>
+    <Label fx:id="nameHeading" text="Enter Your Name Here:" minWidth="1000" alignment="CENTER"  ></Label> 
+    <TextField fx:id="nameField" maxWidth="1000" minHeight="50"   ></TextField>
+    <HBox fx:id="buttonBar" minWidth="1000">
+        <Button fx:id="previewBtn" text="Preview"></Button>
+        <Button fx:id="submitBtn" text="Submit"></Button>
+    </HBox>
+    <ProgressBar fx:id="progressBar" minWidth="1000"></ProgressBar>
+    <Button fx:id="settingsBtn" text="Settings"></Button>
+    
+</VBox>

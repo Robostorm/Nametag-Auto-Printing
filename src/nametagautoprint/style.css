@@ -1,0 +1,90 @@
+
+/* 
+    Created on : May 31, 2015, 6:47:14 PM
+    Author     : tim
+*/
+
+.root{
+    -fx-background-color: #4BB648;
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+
+.label{
+    -fx-font-family: "Sans-Serif";
+}
+
+#nameHeading{
+    -fx-font-size: 40px;
+}
+
+#printerHeading{
+    -fx-padding: 50 10 10 10;
+    -fx-font-size: 40px;
+}
+
+#printerName{
+    -fx-font-size: 25px;
+    -fx-font-weight: bolder;
+}
+
+#queueHeading{
+    -fx-padding: 50 10 10 10;
+    -fx-font-size: 40px;
+}
+
+#tagName{
+    -fx-font-size: 25px;
+    -fx-font-weight: bolder;
+}
+
+.text-field{
+    -fx-background-color: #33CC33;
+    -fx-alignment: center;
+    -fx-font-family: "Sans-Serif";
+}
+
+#nameField{
+    -fx-font-size: 40px;
+    -fx-background-radius: 10;
+}
+
+#printerList{
+    //-fx-border-color: black;
+    //-fx-border-insets: 5;
+    //-fx-border-width: 3;
+    //-fx-border-style: solid;
+    -fx-background: #4BB648;
+    -fx-background-color: #4BB648;
+}
+
+#queueList{
+    //-fx-border-color: black;
+    //-fx-border-insets: 5;
+    //-fx-border-width: 3;
+    //-fx-border-style: solid;
+    -fx-background: #4BB648;
+    -fx-background-color: #4BB648;
+}
+
+.button{
+    -fx-background-color: #33CC33;
+}
+
+.button:hover{
+    -fx-background-color: yellow;
+}
+
+#buttonBar{
+    -fx-alignment: center;
+    -fx-padding: 5;
+    -fx-spacing: 50;
+}
+
+#passBox{
+    -fx-padding: 50 10 10 10;
+}
+
+#footer{
+    -fx-padding: 10 10 50 10;
+}
