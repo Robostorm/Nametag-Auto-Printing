@@ -1,0 +1,42 @@
+<project name="name-tag-auto-printing" default="dist" basedir=".">
+    <description>
+        A application to render, slice, and print name tags
+    </description>
+
+    <property name="tomcat-home" value="/apache-tomcat-7.0.57" />
+
+    <property name="src.dir" location="src"/>
+    <property name="web.dir" location="web"/>
+    <property name="build.dir" location="build"/>
+    <property name="dist.dir"  location="dist"/>
+    <property name="lib.dir"  location="lib"/>
+
+    <path id="external.classpath">
+        <fileset dir="${tomcat-home}/bin" includes="*.jar" />
+        <fileset dir="${tomcat-home}/lib" includes="*.jar" />
+    </path>
+
+    <target name="compile" depends="clean" description="compile the source " >
+        <tstamp/>
+        <mkdir dir="${build.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" target="1.7">
+            <classpath refid="external.classpath"/>
+        </javac>
+    </target>
+
+    <target name="dist" depends="compile" description="generate the distribution" >
+        <mkdir dir="${dist.dir}"/>
+        <war destfile="${dist.dir}/SchoolNavigator.war" webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir = "${web.dir}">
+                <include name = "**/*.*"/>
+            </fileset>
+
+            <classes dir = "${build.dir}"/>
+        </war>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+</project>
