@@ -10,19 +10,20 @@ import org.robostorm.queue.NameTagQueue;
 import org.robostorm.queue.PrinterQueue;
 import org.robostorm.service.PreviewService;
 import org.robostorm.service.PrintService;
+import org.robostorm.wrapper.PrinterWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.spi.http.HttpContext;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -72,6 +73,7 @@ public class MainController {
 
     /*********/
     /*Preview*/
+
     /*********/
 
     @RequestMapping("/preview")
@@ -86,6 +88,7 @@ public class MainController {
 
     /*******/
     /*Queue*/
+
     /*******/
 
     @RequestMapping(value = "/queue/add", method = RequestMethod.POST)
@@ -112,7 +115,13 @@ public class MainController {
             for (Field field : nameTag.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 if (!field.getName().equals("config"))
-                    object.put(field.getName(), field.get(nameTag));
+                    if(field.getName().equals("printer") ||
+                            field.getName().equals("stl") ||
+                            field.getName().equals("gcode")) {
+                        object.put(field.getName(), field.get(nameTag).toString());
+                    } else {
+                        object.put(field.getName(), field.get(nameTag));
+                    }
             }
             list.add(object);
         }
@@ -146,9 +155,26 @@ public class MainController {
 
     /**********/
     /*Printers*/
+
     /**********/
 
-    @RequestMapping(value = "/printers/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/editPrinter", method = RequestMethod.GET)
+    public String editPrinters(Model model) {
+        model.addAttribute("wrapper", new PrinterWrapper(printerQueue.getAllPrinters()));
+        return "printers";
+    }
+
+    @RequestMapping(value = "/editPrinter", method = RequestMethod.POST)
+    public String editPrintersSubmit(@ModelAttribute("wrapper") PrinterWrapper wrapper) throws IOException {
+        if(printerQueue != null && wrapper.getPrinters().size() > 0) {
+            for(int i = 0; i < wrapper.getPrinters().size(); i++) {
+                printerQueue.updatePrinter(wrapper.getPrinters().get(i));
+            }
+        }
+        return "redirect:/ntap/editPrinter";
+    }
+
+    @RequestMapping(value = "/printers/add", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> addPrinter(@RequestParam("name") String name,
                                              @RequestParam("ip") String ip,
@@ -177,15 +203,22 @@ public class MainController {
         for (Printer printer : printerQueue.getAllPrinters()) {
             JSONObject object = new JSONObject();
             for (Field field : printer.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                object.put(field.getName(), field.get(printer));
+                if (!field.getName().equals("config")) {
+                    if (field.getName().equals("configFile")) {
+                        field.setAccessible(true);
+                        object.put(field.getName(), field.get(printer).toString());
+                    } else {
+                        field.setAccessible(true);
+                        object.put(field.getName(), field.get(printer));
+                    }
+                }
             }
             list.add(object);
         }
         return list.toJSONString();
     }
 
-    @RequestMapping(value = "/printers/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/printers/update", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> updatePrinter(@RequestParam("id") Integer id,
                                                 @RequestParam("name") String name,
@@ -197,8 +230,8 @@ public class MainController {
 
         boolean found = false;
         List<Printer> printers = printerQueue.getAllPrinters();
-        for(int i = 0; i < printers.size(); i++) {
-            if(printers.get(i).getId() == id) {
+        for (int i = 0; i < printers.size(); i++) {
+            if (printers.get(i).getId() == id) {
                 found = true;
                 printers.get(i).setName(name);
                 printers.get(i).setIp(ip);
@@ -214,7 +247,7 @@ public class MainController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(value = "/printers/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/printers/remove", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<String> removePrinter(@RequestParam("id") Integer id) {
         if (id != null) {
@@ -231,6 +264,7 @@ public class MainController {
 
     /**************/
     /*Print Server*/
+
     /**************/
 
     @RequestMapping("/ps/start")

@@ -48,5 +48,6 @@
         <a class="btn btn-default page-scroll" href="#page-top">Back to top</a>
     </section>
 </div>
+<script src="${pageContext.request.contextPath}/js/main.js"></script>
 </body>
 </html>

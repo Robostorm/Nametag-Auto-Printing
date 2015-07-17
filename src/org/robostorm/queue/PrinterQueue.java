@@ -5,6 +5,7 @@ import org.robostorm.model.Printer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,6 +44,17 @@ public class PrinterQueue {
                 removePrinter(printer);
             }
         }
+    }
+
+    public void updatePrinter(Printer printer) throws IOException {
+        for(int i = 0; i < printers.size(); i++) {
+            if(printer.getConfig() == null)
+                printer.setConfig(config);
+            if(printers.get(i).getId() == printer.getId()) {
+                printers.set(i, printer);
+            }
+        }
+        config.savePrinters(this);
     }
 
     public void updatePrinter(Printer oldPrinter, Printer newPrinter) throws IOException {
@@ -91,5 +103,13 @@ public class PrinterQueue {
         for(Printer printer : printers)
             if(printer.getName().equals(name))
                 removePrinter(printer);
+    }
+
+    public List<Printer> getPrinters() {
+        return printers;
+    }
+
+    public void setPrinters(List<Printer> printers) {
+        this.printers = printers;
     }
 }

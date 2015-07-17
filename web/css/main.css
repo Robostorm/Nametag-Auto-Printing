@@ -52,3 +52,12 @@ table a {
 
 }
 
+.form-inline td input {
+    margin-right: 15px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.editButtonContainer {
+    text-align: right;
+}

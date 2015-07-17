@@ -18,12 +18,9 @@ public class Printer {
     private File configFile;
     private boolean active;
     private boolean printing;
-
     private Config config;
 
-    public void setConfig(Config config) {
-        this.config = config;
-    }
+    public Printer(){}
 
     public Printer(String name, Config config){
         this.name = name;
@@ -172,5 +169,13 @@ public class Printer {
 
     public void setPrinting(boolean printing) {
         this.printing = printing;
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 }
