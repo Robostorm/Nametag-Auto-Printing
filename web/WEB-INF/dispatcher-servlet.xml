@@ -12,7 +12,7 @@
         <constructor-arg name="servletContext" ref="servletContext"/>
         <constructor-arg name="configFileName" type="java.lang.String" value="config.xml"/>
         <constructor-arg name="queueFileName" type="java.lang.String" value="queue.xml"/>
-        <property name="octoPrintHostName" value="192.168.5.36/octoprint"/>
+        <property name="octoPrintHostName" value="127.0.0.1:5000"/>
         <property name="imagesDirectory" value="images/"/>
         <property name="scadDirectory" value="openscad/"/>
         <property name="stlDirectory" value="stl/"/>

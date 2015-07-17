@@ -19,18 +19,18 @@ public class PreviewServiceImpl implements PreviewService {
     }
 
     @Override
-    public String preview(String name,  String path) {
+    public String preview(String name) {
         if(name == null || name.equals("")) {
             return null;
         }
 
         JSONObject json = new JSONObject();
 
-        File imagesDir = new File(path + config.getImagesDirectory());
+        File imagesDir = new File(config.getImagesDirectoryPath());
         if(!imagesDir.exists())
             imagesDir.mkdir();
 
-        File image = new File(imagesDir.getAbsolutePath() + "/" + name + ".png");
+        File image = new File(imagesDir.getAbsolutePath() + "/" + name + ".png" );
 
         if(image.exists()) {
             json.put("code", 0);
@@ -38,11 +38,10 @@ public class PreviewServiceImpl implements PreviewService {
             return json.toJSONString();
         }
 
-        File scadDir = new File(path + config.getScadDirectory());
 
         String pngargs = String.format("\n -o %s/%s.png -D name=\"%s\" -D chars=%d "
                         + "--camera=0,0,0,0,0,0,100 %s/name.scad", imagesDir.getAbsolutePath(),
-                name, name, name.equals("") ? 4 : name.length(), scadDir.getAbsolutePath());
+                name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());
 
         System.out.println(pngargs);
 

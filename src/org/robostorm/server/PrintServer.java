@@ -61,7 +61,7 @@ public class PrintServer implements Runnable {
                     if (!nameTag.isSliced())
                         printer.slice(nameTag);
                     if (!nameTag.isPrinting()) {
-                        File file = new File(String.format("%s/%s.gcode", config.getGcodeDirectory(), nameTag.toString()));
+                        File file = new File(String.format("%s/%s.gcode", config.getGcodeDirectoryPath(), nameTag.toString()));
                         if (!file.exists()) {
                             System.err.println("Attempting to upload file that does not exist from nametag " + nameTag.toString());
                             return;
@@ -93,11 +93,8 @@ public class PrintServer implements Runnable {
                             switch (response.getStatusLine().getStatusCode()) {
                                 case 201:
                                     message = "Upload Successful";
-                                    try {
-                                        nameTagQueue.removeFromQueue(nameTag);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                    nameTag.setPrinting(true);
+                                    printer.setPrinting(true);
                                     break;
                                 case 400:
                                     message = "File was not uploaded properly";
@@ -128,7 +125,6 @@ public class PrintServer implements Runnable {
                             message = "Response was null";
                         }
                         System.out.println(message);
-                        nameTag.setPrinting(true);
                     }
                     try {
                         config.saveQueue(nameTagQueue);

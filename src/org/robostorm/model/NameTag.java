@@ -24,17 +24,21 @@ public class NameTag {
         this.config = config;
     }
 
-    public NameTag(String name) {
+    public NameTag(String name, Config config) {
         this.name = name;
+        this.config = config;
+        id = System.identityHashCode(this);
     }
 
-    public NameTag(String name, Printer printer, String stl, String gcode) {
+    public NameTag(String name, Printer printer, String stl, String gcode, Config config) {
         this.name = name;
         if(!stl.equals(""))
             this.stl = new File(config.getScadDirectory() + stl);
         if(!gcode.equals(""))
             this.gcode = new File(config.getGcodeDirectory() + gcode);
         this.printer = printer;
+        this.config = config;
+        id = System.identityHashCode(this);
     }
 
     public NameTag(NameTag nameTag) {
@@ -52,8 +56,12 @@ public class NameTag {
 
     public void export() {
 
+        File stlDirectory = new File(config.getStlDirectoryPath());
+        if(!stlDirectory.exists())
+            stlDirectory.mkdir();
+
         String stlargs = String.format(" -o %s -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
-                + "openscad/name.scad", stl, name, name.length());
+                + "%s/name.scad", config.getStlDirectoryPath() + name + ".stl", name, name.length(), config.getScadDirectoryPath());
 
         try {
 

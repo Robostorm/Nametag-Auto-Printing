@@ -16,6 +16,15 @@ public interface Config {
     String getScadDirectory();
     String getStlDirectory();
     String getGcodeDirectory();
+
+    String getImagesDirectoryPath();
+
+    String getScadDirectoryPath();
+
+    String getStlDirectoryPath();
+
+    String getGcodeDirectoryPath();
+
     long getLoopTime();
 
     void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException;

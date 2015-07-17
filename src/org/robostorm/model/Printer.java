@@ -11,7 +11,7 @@ import org.robostorm.config.Config;
 public class Printer {
 
     private int id;
-    private final String name;
+    private String name;
     private String ip;
     private int port;
     private String apiKey;
@@ -25,7 +25,7 @@ public class Printer {
         this.config = config;
     }
 
-    public Printer(String name){
+    public Printer(String name, Config config){
         this.name = name;
         ip = "127.0.0.1";
         port = 5000;
@@ -33,9 +33,11 @@ public class Printer {
         configFile = new File("config/slic3r/mendel.ini");
         active = false;
         printing = true;
+        this.config = config;
+        id = System.identityHashCode(this);
     }
 
-    public Printer(String name, String ip, int port, String apiKey, boolean active, boolean printing){
+    public Printer(String name, String ip, int port, String apiKey, boolean active, boolean printing, Config config){
         this.name = name;
         this.ip = ip;
         this.port = port;
@@ -43,6 +45,8 @@ public class Printer {
         this.configFile = new File("config/slic3r/mendel.ini");
         this.active = active;
         this.printing = printing;
+        this.config = config;
+        id = System.identityHashCode(this);
     }
     
 
@@ -52,8 +56,13 @@ public class Printer {
     }
 
     public void slice(NameTag tag){
-        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", config.getStlDirectory(), tag.toString(),
-                config.getGcodeDirectory(), tag.toString());
+
+        File gcodeDirectory = new File(config.getGcodeDirectoryPath());
+        if(!gcodeDirectory.exists())
+            gcodeDirectory.mkdir();
+
+        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", config.getStlDirectoryPath(), tag.toString(),
+                config.getGcodeDirectoryPath(), tag.toString());
             try {
 
                 System.out.println("Args: " + slic3rargs);
@@ -111,6 +120,10 @@ public class Printer {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIp() {

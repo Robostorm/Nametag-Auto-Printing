@@ -36,6 +36,14 @@ public class NameTagQueue {
         System.out.println("Removed Nametag from queue: " + nameTag);
     }
 
+    public void removeFromQueue(int id) throws IOException {
+        for(NameTag nameTag : queue) {
+            if (nameTag.getId() == id) {
+                removeFromQueue(nameTag);
+            }
+        }
+    }
+
     public void updateNameTag(NameTag oldNameTag, NameTag newNameTag) throws IOException {
         for(int i = 0 ; i < queue.size(); i++) {
             if(queue.get(i) == oldNameTag) {
@@ -54,12 +62,6 @@ public class NameTagQueue {
             if(nameTag.toString().equals(name))
                 return nameTag;
         return null;
-    }
-
-    public void removeNameTag(String name) {
-        for(NameTag nameTag : queue)
-            if(nameTag.toString().equals(name))
-                queue.remove(nameTag);
     }
 
     public NameTag getNextNameTag() {

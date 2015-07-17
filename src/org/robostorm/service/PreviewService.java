@@ -1,5 +1,5 @@
 package org.robostorm.service;
 
 public interface PreviewService {
-    String preview(String name, String path);
+    String preview(String name);
 }

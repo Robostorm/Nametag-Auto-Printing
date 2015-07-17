@@ -21,6 +21,7 @@ import java.util.List;
 
 public class ConfigImpl implements Config {
 
+    private ServletContext servletContext;
     private File configFile;
     private File queueFile;
     private String octoPrintHostName;
@@ -66,6 +67,26 @@ public class ConfigImpl implements Config {
     }
 
     @Override
+    public String getImagesDirectoryPath() {
+        return servletContext.getRealPath("/") + imagesDirectory;
+    }
+
+    @Override
+    public String getScadDirectoryPath() {
+        return servletContext.getRealPath("/") + scadDirectory;
+    }
+
+    @Override
+    public String getStlDirectoryPath() {
+        return servletContext.getRealPath("/") + stlDirectory;
+    }
+
+    @Override
+    public String getGcodeDirectoryPath() {
+        return servletContext.getRealPath("/") + gcodeDirectory;
+    }
+
+    @Override
     public long getLoopTime() {
         return loopTime;
     }
@@ -95,6 +116,7 @@ public class ConfigImpl implements Config {
     }
 
     public ConfigImpl(ServletContext servletContext, String configFileName, String queueFileName) {
+        this.servletContext = servletContext;
         File dataDirectory = new File(servletContext.getRealPath("/") + "../data");
         if(!dataDirectory.exists())
             dataDirectory.mkdir();
@@ -110,9 +132,12 @@ public class ConfigImpl implements Config {
         Element printers = configElement.getChild("printers");
         List<Printer> list = new ArrayList<>();
         for(Element printer : printers.getChildren()) {
-            list.add(new Printer(printer.getAttributeValue("name"), printer.getAttributeValue("ip"),
-                    printer.getAttribute("port").getIntValue(), printer.getAttributeValue("apiKey"),
-                    printer.getAttribute("active").getBooleanValue(), printer.getAttribute("available").getBooleanValue()));
+            list.add(new Printer(printer.getAttributeValue("name"),
+                    printer.getAttributeValue("ip"),
+                    printer.getAttribute("port").getIntValue(),
+                    printer.getAttributeValue("apiKey"),
+                    printer.getAttribute("active").getBooleanValue(),
+                    printer.getAttribute("printing").getBooleanValue(), this));
         }
         System.out.println("Read config file");
         printerQueue.addAllPrinters(list);
@@ -155,7 +180,7 @@ public class ConfigImpl implements Config {
         List<NameTag> list = new ArrayList<>();
         for(Element nametag : queue.getChildren()) {
             list.add(new NameTag(nametag.getAttributeValue("name"), printerQueue.getPrinter(nametag.getAttributeValue("printer")),
-                    nametag.getAttributeValue("stl"), nametag.getAttributeValue("gcode")));
+                    nametag.getAttributeValue("stl"), nametag.getAttributeValue("gcode"), this));
         }
         System.out.println("Read queue file");
         nameTagQueue.addAllToQueue(list);

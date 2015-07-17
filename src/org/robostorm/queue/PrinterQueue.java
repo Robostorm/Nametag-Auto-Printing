@@ -37,6 +37,14 @@ public class PrinterQueue {
         System.out.println("All Printers: " + printers);
     }
 
+    public void removePrinter(int id) throws IOException {
+        for(Printer printer : printers) {
+            if(printer.getId() == id) {
+                removePrinter(printer);
+            }
+        }
+    }
+
     public void updatePrinter(Printer oldPrinter, Printer newPrinter) throws IOException {
         for(int i = 0; i < printers.size(); i++) {
             if(printers.get(i) == oldPrinter) {

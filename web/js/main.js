@@ -1,6 +1,6 @@
 function preview() {
     var name = $('#name').val();
-    $.ajax({url: "ntap/preview.json",
+    $.ajax({url: "ntap/preview",
         data: {
             "name": name
         },
@@ -29,7 +29,7 @@ function preview() {
 
 function submit() {
     var name = $('#name').val();
-    $.ajax({url: "ntap/queue/add.json",
+    $.ajax({url: "ntap/queue/add",
         type: "POST",
         data: {
             "name": name
