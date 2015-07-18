@@ -10,6 +10,7 @@ import org.robostorm.queue.NameTagQueue;
 import org.robostorm.queue.PrinterQueue;
 import org.robostorm.service.PreviewService;
 import org.robostorm.service.PrintService;
+import org.robostorm.wrapper.NameTagWrapper;
 import org.robostorm.wrapper.PrinterWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -73,7 +74,6 @@ public class MainController {
 
     /*********/
     /*Preview*/
-
     /*********/
 
     @RequestMapping("/preview")
@@ -84,6 +84,43 @@ public class MainController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+
+    /*********/
+    /*Manager*/
+    /*********/
+
+    @RequestMapping(value = "/manager", method = RequestMethod.GET)
+    public String manager(Model model) {
+        model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters()));
+        model.addAttribute("nameTagWrapper", new NameTagWrapper(nameTagQueue.getAllNametags()));
+        return "manager";
+    }
+
+    @RequestMapping(value = "/manager/printers", method = RequestMethod.GET)
+    public String editPrinters(Model model) {
+        model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters()));
+        return "printers";
+    }
+
+    @RequestMapping(value = "/manager/printers", method = RequestMethod.POST)
+    public String editPrintersSubmit(@ModelAttribute("printerWrapper") PrinterWrapper printerWrapper) throws IOException {
+        if(printerQueue != null && printerWrapper.getPrinters().size() > 0) {
+            for(int i = 0; i < printerWrapper.getPrinters().size(); i++) {
+                printerQueue.updatePrinter(printerWrapper.getPrinters().get(i));
+            }
+        }
+        return "redirect:/ntap/manager#printersTab";
+    }
+
+    @RequestMapping(value = "/manager/nameTags", method = RequestMethod.POST)
+    public String editNameTagsSubmit(@ModelAttribute("nameTagWrapper") NameTagWrapper nameTagWrapper) throws IOException {
+        if(printerQueue != null && nameTagWrapper.getNameTags().size() > 0) {
+            for(int i = 0; i < nameTagWrapper.getNameTags().size(); i++) {
+                nameTagQueue.updateNameTag(nameTagWrapper.getNameTags().get(i));
+            }
+        }
+        return "redirect:/ntap/manager";
     }
 
     /*******/
@@ -157,22 +194,6 @@ public class MainController {
     /*Printers*/
 
     /**********/
-
-    @RequestMapping(value = "/editPrinter", method = RequestMethod.GET)
-    public String editPrinters(Model model) {
-        model.addAttribute("wrapper", new PrinterWrapper(printerQueue.getAllPrinters()));
-        return "printers";
-    }
-
-    @RequestMapping(value = "/editPrinter", method = RequestMethod.POST)
-    public String editPrintersSubmit(@ModelAttribute("wrapper") PrinterWrapper wrapper) throws IOException {
-        if(printerQueue != null && wrapper.getPrinters().size() > 0) {
-            for(int i = 0; i < wrapper.getPrinters().size(); i++) {
-                printerQueue.updatePrinter(wrapper.getPrinters().get(i));
-            }
-        }
-        return "redirect:/ntap/editPrinter";
-    }
 
     @RequestMapping(value = "/printers/add", method = RequestMethod.GET)
     @ResponseBody

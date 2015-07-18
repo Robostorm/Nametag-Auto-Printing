@@ -20,10 +20,6 @@ public class NameTag {
 
     private Config config;
 
-    public void setConfig(Config config) {
-        this.config = config;
-    }
-
     public NameTag(String name, Config config) {
         this.name = name;
         this.config = config;
@@ -49,10 +45,6 @@ public class NameTag {
         this.config = nameTag.config;
     }
 
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void export() {
 
@@ -110,6 +102,14 @@ public class NameTag {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean isPrinting(){
         return printing;
     }
@@ -150,5 +150,11 @@ public class NameTag {
         this.stl = stl;
     }
 
+    public Config getConfig() {
+        return config;
+    }
 
+    public void setConfig(Config config) {
+        this.config = config;
+    }
 }

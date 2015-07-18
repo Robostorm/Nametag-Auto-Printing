@@ -27,46 +27,33 @@
     </div>
 </nav>
 <div class="container main">
-    <form:form method="post" action="/ntap/manager/printers" modelAttribute="printerWrapper">
+    <form:form modelAttribute="nameTagWrapper">
         <table class="table table-striped">
             <thead>
             <tr>
                 <th><label class="control-label">Name</label></th>
-                <th><label class="control-label">IP</label></th>
-                <th><label class="control-label">Port</label></th>
-                <th><label class="control-label">API-Key</label></th>
+                <th><label class="control-label">STL</label></th>
+                <th><label class="control-label">GCode</label></th>
                 <th><label class="control-label">Printing</label></th>
-                <th><label class="control-label">Active</label></th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="printer" items="${printerWrapper.printers}" varStatus="status">
+            <c:forEach var="printer" items="${nameTagWrapper.nameTags}" varStatus="status">
                 <tr class="form-inline">
-                    <form:hidden path="printers[${status.index}].id" value="${printer.id}"/>
                     <td>
-                        <form:input path="printers[${status.index}].name" cssClass="form-control"/>
+                        <form:input path="nameTags[${status.index}].name" cssClass="form-control" readonly="true"/>
                     </td>
                     <td>
-                        <form:input path="printers[${status.index}].ip" cssClass="form-control"/>
+                        <form:input path="nameTags[${status.index}].stl" cssClass="form-control" readonly="true"/>
                     </td>
                     <td>
-                        <form:input path="printers[${status.index}].port" cssClass="form-control"/>
+                        <form:input path="nameTags[${status.index}].gcode" cssClass="form-control" readonly="true"/>
                     </td>
                     <td>
-                        <form:input path="printers[${status.index}].apiKey" cssClass="form-control"/>
+                        <form:checkbox path="nameTags[${status.index}].printing" onclick="return false"/>
                     </td>
-                    <td>
-                        <form:checkbox path="printers[${status.index}].printing"/>
-                    </td>
-                    <td>
-                        <form:checkbox path="printers[${status.index}].active"/>
-                    </td>
-                    <form:hidden path="printers[${status.index}].configFile" value="${printer.configFile}"/>
                 </tr>
             </c:forEach>
-            <tr>
-                <td colspan="6"><input type="submit" value="Save" class="btn btn-success"/></td>
-            </tr>
             </tbody>
         </table>
     </form:form>

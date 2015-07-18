@@ -3,7 +3,6 @@ package org.robostorm.queue;
 import org.robostorm.config.Config;
 import org.robostorm.model.NameTag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +40,22 @@ public class NameTagQueue {
             if (nameTag.getId() == id) {
                 removeFromQueue(nameTag);
             }
+        }
+    }
+
+    public void updateNameTag(NameTag nameTag) throws IOException {
+        boolean found = false;
+        if(nameTag.getConfig() == null)
+            nameTag.setConfig(config);
+        for(int i = 0 ; i < queue.size(); i++) {
+            if(queue.get(i).getId() == nameTag.getId()) {
+                queue.set(i, nameTag);
+                found = true;
+                config.saveQueue(this);
+            }
+        }
+        if(!found) {
+            addToQueue(nameTag);
         }
     }
 

@@ -47,14 +47,19 @@ public class PrinterQueue {
     }
 
     public void updatePrinter(Printer printer) throws IOException {
+        boolean found = false;
+        if(printer.getConfig() == null)
+            printer.setConfig(config);
         for(int i = 0; i < printers.size(); i++) {
-            if(printer.getConfig() == null)
-                printer.setConfig(config);
             if(printers.get(i).getId() == printer.getId()) {
                 printers.set(i, printer);
+                found = true;
+                config.savePrinters(this);
             }
         }
-        config.savePrinters(this);
+        if(!found) {
+            addPrinter(printer);
+        }
     }
 
     public void updatePrinter(Printer oldPrinter, Printer newPrinter) throws IOException {

@@ -21,36 +21,92 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a data-toggle="tab" href="#printersTab">Printers</a></li>
                 <li><a data-toggle="tab" href="#nameTagsTab">Name Tags</a></li>
+                <li><a data-toggle="tab" href="#printersTab">Printers</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="reload">Reload</a></li>
             </ul>
         </div>
     </div>
 </nav>
 <div class="main container tab-content">
-    <div id="printersTab" class="tab-pane fade in active">
-        <table id="printers" class="table table-striped table-bordered">
-            <tr>
-                <td><h3>Printers</h3></td>
-                <td colspan="5" class="editButtonContainer">
-                    <button id="editPrinters" class="btn btn-primary">Edit</button>
-                </td>
-            </tr>
-
-            <%--<tr class="form-inline">
-                <td>
-                    <label class="control-label">Name</label>
-                    <input class="form-control" value="Test" size="1" readonly/>
-                </td>
-                <td>
-                    <label class="control-label">IP</label>
-                    <input class="form-control" value="127.0.0.1" size="5" readonly/>
-                </td>
-            </tr>--%>
-        </table>
+    <div id="nameTagsTab" class="tab-pane fade in active">
+        <form:form modelAttribute="nameTagWrapper">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><label class="control-label">Name</label></th>
+                    <th><label class="control-label">STL</label></th>
+                    <th><label class="control-label">GCode</label></th>
+                    <th><label class="control-label">Printing</label></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="printer" items="${nameTagWrapper.nameTags}" varStatus="status">
+                    <tr class="form-inline">
+                        <td>
+                            <form:input path="nameTags[${status.index}].name" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:input path="nameTags[${status.index}].stl" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:input path="nameTags[${status.index}].gcode" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:checkbox path="nameTags[${status.index}].printing" onclick="return false"/>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </form:form>
     </div>
-    <div id="nameTagsTab" class="tab-pane fade">
-
+    <div id="printersTab" class="tab-pane fade in">
+        <form:form modelAttribute="printerWrapper">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><label class="control-label">Name</label></th>
+                    <th><label class="control-label">IP</label></th>
+                    <th><label class="control-label">Port</label></th>
+                    <th><label class="control-label">API-Key</label></th>
+                    <th><label class="control-label">Printing</label></th>
+                    <th><label class="control-label">Active</label></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="printer" items="${printerWrapper.printers}" varStatus="status">
+                    <tr class="form-inline">
+                        <td>
+                            <form:input path="printers[${status.index}].name" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:input path="printers[${status.index}].ip" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:input path="printers[${status.index}].port" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:input path="printers[${status.index}].apiKey" cssClass="form-control"
+                                        readonly="true"/>
+                        </td>
+                        <td>
+                            <form:checkbox path="printers[${status.index}].printing" onclick="return false"/>
+                        </td>
+                        <td>
+                            <form:checkbox path="printers[${status.index}].active" onclick="return false"/>
+                        </td>
+                    </tr>
+                </c:forEach>
+                <tr>
+                    <td colspan="6"><a href="${pageContext.request.contextPath}/ntap/manager/printers"
+                                       class="btn btn-success">Edit</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </form:form>
     </div>
 </div>
 <script src="${pageContext.request.contextPath}/js/manger.js"></script>

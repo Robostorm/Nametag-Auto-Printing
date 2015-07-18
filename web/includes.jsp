@@ -4,7 +4,7 @@
 <title>Team 3637 Scouting App</title>
 <meta name="description" content="Team 3637 Scouting App"/>
 <meta name="author" content="Ben"/>
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/centrallogo.png">
+<link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/icon.png">
 <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="${pageContext.request.contextPath}/css/main.css" rel="stylesheet"/>
 <link href="${pageContext.request.contextPath}/css/selectize.bootstrap3.css" rel="stylesheet"/>
