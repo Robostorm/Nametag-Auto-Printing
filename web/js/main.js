@@ -1,6 +1,7 @@
 function preview() {
     var name = $('#name').val();
-    $.ajax({url: "ntap/preview",
+    $.ajax({
+        url: "ntap/preview",
         data: {
             "name": name
         },

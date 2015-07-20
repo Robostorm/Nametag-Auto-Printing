@@ -20,6 +20,8 @@ public class NameTag {
 
     private Config config;
 
+    public NameTag(){}
+
     public NameTag(String name, Config config) {
         this.name = name;
         this.config = config;

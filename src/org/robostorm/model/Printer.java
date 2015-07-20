@@ -13,7 +13,7 @@ public class Printer {
     private int id;
     private String name;
     private String ip;
-    private int port;
+    private Integer port;
     private String apiKey;
     private File configFile;
     private boolean active;

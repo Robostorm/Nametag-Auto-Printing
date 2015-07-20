@@ -5,6 +5,7 @@
 <html>
 <head>
     <%@ include file="/includes.jsp" %>
+    <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet"/>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -27,7 +28,7 @@
     </div>
 </nav>
 <div class="container main">
-    <form:form modelAttribute="nameTagWrapper">
+    <form:form method="post" action="/ntap/manager/nameTags" modelAttribute="nameTagWrapper">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -38,25 +39,34 @@
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="printer" items="${nameTagWrapper.nameTags}" varStatus="status">
+            <c:forEach var="nameTag" items="${nameTagWrapper.nameTags}" varStatus="status">
                 <tr class="form-inline">
+                    <form:hidden path="nameTags[${status.index}].id" value="${nameTag.id}"/>
                     <td>
-                        <form:input path="nameTags[${status.index}].name" cssClass="form-control" readonly="true"/>
+                        <form:input path="nameTags[${status.index}].name" cssClass="form-control"/>
                     </td>
                     <td>
-                        <form:input path="nameTags[${status.index}].stl" cssClass="form-control" readonly="true"/>
+                        <form:input path="nameTags[${status.index}].stl" cssClass="form-control"/>
                     </td>
                     <td>
-                        <form:input path="nameTags[${status.index}].gcode" cssClass="form-control" readonly="true"/>
+                        <form:input path="nameTags[${status.index}].gcode" cssClass="form-control"/>
                     </td>
                     <td>
-                        <form:checkbox path="nameTags[${status.index}].printing" onclick="return false"/>
+                        <form:checkbox path="nameTags[${status.index}].printing"/>
+                    </td>
+                    <td>
+                        <input type="button" class="btn btn-danger delete" value="Delete"/>
+                        <form:hidden path="deleted[${status.index}]" value="${false}"/>
                     </td>
                 </tr>
             </c:forEach>
+            <tr>
+                <td colspan="6"><input type="submit" value="Save" class="btn btn-success"/></td>
+            </tr>
             </tbody>
         </table>
     </form:form>
 </div>
+<script src="${pageContext.request.contextPath}/js/editor.js"></script>
 </body>
 </html>

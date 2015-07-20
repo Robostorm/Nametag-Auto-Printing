@@ -39,17 +39,15 @@ public class PrinterQueue {
     }
 
     public void removePrinter(int id) throws IOException {
-        for(Printer printer : printers) {
-            if(printer.getId() == id) {
-                removePrinter(printer);
+        for(int i = 0; i < printers.size(); i ++) {
+            if(printers.get(i).getId() == id) {
+                removePrinter(printers.get(i));
             }
         }
     }
 
     public void updatePrinter(Printer printer) throws IOException {
         boolean found = false;
-        if(printer.getConfig() == null)
-            printer.setConfig(config);
         for(int i = 0; i < printers.size(); i++) {
             if(printers.get(i).getId() == printer.getId()) {
                 printers.set(i, printer);

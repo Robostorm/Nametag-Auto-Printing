@@ -11,6 +11,7 @@ import org.robostorm.queue.PrinterQueue;
 import org.robostorm.service.PreviewService;
 import org.robostorm.service.PrintService;
 import org.robostorm.wrapper.NameTagWrapper;
+import org.robostorm.wrapper.PrintServerWrapper;
 import org.robostorm.wrapper.PrinterWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
@@ -25,6 +26,7 @@ import javax.annotation.PreDestroy;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.spi.http.HttpContext;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -74,6 +76,7 @@ public class MainController {
 
     /*********/
     /*Preview*/
+
     /*********/
 
     @RequestMapping("/preview")
@@ -88,36 +91,58 @@ public class MainController {
 
     /*********/
     /*Manager*/
+
     /*********/
 
     @RequestMapping(value = "/manager", method = RequestMethod.GET)
     public String manager(Model model) {
         model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters()));
         model.addAttribute("nameTagWrapper", new NameTagWrapper(nameTagQueue.getAllNametags()));
+        model.addAttribute("printServerStatus", new PrintServerWrapper(getPrintServerStatus()));
         return "manager";
     }
 
     @RequestMapping(value = "/manager/printers", method = RequestMethod.GET)
     public String editPrinters(Model model) {
-        model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters()));
+        model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters(), new boolean[printerQueue.getAllPrinters().size()]));
         return "printers";
     }
 
     @RequestMapping(value = "/manager/printers", method = RequestMethod.POST)
     public String editPrintersSubmit(@ModelAttribute("printerWrapper") PrinterWrapper printerWrapper) throws IOException {
-        if(printerQueue != null && printerWrapper.getPrinters().size() > 0) {
-            for(int i = 0; i < printerWrapper.getPrinters().size(); i++) {
-                printerQueue.updatePrinter(printerWrapper.getPrinters().get(i));
+        if (printerQueue != null && printerWrapper.getPrinters().size() > 0) {
+            for (int i = 0; i < printerWrapper.getPrinters().size(); i++) {
+                if (printerWrapper.getPrinters().get(i).getId() != -1 && printerWrapper.getDeleted()[i]) {
+                    printerQueue.removePrinter(printerWrapper.getPrinters().get(i).getId());
+                } else {
+                    if (printerWrapper.getPrinters().get(i).getConfig() == null)
+                        printerWrapper.getPrinters().get(i).setConfig(config);
+                    if (printerWrapper.getPrinters().get(i).getId() == -1)
+                        printerWrapper.getPrinters().get(i).setId(System.identityHashCode(printerWrapper.getPrinters().get(i)));
+                    if (printerWrapper.getPrinters().get(i).getConfigFile() == null)
+                        printerWrapper.getPrinters().get(i).setConfigFile(new File("config\\slic3r\\mendel.ini"));
+                    printerQueue.updatePrinter(printerWrapper.getPrinters().get(i));
+                }
             }
         }
         return "redirect:/ntap/manager#printersTab";
     }
 
+    @RequestMapping(value = "/manager/nameTags", method = RequestMethod.GET)
+    public String editNameTags(Model model) {
+        model.addAttribute("nameTagWrapper", new NameTagWrapper(nameTagQueue.getAllNametags(), new boolean[nameTagQueue.getAllNametags().size()]));
+        return "nameTags";
+    }
+
     @RequestMapping(value = "/manager/nameTags", method = RequestMethod.POST)
     public String editNameTagsSubmit(@ModelAttribute("nameTagWrapper") NameTagWrapper nameTagWrapper) throws IOException {
-        if(printerQueue != null && nameTagWrapper.getNameTags().size() > 0) {
-            for(int i = 0; i < nameTagWrapper.getNameTags().size(); i++) {
-                nameTagQueue.updateNameTag(nameTagWrapper.getNameTags().get(i));
+        if (printerQueue != null && nameTagWrapper.getNameTags().size() > 0) {
+            for (int i = 0; i < nameTagWrapper.getNameTags().size(); i++) {
+                if (nameTagWrapper.getDeleted()[i]) {
+                    nameTagQueue.removeFromQueue(nameTagWrapper.getNameTags().get(i).getId());
+                } else {
+                    nameTagQueue.updateNameTag(nameTagWrapper.getNameTags().get(i));
+                }
             }
         }
         return "redirect:/ntap/manager";
@@ -152,7 +177,7 @@ public class MainController {
             for (Field field : nameTag.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
                 if (!field.getName().equals("config"))
-                    if(field.getName().equals("printer") ||
+                    if (field.getName().equals("printer") ||
                             field.getName().equals("stl") ||
                             field.getName().equals("gcode")) {
                         object.put(field.getName(), field.get(nameTag).toString());
@@ -288,27 +313,51 @@ public class MainController {
 
     /**************/
 
+    private JSONObject getPrintServerStatus() {
+        JSONObject json = new JSONObject();
+        if(printService.isStopped() && !printService.isRunning()) {
+            json.put("code", 0);
+            json.put("status", "Stopped");
+            return json;
+        } else if (!printService.isStopped() && printService.isRunning()) {
+            json.put("code", 1);
+            json.put("status", "Running");
+            return json;
+        } else if (printService.isStopped()) {
+            json.put("code", 2);
+            json.put("status", "Stopped but still alive");
+            return json;
+        }
+        json.put("code", 3);
+        json.put("status", "Alive but not Stopped");
+        return json;
+    }
+
+    @RequestMapping("/ps/status")
+    @ResponseBody
+    public String status() {
+        return getPrintServerStatus().toJSONString();
+    }
+
     @RequestMapping("/ps/start")
     @ResponseBody
     public String start() {
-        if (printService.isRunning()) {
-            return "Running";
-        } else {
+        JSONObject json =  getPrintServerStatus();
+        if (!printService.isRunning())  {
+            json.put("action", "Starting");
             printService.start();
-            return "Staring...";
         }
+        return json.toJSONString();
     }
 
     @RequestMapping("/ps/stop")
     @ResponseBody
     public String stop() {
+        JSONObject json =  getPrintServerStatus();
         if (!printService.isStopped() && printService.isRunning()) {
+            json.put("action", "Stopping");
             printService.stop();
-            return "Stopping...";
-        } else if (printService.isStopped() && printService.isRunning()) {
-            return "Stopped but still alive";
-        } else {
-            return "Stopped";
         }
+        return json.toJSONString();
     }
 }

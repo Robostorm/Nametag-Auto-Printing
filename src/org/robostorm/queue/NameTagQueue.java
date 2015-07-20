@@ -36,9 +36,10 @@ public class NameTagQueue {
     }
 
     public void removeFromQueue(int id) throws IOException {
-        for(NameTag nameTag : queue) {
-            if (nameTag.getId() == id) {
-                removeFromQueue(nameTag);
+        for(int i = 0; i < queue.size(); i++) {
+            if (queue.get(i).getId() == id) {
+                removeFromQueue(queue.get(i));
+                config.saveQueue(this);
             }
         }
     }

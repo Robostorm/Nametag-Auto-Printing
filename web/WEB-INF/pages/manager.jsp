@@ -5,6 +5,7 @@
 <html>
 <head>
     <%@ include file="../../includes.jsp" %>
+    <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet"/>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -23,6 +24,7 @@
             <ul class="nav navbar-nav">
                 <li><a data-toggle="tab" href="#nameTagsTab">Name Tags</a></li>
                 <li><a data-toggle="tab" href="#printersTab">Printers</a></li>
+                <li><a data-toggle="tab" href="#printServerTab">Print Server</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a id="reload">Reload</a></li>
@@ -59,6 +61,10 @@
                         </td>
                     </tr>
                 </c:forEach>
+                <tr>
+                    <td colspan="6"><a href="${pageContext.request.contextPath}/ntap/manager/nameTags"
+                                       class="btn btn-success">Edit</a></td>
+                </tr>
                 </tbody>
             </table>
         </form:form>
@@ -72,6 +78,7 @@
                     <th><label class="control-label">IP</label></th>
                     <th><label class="control-label">Port</label></th>
                     <th><label class="control-label">API-Key</label></th>
+                    <th><label class="control-label">Config File</label></th>
                     <th><label class="control-label">Printing</label></th>
                     <th><label class="control-label">Active</label></th>
                 </tr>
@@ -93,6 +100,10 @@
                                         readonly="true"/>
                         </td>
                         <td>
+                            <form:input path="printers[${status.index}].configFile" cssClass="form-control"
+                                        readonly="true"/>
+                        </td>
+                        <td>
                             <form:checkbox path="printers[${status.index}].printing" onclick="return false"/>
                         </td>
                         <td>
@@ -107,6 +118,26 @@
                 </tbody>
             </table>
         </form:form>
+    </div>
+    <div id="printServerTab" class="tab-pane fade in">
+        <div id="server">
+            <form:form modelAttribute="printServerStatus">
+                <div class="input-group">
+                    <span class="input-group-addon">Server Status</span>
+                    <form:input path="status" cssClass="form-control" readonly="true"/>
+                </div>
+                <div id="spacer"></div>
+                <div class="input-group">
+                    <span class="input-group-addon">Server Action</span>
+                    <form:input path="action" cssClass="form-control" readonly="true"/>
+                </div>
+            </form:form>
+            <input id="start" type="button" class="btn btn-success" value="Start"/>
+            <input id="stop" type="button" class="btn btn-danger" value="Stop"/>
+            <button id="refresh" type="button" class="btn btn-info" aria-label="Refresh">
+                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh
+            </button>
+        </div>
     </div>
 </div>
 <script src="${pageContext.request.contextPath}/js/manger.js"></script>

@@ -5,6 +5,7 @@
 <html>
 <head>
     <%@ include file="/includes.jsp" %>
+    <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet"/>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -21,7 +22,7 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="${pageContext.request.contextPath}/ntap/manager">Back</a></li>
+                <li><a href="${pageContext.request.contextPath}/ntap/manager#printersTab">Back</a></li>
             </ul>
         </div>
     </div>
@@ -35,6 +36,7 @@
                 <th><label class="control-label">IP</label></th>
                 <th><label class="control-label">Port</label></th>
                 <th><label class="control-label">API-Key</label></th>
+                <th><label class="control-label">Config File</label></th>
                 <th><label class="control-label">Printing</label></th>
                 <th><label class="control-label">Active</label></th>
             </tr>
@@ -56,20 +58,31 @@
                         <form:input path="printers[${status.index}].apiKey" cssClass="form-control"/>
                     </td>
                     <td>
+                        <form:input path="printers[${status.index}].configFile" cssClass="form-control"/>
+                    </td>
+                    <td>
                         <form:checkbox path="printers[${status.index}].printing"/>
                     </td>
                     <td>
                         <form:checkbox path="printers[${status.index}].active"/>
                     </td>
-                    <form:hidden path="printers[${status.index}].configFile" value="${printer.configFile}"/>
+                    <td>
+                        <input type="button" class="btn btn-danger delete" value="Delete"/>
+                        <form:hidden path="deleted[${status.index}]" value="${false}"/>
+                    </td>
                 </tr>
             </c:forEach>
             <tr>
-                <td colspan="6"><input type="submit" value="Save" class="btn btn-success"/></td>
+                <td colspan="8" class="text-center"><input id="addPrinter" type="button" class="btn btn-info" value="Add Printer"/></td>
+            </tr>
+            <tr>
+                <td colspan="8"><input type="submit" value="Save" class="btn btn-success"/></td>
             </tr>
             </tbody>
         </table>
+        <script>var num = ${printerWrapper.printers.size()};</script>
     </form:form>
 </div>
+<script src="${pageContext.request.contextPath}/js/editor.js"></script>
 </body>
 </html>

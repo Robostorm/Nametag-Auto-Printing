@@ -25,9 +25,6 @@ public class PrintServiceImpl implements PrintService {
 
     @Override
     public boolean isRunning() {
-        if(printServer.getThread() != null)
-            return printServer.getThread().isAlive();
-        else
-            return false;
+        return printServer.getThread() != null && printServer.getThread().isAlive();
     }
 }
