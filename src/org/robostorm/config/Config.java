@@ -11,7 +11,7 @@ public interface Config {
 
     File getConfigFile();
     File getQueueFile();
-    String getOctoPrintHostName();
+    String getPassword();
     String getImagesDirectory();
     String getScadDirectory();
     String getStlDirectory();
@@ -26,6 +26,10 @@ public interface Config {
     String getGcodeDirectoryPath();
 
     long getLoopTime();
+
+    boolean isLoggedIn();
+
+    void setLoggedIn(boolean loggedIn);
 
     void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException;
     void savePrinters(PrinterQueue printerQueue) throws IOException;

@@ -20,4 +20,19 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/ntap/*</url-pattern>
     </servlet-mapping>
+
+<!--    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>mywebapp</web-resource-name>
+            <url-pattern>/ntap/manager</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>nameTag-admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>mywebapp</realm-name>
+    </login-config>-->
 </web-app>

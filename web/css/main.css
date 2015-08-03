@@ -6,6 +6,15 @@ body {
   text-align: center;
 }
 
+[data-notify="progressbar"] {
+    margin-bottom: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+}
+
 .form-input {
     text-align: center;
 }
@@ -61,5 +70,3 @@ table a {
 .editButtonContainer {
     text-align: right;
 }
-
-

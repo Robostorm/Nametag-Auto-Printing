@@ -148,6 +148,16 @@ public class MainController {
         return "redirect:/ntap/manager";
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String submitLogin(@RequestParam("password") String password) {
+        if(password.equals(config.getPassword())) {
+            config.setLoggedIn(true);
+            return "redirect:/ntap/manager";
+        } else {
+            return "redirect:/login.jsp?failed=true";
+        }
+    }
+
     /*******/
     /*Queue*/
 
@@ -359,5 +369,24 @@ public class MainController {
             printService.stop();
         }
         return json.toJSONString();
+    }
+
+    @RequestMapping(value = "/response", method = RequestMethod.POST)
+    @ResponseBody
+    public String printerResponse(@RequestParam("printer") String printerIp) {
+        printerQueue.getPrinterByIp(printerIp).setPrinting(false);
+        return String.format("Received printer IP: %s and set it as available", printerIp);
+    }
+
+    @RequestMapping("/codeTest")
+    @ResponseBody
+    public ResponseEntity<String> returnCode(@RequestParam("code") Integer code) {
+        switch (code) {
+            case 201: return new ResponseEntity<>(HttpStatus.OK);
+            case 400: return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+            case 404: return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            case 500: return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            default: return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }

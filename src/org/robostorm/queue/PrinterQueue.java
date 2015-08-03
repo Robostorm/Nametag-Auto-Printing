@@ -102,6 +102,13 @@ public class PrinterQueue {
         return null;
     }
 
+    public Printer getPrinter(int id) {
+        for (Printer printer : printers)
+            if (printer.getId() == id)
+                return printer;
+        return null;
+    }
+
     public void removePrinter(String name) throws IOException {
         for(Printer printer : printers)
             if(printer.getName().equals(name))
@@ -114,5 +121,12 @@ public class PrinterQueue {
 
     public void setPrinters(List<Printer> printers) {
         this.printers = printers;
+    }
+
+    public Printer getPrinterByIp(String ip) {
+        for(Printer printer : printers)
+            if(printer.getIp().equals(ip))
+                return printer;
+        return null;
     }
 }

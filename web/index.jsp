@@ -20,6 +20,9 @@
             <ul class="nav navbar-nav">
                 <li><a class="page-scroll" href="#form">Get A Name Tag</a></li>
             </ul>
+<%--            <ul class="nav navbar-nav navbar-right">
+                <li><a href="${pageContext.request.contextPath}/login.jsp">Manager</a></li>
+            </ul>--%>
         </div>
     </div>
 </nav>
@@ -42,10 +45,6 @@
                 <button type="button" class="btn btn-success" id="submit">Submit</button>
             </form>
         </div>
-    </section>
-    <section>
-        <hr/>
-        <a class="btn btn-default page-scroll" href="#page-top">Back to top</a>
     </section>
 </div>
 <script src="${pageContext.request.contextPath}/js/main.js"></script>

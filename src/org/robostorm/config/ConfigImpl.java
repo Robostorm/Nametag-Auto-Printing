@@ -10,7 +10,6 @@ import org.robostorm.model.NameTag;
 import org.robostorm.model.Printer;
 import org.robostorm.queue.NameTagQueue;
 import org.robostorm.queue.PrinterQueue;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -24,12 +23,13 @@ public class ConfigImpl implements Config {
     private ServletContext servletContext;
     private File configFile;
     private File queueFile;
-    private String octoPrintHostName;
+    private String password;
     private String imagesDirectory;
     private String scadDirectory;
     private String stlDirectory;
     private String gcodeDirectory;
     private long loopTime;
+    private boolean loggedIn = false;
 
     @Override
     public File getConfigFile() {
@@ -42,8 +42,8 @@ public class ConfigImpl implements Config {
     }
 
     @Override
-    public String getOctoPrintHostName() {
-        return octoPrintHostName;
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -91,8 +91,13 @@ public class ConfigImpl implements Config {
         return loopTime;
     }
 
-    public void setOctoPrintHostName(String octoPrintHostName) {
-        this.octoPrintHostName = octoPrintHostName;
+    @Override
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public void setImagesDirectory(String imagesDirectory) {
@@ -113,6 +118,11 @@ public class ConfigImpl implements Config {
 
     public void setLoopTime(long loopTime) {
         this.loopTime = loopTime;
+    }
+
+    @Override
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
     }
 
     public ConfigImpl(ServletContext servletContext, String configFileName, String queueFileName) {
