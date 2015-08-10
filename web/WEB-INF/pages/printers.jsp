@@ -28,7 +28,7 @@
     </div>
 </nav>
 <div class="container main">
-    <form:form method="post" action="/ntap/manager/printers" modelAttribute="printerWrapper">
+    <form:form method="post" action="${pageContext.request.contextPath}/ntap/manager/printers" modelAttribute="printerWrapper">
         <table class="table table-striped">
             <thead>
             <tr>

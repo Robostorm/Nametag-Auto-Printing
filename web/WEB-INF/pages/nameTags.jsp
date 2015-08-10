@@ -28,7 +28,7 @@
     </div>
 </nav>
 <div class="container main">
-    <form:form method="post" action="/ntap/manager/nameTags" modelAttribute="nameTagWrapper">
+    <form:form method="post" action="${pageContext.request.contextPath}/ntap/manager/nameTags" modelAttribute="nameTagWrapper">
         <table class="table table-striped">
             <thead>
             <tr>

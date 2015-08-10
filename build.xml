@@ -3,7 +3,7 @@
         A application to render, slice, and print name tags
     </description>
 
-    <property name="tomcat-home" value="/apache-tomcat-7.0.57" />
+    <property name="tomcat-home" value="/apache-tomcat-8.0.23" />
 
     <property name="src.dir" location="src"/>
     <property name="web.dir" location="web"/>
@@ -14,23 +14,25 @@
     <path id="external.classpath">
         <fileset dir="${tomcat-home}/bin" includes="*.jar" />
         <fileset dir="${tomcat-home}/lib" includes="*.jar" />
+        <fileset dir="${lib.dir}/" includes="*.jar" />
     </path>
 
     <target name="compile" depends="clean" description="compile the source " >
         <tstamp/>
         <mkdir dir="${build.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" target="1.7">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false" target="1.8">
             <classpath refid="external.classpath"/>
         </javac>
     </target>
 
     <target name="dist" depends="compile" description="generate the distribution" >
         <mkdir dir="${dist.dir}"/>
-        <war destfile="${dist.dir}/SchoolNavigator.war" webxml="${web.dir}/WEB-INF/web.xml">
+        <war destfile="${dist.dir}/NameTagAutoPrinting.war" webxml="${web.dir}/WEB-INF/web.xml">
             <fileset dir = "${web.dir}">
                 <include name = "**/*.*"/>
             </fileset>
-
+            <webinf dir="${web.dir}/WEB-INF" />
+            <lib dir="${lib.dir}"/>
             <classes dir = "${build.dir}"/>
         </war>
     </target>
@@ -38,5 +40,10 @@
     <target name="clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+    </target>
+
+    <target name="print-version">
+        <echo>Java/JVM version: ${ant.java.version}</echo>
+        <echo>Java/JVM detail version: ${java.version}</echo>
     </target>
 </project>
