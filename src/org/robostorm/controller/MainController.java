@@ -374,8 +374,10 @@ public class MainController {
     @RequestMapping(value = "/response", method = RequestMethod.POST)
     @ResponseBody
     public String printerResponse(@RequestParam("printer") String printerIp) {
-        printerQueue.getPrinterByIp(printerIp).setPrinting(false);
-        return String.format("Received printer IP: %s and set it as available", printerIp);
+        Printer printer = printerQueue.getPrinterByIp(printerIp);
+        boolean printerStatus = printer.isPrinting();
+        printer.setPrinting(false);
+        return String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
     }
 
     @RequestMapping("/codeTest")
