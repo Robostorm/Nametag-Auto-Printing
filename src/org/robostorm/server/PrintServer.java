@@ -53,7 +53,9 @@ public class PrintServer implements Runnable {
                 NameTag nameTag = nameTagQueue.getNextNameTag();
                 if (printer != null && nameTag != null) {
                     System.out.printf("Assigning name tag %s to Printer %s\n", nameTag.toString(), printer.getName());
-                    printer.setPrinting(false);
+                    printer.setPrinting(true);
+                    printer.setNameTag(nameTag);
+                    nameTag.setPrinter(printer);
                     System.out.printf("Rendering name tag %s for printer %s\n", nameTag.toString(), printer.getName());
                     if (!nameTag.isGenerated())
                         nameTag.export();
@@ -82,8 +84,6 @@ public class PrintServer implements Runnable {
                             response = client.execute(post);
                         } catch (HttpHostConnectException e) {
                             throw new RuntimeException("Could not connect to printer", e);
-                        } catch (ClientProtocolException e) {
-                            e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

@@ -19,6 +19,7 @@ public class Printer {
     private boolean active;
     private boolean printing;
     private Config config;
+    private NameTag nameTag;
 
     public Printer(){}
 
@@ -58,7 +59,7 @@ public class Printer {
         if(!gcodeDirectory.exists())
             gcodeDirectory.mkdir();
 
-        String slic3rargs = String.format(" %s/%s.stl --output %s/%s.gcode", config.getStlDirectoryPath(), tag.toString(),
+        String slic3rargs = String.format(" %s%s.stl --output %s%s.gcode", config.getStlDirectoryPath(), tag.toString(),
                 config.getGcodeDirectoryPath(), tag.toString());
             try {
 
@@ -177,5 +178,13 @@ public class Printer {
 
     public void setConfig(Config config) {
         this.config = config;
+    }
+
+    public NameTag getNameTag() {
+        return nameTag;
+    }
+
+    public void setNameTag(NameTag nameTag) {
+        this.nameTag = nameTag;
     }
 }

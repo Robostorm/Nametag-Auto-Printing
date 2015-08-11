@@ -40,7 +40,7 @@ public class PreviewServiceImpl implements PreviewService {
 
 
         String pngargs = String.format("\n -o %s/%s.png -D \"name=\\\"%s\\\"\" -D chars=%d "
-                        + "--camera=0,0,0,0,0,0,100 %s/name.scad", imagesDir.getAbsolutePath(),
+                        + "--camera=0,0,0,0,0,0,100 %sname.scad", imagesDir.getAbsolutePath(),
                 name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());
 
         System.out.println(pngargs);

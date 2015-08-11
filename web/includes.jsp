@@ -2,7 +2,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Team 3637 Scouting App</title>
-<meta name="description" content="Team 3637 Scouting App"/>
+<meta name="description" content="Robostorm Name Tag Auto Printing"/>
 <meta name="author" content="Ben"/>
 <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/icon.png">
 <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>

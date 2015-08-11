@@ -339,7 +339,7 @@ public class MainController {
             return json;
         }
         json.put("code", 3);
-        json.put("status", "Alive but not Stopped");
+        json.put("status", "Dead but not Stopped");
         return json;
     }
 
@@ -373,11 +373,14 @@ public class MainController {
 
     @RequestMapping(value = "/response", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> printerResponse(@RequestParam("printer") String printerIp) {
+    public ResponseEntity<String> printerResponse(@RequestParam("printer") String printerIp) throws IOException {
         Printer printer = printerQueue.getPrinterByIp(printerIp);
         if(printer != null) {
             boolean printerStatus = printer.isPrinting();
             printer.setPrinting(false);
+            if(printer.getNameTag() != null)
+                nameTagQueue.removeFromQueue(printer.getNameTag());
+            printer.setNameTag(null);
             return new ResponseEntity<>(String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting()), HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Printer does not exist", HttpStatus.BAD_REQUEST);

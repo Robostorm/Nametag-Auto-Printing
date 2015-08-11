@@ -55,7 +55,7 @@ public class NameTag {
             stlDirectory.mkdir();
 
         String stlargs = String.format(" -o %s -D \"name=\\\"%s\\\"\" -D chars=%d --camera=0,0,0,0,0,0,100 "
-                + "%s/name.scad", config.getStlDirectoryPath() + name + ".stl", name, name.length(), config.getScadDirectoryPath());
+                + "%sname.scad", config.getStlDirectoryPath() + name + ".stl", name, name.length(), config.getScadDirectoryPath());
 
         try {
 
