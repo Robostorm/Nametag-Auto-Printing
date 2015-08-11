@@ -373,11 +373,15 @@ public class MainController {
 
     @RequestMapping(value = "/response", method = RequestMethod.POST)
     @ResponseBody
-    public String printerResponse(@RequestParam("printer") String printerIp) {
+    public ResponseEntity<String> printerResponse(@RequestParam("printer") String printerIp) {
         Printer printer = printerQueue.getPrinterByIp(printerIp);
-        boolean printerStatus = printer.isPrinting();
-        printer.setPrinting(false);
-        return String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
+        if(printer != null) {
+            boolean printerStatus = printer.isPrinting();
+            printer.setPrinting(false);
+            return new ResponseEntity<>(String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Printer does not exist", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping("/codeTest")
@@ -385,8 +389,8 @@ public class MainController {
     public ResponseEntity<String> returnCode(@RequestParam("code") Integer code) {
         switch (code) {
             case 201: return new ResponseEntity<>(HttpStatus.OK);
-            case 400: return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-            case 404: return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+            case 400: return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            case 404: return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             case 500: return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             default: return new ResponseEntity<>(HttpStatus.OK);
         }
