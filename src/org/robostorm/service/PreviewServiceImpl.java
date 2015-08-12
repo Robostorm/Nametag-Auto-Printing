@@ -40,13 +40,13 @@ public class PreviewServiceImpl implements PreviewService {
         }
 
 
-        /*String pngargs = String.format(" -o %s/%s.png -D \"name=\\\"%s\\\"\" -D chars=%d "
+        String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
                         + "--camera=0,0,0,0,0,0,100 %sname.scad", imagesDir.getAbsolutePath(),
-                name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());*/
+                name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());
 
-        String pngargs = String.format(" -o %s/%s.png -D chars=%d"
+/*        String pngargs = String.format(" -o %s/%s.png -D chars=%d"
                         + " --camera=0,0,0,0,0,0,100 %sname.scad", imagesDir.getAbsolutePath(),
-                name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());;
+                name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());;*/
 
         //System.out.println(pngargs);
 
