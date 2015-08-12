@@ -5,8 +5,10 @@ import org.robostorm.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class NameTag {
 
@@ -54,7 +56,7 @@ public class NameTag {
         if(!stlDirectory.exists())
             stlDirectory.mkdir();
 
-        String stlargs = String.format(" -o %s -D \"name=\\\"%s\\\"\" -D chars=%d --camera=0,0,0,0,0,0,100 "
+        String stlargs = String.format(" -o %s -D name=\"%s\" -D chars=%d --camera=0,0,0,0,0,0,100 "
                 + "%sname.scad", config.getStlDirectoryPath() + name + ".stl", name, name.length(), config.getScadDirectoryPath());
 
         try {
@@ -64,6 +66,25 @@ public class NameTag {
             System.out.println("Args: " + stlargs);
 
             Process p = Runtime.getRuntime().exec("openscad" + stlargs);
+
+            BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(p.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(p.getErrorStream()));
+
+            // read the output from the command
+            System.out.println("Here is the standard output of the command:\n");
+            String s;
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            // read any errors from the attempted command
+            System.out.println("Here is the standard error of the command (if any):\n");
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
 
             while (p.isAlive()) {}
             System.out.println("Done");
