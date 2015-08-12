@@ -8,6 +8,7 @@ import org.robostorm.model.NameTag;
 import org.robostorm.model.Printer;
 import org.robostorm.queue.NameTagQueue;
 import org.robostorm.queue.PrinterQueue;
+import org.robostorm.response.Response;
 import org.robostorm.service.PreviewService;
 import org.robostorm.service.PrintService;
 import org.robostorm.wrapper.NameTagWrapper;
@@ -374,15 +375,27 @@ public class MainController {
     @RequestMapping(value = "/response", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> printerResponse(@RequestParam("printer") String printerIp) throws IOException {
+        System.out.println("Relieved printer DONE response for IP " + printerIp);
         Printer printer = printerQueue.getPrinterByIp(printerIp);
         if(printer != null) {
-            boolean printerStatus = printer.isPrinting();
-            printer.setPrinting(false);
-            if(printer.getNameTag() != null)
-                nameTagQueue.removeFromQueue(printer.getNameTag());
-            printer.setNameTag(null);
-            return new ResponseEntity<>(String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting()), HttpStatus.OK);
+            NameTag nameTag = printer.getNameTag();
+            if(nameTag != null) {
+                System.out.println("Sending delete request to octoprint");
+                new Thread(new Response(nameTag, printer)).start();
+                boolean printerStatus = printer.isPrinting();
+                printer.setPrinting(false);
+                if (printer.getNameTag() != null)
+                    nameTagQueue.removeFromQueue(printer.getNameTag());
+                printer.setNameTag(null);
+                String response = String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
+                System.out.println(response);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                System.out.println("Printer has no name tag");
+                return new ResponseEntity<>("Printer has no name tag", HttpStatus.BAD_REQUEST);
+            }
         } else {
+            System.out.println("Printer not found");
             return new ResponseEntity<>("Printer does not exist", HttpStatus.BAD_REQUEST);
         }
     }
