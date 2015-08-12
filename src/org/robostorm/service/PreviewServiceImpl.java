@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 public class PreviewServiceImpl implements PreviewService {
 
@@ -39,16 +40,29 @@ public class PreviewServiceImpl implements PreviewService {
         }
 
 
-        String pngargs = String.format("\n -o %s/%s.png -D \"name=\\\"%s\\\"\" -D chars=%d "
+        /*String pngargs = String.format(" -o %s/%s.png -D \"name=\\\"%s\\\"\" -D chars=%d "
                         + "--camera=0,0,0,0,0,0,100 %sname.scad", imagesDir.getAbsolutePath(),
-                name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());
+                name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());*/
 
-        System.out.println(pngargs);
+        String pngargs = String.format(" -o %s/%s.png -D chars=%d"
+                        + " --camera=0,0,0,0,0,0,100 %sname.scad", imagesDir.getAbsolutePath(),
+                name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());;
+
+        //System.out.println(pngargs);
+
+        String command = "sh " + config.getScadDirectoryPath() + "test.sh";
 
         try {
             System.out.println("Args: " + pngargs);
-
+            //System.out.println("DISPLAY: " + System.getenv("DISPLAY"));
+/*            Map<String, String> env = System.getenv();
+            for (String envName : env.keySet()) {
+                System.out.format("%s=%s%n", envName, env.get(envName));
+            }*/
+            //System.out.println(command);
             Process p = Runtime.getRuntime().exec("openscad" + pngargs);
+            //Process p = Runtime.getRuntime().exec("echo $DISPLAY");
+//            Process p = Runtime.getRuntime().exec(command);
 
             BufferedReader stdInput = new BufferedReader(new
                     InputStreamReader(p.getInputStream()));
