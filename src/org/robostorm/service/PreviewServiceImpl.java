@@ -39,10 +39,16 @@ public class PreviewServiceImpl implements PreviewService {
             return json.toJSONString();
         }
 
+        int zoom = 100;
+        if(name.length() > 8) {
+            zoom = 150;
+        } else if(name.length() > 5) {
+            zoom = 130;
+        }
 
         String pngargs = String.format(" -o %s/%s.png -D name=\"%s\" -D chars=%d "
-                        + "--camera=0,0,0,0,0,0,100 %sname.scad", imagesDir.getAbsolutePath(),
-                name, name, name.equals("") ? 4 : name.length(), config.getScadDirectoryPath());
+                        + "--camera=0,0,0,0,0,0,%d %sname.scad", imagesDir.getAbsolutePath(),
+                name, name, name.equals("") ? 4 : name.length(), zoom, config.getScadDirectoryPath());
 
         try {
             System.out.println("Args: " + pngargs);
