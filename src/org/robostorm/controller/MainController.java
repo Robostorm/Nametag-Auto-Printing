@@ -24,9 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.spi.http.HttpContext;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -63,9 +60,9 @@ public class MainController {
             e.printStackTrace();
         }
 
-/*        if(!printService.isRunning()) {
+        if(!printService.isRunning()) {
             printService.start();
-        }*/
+        }
     }
 
     @PreDestroy

@@ -48,7 +48,7 @@ public class PrintServer implements Runnable {
         long oldTime = time;
         while (!isStopped()) {
             time = System.currentTimeMillis();
-            if(time - oldTime >= config.getLoopTime()) {
+            if (time - oldTime >= config.getLoopTime()) {
                 Printer printer = printerQueue.getNextPrinter();
                 NameTag nameTag = nameTagQueue.getNextNameTag();
                 if (printer != null && nameTag != null) {
@@ -66,12 +66,14 @@ public class PrintServer implements Runnable {
                         if (!file.exists()) {
                             System.err.println("Attempting to upload file that does not exist from nametag " + nameTag.toString());
                         } else {
+                            System.out.printf("Uploading name tag %s to printer %s with ip %s on port %d", nameTag.toString(),
+                                    printer.getName(), printer.getIp(), printer.getPort());
                             String remotePath = String.format("http://%s:%s/api/files/local", printer.getIp(), Integer.toString(printer.getPort()));
                             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
                             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                             FileBody fileBody = new FileBody(file);
                             builder.addPart("file", fileBody);
-                            builder.addTextBody("print", "false");
+                            builder.addTextBody("print", "true");
 
                             HttpPost post = new HttpPost(remotePath);
 

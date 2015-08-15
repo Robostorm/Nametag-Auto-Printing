@@ -59,8 +59,8 @@ public class Printer {
         if(!gcodeDirectory.exists())
             gcodeDirectory.mkdir();
 
-        String slic3rargs = String.format(" %s%s.stl --output %s%s.gcode", config.getStlDirectoryPath(), tag.toString(),
-                config.getGcodeDirectoryPath(), tag.toString());
+        String slic3rargs = String.format(" %s%s.stl --output %s%s.gcode --load %sslic3r.ini", config.getStlDirectoryPath(), tag.toString(),
+                config.getGcodeDirectoryPath(), tag.toString(), config.getScadDirectoryPath());
             try {
 
                 System.out.println("Args: " + slic3rargs);
