@@ -23,7 +23,7 @@ public class Response implements Runnable {
 
     @Override
     public void run() {
-        String remotePath = String.format("ttp://%s:%s/api/files/local/%s.gcode", printer.getIp(),
+        String remotePath = String.format("http://%s:%s/api/files/local/%s.gcode", printer.getIp(),
                 Integer.toString(printer.getPort()), nameTag.getName());
         HttpDelete delete = new HttpDelete(remotePath);
         delete.addHeader("X-Api-Key", printer.getApiKey());
