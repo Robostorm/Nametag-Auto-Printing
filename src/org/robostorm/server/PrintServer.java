@@ -52,28 +52,34 @@ public class PrintServer implements Runnable {
                 Printer printer = printerQueue.getNextPrinter();
                 NameTag nameTag = nameTagQueue.getNextNameTag();
                 if (printer != null && nameTag != null) {
-                    System.out.printf("Assigning name tag %s to Printer %s\n", nameTag.toString(), printer.getName());
-                    printer.setNameTag(nameTag);
-                    nameTag.setPrinter(printer);
-                    System.out.printf("Rendering name tag %s for printer %s\n", nameTag.toString(), printer.getName());
-                    if (!nameTag.isGenerated())
+                    if(printer.getNameTag() == null && nameTag.getPrinter() == null) {
+                        System.out.printf("Assigning name tag %s to Printer %s\n", nameTag.toString(), printer.getName());
+                        printer.setNameTag(nameTag);
+                        nameTag.setPrinter(printer);
+                    } else if (printer.getNameTag() != null) {
+                        nameTag = printer.getNameTag();
+                    }
+                    if (!nameTag.isGenerated()) {
+                        System.out.printf("Rendering name tag %s for printer %s\n", nameTag.toString(), printer.getName());
                         nameTag.export();
-                    System.out.printf("Slicing name tag %s for printer %s\n", nameTag.toString(), printer.getName());
-                    if (!nameTag.isSliced())
+                    }
+                    if (!nameTag.isSliced()) {
+                        System.out.printf("Slicing name tag %s for printer %s\n", nameTag.toString(), printer.getName());
                         printer.slice(nameTag);
+                    }
                     if (!nameTag.isPrinting()) {
                         File file = new File(String.format("%s/%s.gcode", config.getGcodeDirectoryPath(), nameTag.toString()));
                         if (!file.exists()) {
                             System.err.println("Attempting to upload file that does not exist from nametag " + nameTag.toString());
                         } else {
-                            System.out.printf("Uploading name tag %s to printer %s with ip %s on port %d", nameTag.toString(),
+                            System.out.printf("Uploading name tag %s to printer %s with ip %s on port %d\n", nameTag.toString(),
                                     printer.getName(), printer.getIp(), printer.getPort());
                             String remotePath = String.format("http://%s:%s/api/files/local", printer.getIp(), Integer.toString(printer.getPort()));
                             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
                             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                             FileBody fileBody = new FileBody(file);
                             builder.addPart("file", fileBody);
-                            builder.addTextBody("print", "true");
+                            builder.addTextBody("print", "false");
 
                             HttpPost post = new HttpPost(remotePath);
 
@@ -130,6 +136,7 @@ public class PrintServer implements Runnable {
                     }
                     try {
                         config.saveQueue(nameTagQueue);
+                        config.savePrinters(printerQueue);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
