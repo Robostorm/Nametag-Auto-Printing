@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public interface Config {
 
-    File getConfigFile();
+    File getPrintersFile();
     File getQueueFile();
     String getPassword();
     String getImagesDirectory();
@@ -33,7 +33,7 @@ public interface Config {
 
     void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException;
     void savePrinters(PrinterQueue printerQueue) throws IOException;
-    void buildConfig() throws IOException;
+    void buildPrinters() throws IOException;
     void loadQueue(NameTagQueue nameTagQueue, PrinterQueue printerQueue) throws JDOMException, IOException;
     void saveQueue(NameTagQueue nameTagQueue) throws IOException;
     void buildQueue() throws IOException;

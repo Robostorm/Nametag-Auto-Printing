@@ -21,7 +21,7 @@ import java.util.List;
 public class ConfigImpl implements Config {
 
     private ServletContext servletContext;
-    private File configFile;
+    private File printersFile;
     private File queueFile;
     private String password;
     private String imagesDirectory;
@@ -32,8 +32,8 @@ public class ConfigImpl implements Config {
     private boolean loggedIn = false;
 
     @Override
-    public File getConfigFile() {
-        return configFile;
+    public File getPrintersFile() {
+        return printersFile;
     }
 
     @Override
@@ -125,19 +125,19 @@ public class ConfigImpl implements Config {
         this.loggedIn = loggedIn;
     }
 
-    public ConfigImpl(ServletContext servletContext, String configFileName, String queueFileName) {
+    public ConfigImpl(ServletContext servletContext, String printersFileName, String queueFileName) {
         this.servletContext = servletContext;
         File dataDirectory = new File(servletContext.getRealPath("/") + "../data");
         if(!dataDirectory.exists())
             dataDirectory.mkdir();
-        configFile = new File(dataDirectory.getAbsolutePath() + "/" + configFileName);
+        printersFile = new File(dataDirectory.getAbsolutePath() + "/" + printersFileName);
         queueFile = new File(dataDirectory.getAbsolutePath() + "/" + queueFileName);
     }
 
     @Override
     public void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();
-        Document document = saxBuilder.build(configFile);
+        Document document = saxBuilder.build(printersFile);
         Element configElement = document.getRootElement();
         Element printers = configElement.getChild("printers");
         List<Printer> list = new ArrayList<>();
@@ -147,9 +147,10 @@ public class ConfigImpl implements Config {
                     printer.getAttribute("port").getIntValue(),
                     printer.getAttributeValue("apiKey"),
                     printer.getAttribute("active").getBooleanValue(),
-                    printer.getAttribute("printing").getBooleanValue(), this));
+                    printer.getAttribute("printing").getBooleanValue(),
+                    this));
         }
-        System.out.println("Read config file");
+        System.out.println("Read printers file");
         printerQueue.addAllPrinters(list);
     }
 
@@ -162,23 +163,23 @@ public class ConfigImpl implements Config {
             printers.addContent(printer.toElement());
         config.getRootElement().addContent(printers);
         XMLOutputter xmlOutputter = new XMLOutputter();
-        System.out.println("Wrote config file");
+        System.out.println("Wrote printers file");
         //xmlOutputter.output(config, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(configFile.getAbsolutePath()));
+        xmlOutputter.output(config, new FileWriter(printersFile.getAbsolutePath()));
     }
 
     @Override
-    public void buildConfig() throws IOException {
+    public void buildPrinters() throws IOException {
         Element root = new Element("config");
         Document config = new Document(root);
         Element printers = new Element("printers");
         config.getRootElement().addContent(printers);
         XMLOutputter xmlOutputter = new XMLOutputter();
-        System.out.println("Built queue config file");
+        System.out.println("Built printers file");
         //xmlOutputter.output(config, System.out);
         xmlOutputter.setFormat(Format.getPrettyFormat());
-        xmlOutputter.output(config, new FileWriter(configFile.getAbsolutePath()));
+        xmlOutputter.output(config, new FileWriter(printersFile.getAbsolutePath()));
 
     }
 
@@ -189,8 +190,12 @@ public class ConfigImpl implements Config {
         Element queue = document.getRootElement();
         List<NameTag> list = new ArrayList<>();
         for(Element nametag : queue.getChildren()) {
-            list.add(new NameTag(nametag.getAttributeValue("name"), printerQueue.getPrinter(nametag.getAttributeValue("printer")),
-                    nametag.getAttributeValue("stl"), nametag.getAttributeValue("gcode"), this));
+            list.add(new NameTag(nametag.getAttributeValue("name"),
+                    printerQueue.getPrinter(nametag.getAttributeValue("printer")),
+                    nametag.getAttributeValue("stl"),
+                    nametag.getAttributeValue("gcode"),
+                    Boolean.parseBoolean(nametag.getAttributeValue("printing")),
+                    this));
         }
         System.out.println("Read queue file");
         nameTagQueue.addAllToQueue(list);

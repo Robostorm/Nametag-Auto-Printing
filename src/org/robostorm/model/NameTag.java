@@ -30,7 +30,7 @@ public class NameTag {
         id = System.identityHashCode(this);
     }
 
-    public NameTag(String name, Printer printer, String stl, String gcode, Config config) {
+    public NameTag(String name, Printer printer, String stl, String gcode, boolean printing, Config config) {
         this.name = name;
         if(!stl.equals(""))
             this.stl = new File(config.getScadDirectory() + stl);
@@ -38,6 +38,7 @@ public class NameTag {
             this.gcode = new File(config.getGcodeDirectory() + gcode);
         this.printer = printer;
         this.config = config;
+        this.printing = printing;
         id = System.identityHashCode(this);
     }
 
@@ -114,6 +115,7 @@ public class NameTag {
             nametagElement.setAttribute("printer", printer.getName());
         else
             nametagElement.setAttribute("printer", "");
+        nametagElement.setAttribute("printing", Boolean.toString(printing));
         return nametagElement;
     }
 

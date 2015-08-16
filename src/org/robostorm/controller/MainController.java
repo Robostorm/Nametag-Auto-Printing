@@ -48,8 +48,8 @@ public class MainController {
     @PostConstruct
     public void init() {
         try {
-            if (!config.getConfigFile().exists())
-                config.buildConfig();
+            if (!config.getPrintersFile().exists())
+                config.buildPrinters();
             else
                 config.loadPrinters(printerQueue);
             if (!config.getQueueFile().exists())
@@ -60,7 +60,7 @@ public class MainController {
             e.printStackTrace();
         }
 
-        if(!printService.isRunning()) {
+        if (!printService.isRunning()) {
             printService.start();
         }
     }
@@ -148,7 +148,7 @@ public class MainController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String submitLogin(@RequestParam("password") String password) {
-        if(password.equals(config.getPassword())) {
+        if (password.equals(config.getPassword())) {
             config.setLoggedIn(true);
             return "redirect:/ntap/manager";
         } else {
@@ -323,7 +323,7 @@ public class MainController {
 
     private JSONObject getPrintServerStatus() {
         JSONObject json = new JSONObject();
-        if(printService.isStopped() && !printService.isRunning()) {
+        if (printService.isStopped() && !printService.isRunning()) {
             json.put("code", 0);
             json.put("status", "Stopped");
             return json;
@@ -350,8 +350,8 @@ public class MainController {
     @RequestMapping("/ps/start")
     @ResponseBody
     public String start() {
-        JSONObject json =  getPrintServerStatus();
-        if (!printService.isRunning())  {
+        JSONObject json = getPrintServerStatus();
+        if (!printService.isRunning()) {
             json.put("action", "Starting");
             printService.start();
         }
@@ -361,7 +361,7 @@ public class MainController {
     @RequestMapping("/ps/stop")
     @ResponseBody
     public String stop() {
-        JSONObject json =  getPrintServerStatus();
+        JSONObject json = getPrintServerStatus();
         if (!printService.isStopped() && printService.isRunning()) {
             json.put("action", "Stopping");
             printService.stop();
@@ -372,40 +372,46 @@ public class MainController {
     @RequestMapping(value = "/response", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> printerResponse(@RequestParam("printer") String printerIp) throws IOException {
+        String message;
+        HttpStatus status;
         System.out.println("Relieved printer DONE response for IP " + printerIp);
         Printer printer = printerQueue.getPrinterByIp(printerIp);
-        if(printer != null) {
+        if (printer != null) {
             NameTag nameTag = printer.getNameTag();
-            if(nameTag != null) {
-                System.out.println("Sending delete request to octoprint");
+            boolean printerStatus = printer.isPrinting();
+            message = String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
+            printer.setPrinting(false);
+            status = HttpStatus.OK;
+            if (nameTag != null) {
+                message += "\nSending delete request to octoprint";
                 new Thread(new Response(nameTag, printer)).start();
-                boolean printerStatus = printer.isPrinting();
-                printer.setPrinting(false);
-                if (printer.getNameTag() != null)
-                    nameTagQueue.removeFromQueue(printer.getNameTag());
-                printer.setNameTag(null);
-                String response = String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
-                System.out.println(response);
-                return new ResponseEntity<>(response, HttpStatus.OK);
+                nameTagQueue.removeFromQueue(printer.getNameTag());
             } else {
-                System.out.println("Printer has no name tag");
-                return new ResponseEntity<>("Printer has no name tag", HttpStatus.BAD_REQUEST);
+                message += "\nPrinter has no name tag";
             }
+            printer.setNameTag(null);
         } else {
-            System.out.println("Printer not found");
-            return new ResponseEntity<>("Printer does not exist", HttpStatus.BAD_REQUEST);
+            message = "Printer not found";
+            status = HttpStatus.BAD_REQUEST;
         }
+        System.out.println(message);
+        return new ResponseEntity<>(message, status);
     }
 
     @RequestMapping("/codeTest")
     @ResponseBody
     public ResponseEntity<String> returnCode(@RequestParam("code") Integer code) {
         switch (code) {
-            case 201: return new ResponseEntity<>(HttpStatus.OK);
-            case 400: return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            case 404: return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            case 500: return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            default: return new ResponseEntity<>(HttpStatus.OK);
+            case 201:
+                return new ResponseEntity<>(HttpStatus.OK);
+            case 400:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            case 404:
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            case 500:
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            default:
+                return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 }

@@ -10,7 +10,7 @@
 
     <bean id="config" class="org.robostorm.config.ConfigImpl">
         <constructor-arg name="servletContext" value="#{servletContext}"/>
-        <constructor-arg name="configFileName" type="java.lang.String" value="config.xml"/>
+        <constructor-arg name="printersFileName" type="java.lang.String" value="printers.xml"/>
         <constructor-arg name="queueFileName" type="java.lang.String" value="queue.xml"/>
         <property name="password" value="r0b0tic$"/>
         <property name="imagesDirectory" value="images/"/>
