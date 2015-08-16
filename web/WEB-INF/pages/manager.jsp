@@ -4,6 +4,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <title>Manager</title>
     <%@ include file="../../includes.jsp" %>
     <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet"/>
 </head>

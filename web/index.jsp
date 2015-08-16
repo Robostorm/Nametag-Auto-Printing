@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <title>Robostorm's Name Tag Auto Printing</title>
     <%@ include file="includes.jsp" %>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
