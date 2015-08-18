@@ -21,9 +21,10 @@ public class Printer {
     private Config config;
     private NameTag nameTag;
 
-    public Printer(){}
+    public Printer() {
+    }
 
-    public Printer(String name, Config config){
+    public Printer(String name, Config config) {
         this.name = name;
         ip = "127.0.0.1";
         port = 5000;
@@ -35,12 +36,12 @@ public class Printer {
         id = System.identityHashCode(this);
     }
 
-    public Printer(String name, String ip, int port, String apiKey, String configFile, boolean active, boolean printing, Config config){
+    public Printer(String name, String ip, int port, String apiKey, String configFile, boolean active, boolean printing, Config config) {
         this.name = name;
         this.ip = ip;
         this.port = port;
         this.apiKey = apiKey;
-        if(configFile.equals(""))
+        if (configFile.equals(""))
             this.configFile = null;
         else
             this.configFile = new File(configFile);
@@ -49,53 +50,55 @@ public class Printer {
         this.config = config;
         id = System.identityHashCode(this);
     }
-    
+
 
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 
-    public void slice(NameTag tag){
+    public void slice(NameTag tag) {
 
         File gcodeDirectory = new File(config.getGcodeDirectoryPath());
-        if(!gcodeDirectory.exists())
+        if (!gcodeDirectory.exists())
             gcodeDirectory.mkdir();
 
         String slic3rargs = String.format(" %s%s.stl --output %s%s.gcode --load %s", config.getStlDirectoryPath(), tag.toString(),
-                config.getGcodeDirectoryPath(), tag.toString(), configFile.getAbsolutePath());
-            try {
+                config.getGcodeDirectoryPath(), tag.toString(), configFile != null ?
+                        configFile.getAbsolutePath() : config.getScadDirectoryPath() + "mendel.ini");
+        try {
 
-                System.out.println("Args: " + slic3rargs);
+            System.out.println("Args: " + slic3rargs);
 
-                Process p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
+            Process p = Runtime.getRuntime().exec("slic3r" + slic3rargs);
 
-                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-                BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
-                String s;
+            String s;
 
-                // read the output from the command
-                System.out.println("Here is the standard output of the command:\n");
-                while ((s = stdInput.readLine()) != null) {
-                    System.out.println(s);
-                }
-
-                // read any errors from the attempted command
-                System.out.println("Here is the standard error of the command (if any):\n");
-                while ((s = stdError.readLine()) != null) {
-                    System.out.println(s);
-                }
-
-                while (p.isAlive()){}
-                tag.setPrinter(this);
-                tag.setGcode(new File(String.format("%s/%s.gcode", config.getStlDirectory(), tag.toString())));
-                System.out.println("Done");
-
-            } catch (IOException e) {
-                throw new RuntimeException("exception happened - here's what I know: ", e);
+            // read the output from the command
+            System.out.println("Here is the standard output of the command:\n");
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
             }
+
+            // read any errors from the attempted command
+            System.out.println("Here is the standard error of the command (if any):\n");
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            while (p.isAlive()) {
+            }
+            tag.setPrinter(this);
+            tag.setGcode(new File(String.format("%s/%s.gcode", config.getStlDirectory(), tag.toString())));
+            System.out.println("Done");
+
+        } catch (IOException e) {
+            throw new RuntimeException("exception happened - here's what I know: ", e);
+        }
 
     }
 
@@ -105,7 +108,7 @@ public class Printer {
         printerElement.setAttribute("ip", ip);
         printerElement.setAttribute("port", Integer.toString(port));
         printerElement.setAttribute("apiKey", apiKey);
-        if(configFile == null)
+        if (configFile == null)
             printerElement.setAttribute("configFile", "");
         else
             printerElement.setAttribute("configFile", configFile.getAbsolutePath());

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <printers>
-    <printer name="Robostorm" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" printing="false" />
-    <printer name="Tim" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" printing="false" />
-    <printer name="Ben" ip="192.168.1.23" port="80" apiKey="0C3943EADEF243DEBFC3726BA0FAE6E3" file="config\slic3r\mendel.ini" active="false" printing="false" />
-    <printer name="Mike" ip="" port="5000" apiKey="" file="config\slic3r\mendel.ini" active="false" printing="false" />
-    <printer name="Test" ip="127.0.0.1" port="5000" apiKey="88730606C84C40DD9D552DDB583B9E07" file="config\slic3r\mendel.ini" active="false" printing="false" />
-    <printer name="Test2" ip="192.168.1.4" port="5000" apiKey="88730606C84C40DD9D552DDB583B9E07" file="config\slic3r\mendel.ini" active="true" printing="false" />
+    <printer name="Robostorm" ip="" port="5000" apiKey="" configFile="" active="false" printing="false" />
+    <printer name="Tim" ip="" port="5000" apiKey="" configFile="" active="false" printing="false" />
+    <printer name="Ben" ip="192.168.1.23" port="80" apiKey="0C3943EADEF243DEBFC3726BA0FAE6E3" configFile="" active="false" printing="false" />
+    <printer name="Mike" ip="" port="5000" apiKey="" configFile="" active="false" printing="false" />
+    <printer name="Test" ip="127.0.0.1" port="5000" apiKey="88730606C84C40DD9D552DDB583B9E07" configFile="" active="false" printing="false" />
+    <printer name="Test2" ip="192.168.1.4" port="5000" apiKey="88730606C84C40DD9D552DDB583B9E07" configFile="" active="true" printing="false" />
   </printers>
 </config>

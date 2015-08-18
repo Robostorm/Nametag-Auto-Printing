@@ -79,7 +79,7 @@ public class PrintServer implements Runnable {
                             builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                             FileBody fileBody = new FileBody(file);
                             builder.addPart("file", fileBody);
-                            builder.addTextBody("print", "false");
+                            builder.addTextBody("print", "true");
 
                             HttpPost post = new HttpPost(remotePath);
 
