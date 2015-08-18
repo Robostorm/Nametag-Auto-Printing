@@ -40,7 +40,10 @@ public class Printer {
         this.ip = ip;
         this.port = port;
         this.apiKey = apiKey;
-        this.configFile = new File(configFile);
+        if(configFile.equals(""))
+            this.configFile = null;
+        else
+            this.configFile = new File(configFile);
         this.active = active;
         this.printing = printing;
         this.config = config;
@@ -102,7 +105,10 @@ public class Printer {
         printerElement.setAttribute("ip", ip);
         printerElement.setAttribute("port", Integer.toString(port));
         printerElement.setAttribute("apiKey", apiKey);
-        printerElement.setAttribute("configFile", configFile.getAbsolutePath());
+        if(configFile == null)
+            printerElement.setAttribute("configFile", "");
+        else
+            printerElement.setAttribute("configFile", configFile.getAbsolutePath());
         printerElement.setAttribute("active", Boolean.toString(active));
         printerElement.setAttribute("printing", Boolean.toString(printing));
         return printerElement;
@@ -149,6 +155,9 @@ public class Printer {
     }
 
     public File getConfigFile() {
+        if (configFile == null) {
+            return new File(config.getScadDirectoryPath() + "mendel.ini");
+        }
         return configFile;
     }
 

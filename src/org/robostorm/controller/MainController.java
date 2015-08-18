@@ -119,13 +119,13 @@ public class MainController {
                         printerWrapper.getPrinters().get(i).setConfig(config);
                     if (printerWrapper.getPrinters().get(i).getId() == -1)
                         printerWrapper.getPrinters().get(i).setId(System.identityHashCode(printerWrapper.getPrinters().get(i)));
-                    if (printerWrapper.getFiles() != null && printerWrapper.getFiles().get(i) != null) {
-                        File configFile = new File(config.getDataDirectoryPath() + printerWrapper.getPrinters().get(i).getName() + ".ini");
+                    if (printerWrapper.getFiles() != null && printerWrapper.getFiles().get(i) != null && !printerWrapper.getFiles().get(i).getOriginalFilename().equals("")) {
+                        File configFile = new File(config.getDataDirectoryPath() + "/" + printerWrapper.getPrinters().get(i).getName() + ".ini");
                         printerWrapper.getFiles().get(i).transferTo(configFile);
                         printerWrapper.getPrinters().get(i).setConfigFile(configFile);
                     }
-                    if (printerWrapper.getPrinters().get(i).getConfigFile() == null)
-                        printerWrapper.getPrinters().get(i).setConfigFile(new File(config.getScadDirectoryPath() + "mendel.ini"));
+                    if (printerWrapper.getPrinters().get(i).getConfigFile().getName().equals("mendel.ini"))
+                        printerWrapper.getPrinters().get(i).setConfigFile(null);
                     printerQueue.updatePrinter(printerWrapper.getPrinters().get(i));
                 }
             }

@@ -13,6 +13,8 @@
         <property name="suffix" value=".jsp" />
     </bean>
 
-    <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="5000000"/>
+    </bean>
 
 </beans>

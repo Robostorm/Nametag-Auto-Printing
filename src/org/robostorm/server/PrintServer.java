@@ -90,7 +90,8 @@ public class PrintServer implements Runnable {
                             try {
                                 response = client.execute(post);
                             } catch (HttpHostConnectException e) {
-                                throw new RuntimeException("Could not connect to printer", e);
+                                System.err.println("Could not connect to printer");
+                                printer.setActive(false);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
