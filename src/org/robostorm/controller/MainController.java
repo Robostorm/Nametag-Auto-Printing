@@ -21,12 +21,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -102,7 +104,7 @@ public class MainController {
 
     @RequestMapping(value = "/manager/printers", method = RequestMethod.GET)
     public String editPrinters(Model model) {
-        model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters(), new boolean[printerQueue.getAllPrinters().size()]));
+        model.addAttribute("printerWrapper", new PrinterWrapper(printerQueue.getAllPrinters(), new boolean[printerQueue.getAllPrinters().size()], new ArrayList<>()));
         return "printers";
     }
 
@@ -117,8 +119,13 @@ public class MainController {
                         printerWrapper.getPrinters().get(i).setConfig(config);
                     if (printerWrapper.getPrinters().get(i).getId() == -1)
                         printerWrapper.getPrinters().get(i).setId(System.identityHashCode(printerWrapper.getPrinters().get(i)));
+                    if (printerWrapper.getFiles() != null && printerWrapper.getFiles().get(i) != null) {
+                        File configFile = new File(config.getDataDirectoryPath() + printerWrapper.getPrinters().get(i).getName() + ".ini");
+                        printerWrapper.getFiles().get(i).transferTo(configFile);
+                        printerWrapper.getPrinters().get(i).setConfigFile(configFile);
+                    }
                     if (printerWrapper.getPrinters().get(i).getConfigFile() == null)
-                        printerWrapper.getPrinters().get(i).setConfigFile(new File("config\\slic3r\\mendel.ini"));
+                        printerWrapper.getPrinters().get(i).setConfigFile(new File(config.getScadDirectoryPath() + "mendel.ini"));
                     printerQueue.updatePrinter(printerWrapper.getPrinters().get(i));
                 }
             }
@@ -234,12 +241,13 @@ public class MainController {
                                              @RequestParam("ip") String ip,
                                              @RequestParam("port") Integer port,
                                              @RequestParam("apiKey") String apiKey,
+                                             @RequestParam("configFile") String configFile,
                                              @RequestParam("active") Boolean active,
                                              @RequestParam("printing") Boolean printing) {
 
         if (name != null && !name.equals("")) {
             try {
-                printerQueue.addPrinter(new Printer(name, ip, port, apiKey, active, printing, config));
+                printerQueue.addPrinter(new Printer(name, ip, port, apiKey, configFile, active, printing, config));
                 return new ResponseEntity<>("Success", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();

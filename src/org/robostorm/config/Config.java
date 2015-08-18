@@ -25,6 +25,8 @@ public interface Config {
 
     String getGcodeDirectoryPath();
 
+    String getDataDirectoryPath();
+
     long getLoopTime();
 
     boolean isLoggedIn();

@@ -30,7 +30,7 @@
 </nav>
 <div class="container main">
     <form:form method="post" action="${pageContext.request.contextPath}/ntap/manager/printers"
-               modelAttribute="printerWrapper">
+               modelAttribute="printerWrapper" enctype="multipart/form-data">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -66,7 +66,12 @@
                         <form:input path="printers[${status.index}].apiKey" cssClass="form-control"/>
                     </td>
                     <td>
-                        <form:input path="printers[${status.index}].configFile" cssClass="form-control"/>
+                        <div class="input-group">
+                            <form:input path="printers[${status.index}].configFile" cssClass="form-control"/>
+                            <%--<span class="input-group-btn">--%>
+                                <input type="file" class="upload" name="files[${status.index}]">
+                            <%--</span>--%>
+                        </div>
                     </td>
                     <td>
                         <input type="button" class="btn btn-danger delete" value="Delete"/>

@@ -23,6 +23,7 @@ public class ConfigImpl implements Config {
     private ServletContext servletContext;
     private File printersFile;
     private File queueFile;
+    private File dataDirectory;
     private String password;
     private String imagesDirectory;
     private String scadDirectory;
@@ -87,6 +88,11 @@ public class ConfigImpl implements Config {
     }
 
     @Override
+    public String getDataDirectoryPath() {
+        return dataDirectory.getAbsolutePath();
+    }
+
+    @Override
     public long getLoopTime() {
         return loopTime;
     }
@@ -128,6 +134,7 @@ public class ConfigImpl implements Config {
     public ConfigImpl(ServletContext servletContext, String printersFileName, String queueFileName) {
         this.servletContext = servletContext;
         File dataDirectory = new File(servletContext.getRealPath("/") + "../data");
+        this.dataDirectory = dataDirectory;
         if(!dataDirectory.exists())
             dataDirectory.mkdir();
         printersFile = new File(dataDirectory.getAbsolutePath() + "/" + printersFileName);
@@ -146,6 +153,7 @@ public class ConfigImpl implements Config {
                     printer.getAttributeValue("ip"),
                     printer.getAttribute("port").getIntValue(),
                     printer.getAttributeValue("apiKey"),
+                    printer.getAttributeValue("configFile"),
                     printer.getAttribute("active").getBooleanValue(),
                     printer.getAttribute("printing").getBooleanValue(),
                     this));

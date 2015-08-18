@@ -28,19 +28,19 @@ public class Printer {
         ip = "127.0.0.1";
         port = 5000;
         apiKey = "ApiKey";
-        configFile = new File("config/slic3r/mendel.ini");
+        configFile = new File(config.getScadDirectoryPath() + "mendel.ini");
         active = false;
         printing = true;
         this.config = config;
         id = System.identityHashCode(this);
     }
 
-    public Printer(String name, String ip, int port, String apiKey, boolean active, boolean printing, Config config){
+    public Printer(String name, String ip, int port, String apiKey, String configFile, boolean active, boolean printing, Config config){
         this.name = name;
         this.ip = ip;
         this.port = port;
         this.apiKey = apiKey;
-        this.configFile = new File("config/slic3r/mendel.ini");
+        this.configFile = new File(configFile);
         this.active = active;
         this.printing = printing;
         this.config = config;
@@ -59,8 +59,8 @@ public class Printer {
         if(!gcodeDirectory.exists())
             gcodeDirectory.mkdir();
 
-        String slic3rargs = String.format(" %s%s.stl --output %s%s.gcode --load %sslic3r.ini", config.getStlDirectoryPath(), tag.toString(),
-                config.getGcodeDirectoryPath(), tag.toString(), config.getScadDirectoryPath());
+        String slic3rargs = String.format(" %s%s.stl --output %s%s.gcode --load %s", config.getStlDirectoryPath(), tag.toString(),
+                config.getGcodeDirectoryPath(), tag.toString(), configFile.getAbsolutePath());
             try {
 
                 System.out.println("Args: " + slic3rargs);
@@ -102,7 +102,7 @@ public class Printer {
         printerElement.setAttribute("ip", ip);
         printerElement.setAttribute("port", Integer.toString(port));
         printerElement.setAttribute("apiKey", apiKey);
-        printerElement.setAttribute("file", configFile.getPath());
+        printerElement.setAttribute("configFile", configFile.getAbsolutePath());
         printerElement.setAttribute("active", Boolean.toString(active));
         printerElement.setAttribute("printing", Boolean.toString(printing));
         return printerElement;
