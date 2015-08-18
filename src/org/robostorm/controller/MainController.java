@@ -108,7 +108,7 @@ public class MainController {
 
     @RequestMapping(value = "/manager/printers", method = RequestMethod.POST)
     public String editPrintersSubmit(@ModelAttribute("printerWrapper") PrinterWrapper printerWrapper) throws IOException {
-        if (printerQueue != null && printerWrapper.getPrinters().size() > 0) {
+        if (printerQueue != null && printerWrapper != null && printerWrapper.getPrinters().size() > 0) {
             for (int i = 0; i < printerWrapper.getPrinters().size(); i++) {
                 if (printerWrapper.getPrinters().get(i).getId() != -1 && printerWrapper.getDeleted()[i]) {
                     printerQueue.removePrinter(printerWrapper.getPrinters().get(i).getId());
@@ -134,7 +134,7 @@ public class MainController {
 
     @RequestMapping(value = "/manager/nameTags", method = RequestMethod.POST)
     public String editNameTagsSubmit(@ModelAttribute("nameTagWrapper") NameTagWrapper nameTagWrapper) throws IOException {
-        if (printerQueue != null && nameTagWrapper.getNameTags().size() > 0) {
+        if (nameTagQueue != null && nameTagWrapper != null && nameTagWrapper.getNameTags().size() > 0) {
             for (int i = 0; i < nameTagWrapper.getNameTags().size(); i++) {
                 if (nameTagWrapper.getDeleted()[i]) {
                     nameTagQueue.removeFromQueue(nameTagWrapper.getNameTags().get(i).getId());

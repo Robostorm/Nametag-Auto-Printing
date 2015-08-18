@@ -29,17 +29,18 @@
     </div>
 </nav>
 <div class="container main">
-    <form:form method="post" action="${pageContext.request.contextPath}/ntap/manager/printers" modelAttribute="printerWrapper">
+    <form:form method="post" action="${pageContext.request.contextPath}/ntap/manager/printers"
+               modelAttribute="printerWrapper">
         <table class="table table-striped">
             <thead>
             <tr>
                 <th><label class="control-label">Name</label></th>
+                <th><label class="control-label">Printing</label></th>
+                <th><label class="control-label">Active</label></th>
                 <th><label class="control-label">IP</label></th>
                 <th><label class="control-label">Port</label></th>
                 <th><label class="control-label">API-Key</label></th>
                 <th><label class="control-label">Config File</label></th>
-                <th><label class="control-label">Printing</label></th>
-                <th><label class="control-label">Active</label></th>
             </tr>
             </thead>
             <tbody>
@@ -48,6 +49,12 @@
                     <form:hidden path="printers[${status.index}].id" value="${printer.id}"/>
                     <td>
                         <form:input path="printers[${status.index}].name" cssClass="form-control"/>
+                    </td>
+                    <td>
+                        <form:checkbox path="printers[${status.index}].printing"/>
+                    </td>
+                    <td>
+                        <form:checkbox path="printers[${status.index}].active"/>
                     </td>
                     <td>
                         <form:input path="printers[${status.index}].ip" cssClass="form-control"/>
@@ -62,19 +69,14 @@
                         <form:input path="printers[${status.index}].configFile" cssClass="form-control"/>
                     </td>
                     <td>
-                        <form:checkbox path="printers[${status.index}].printing"/>
-                    </td>
-                    <td>
-                        <form:checkbox path="printers[${status.index}].active"/>
-                    </td>
-                    <td>
                         <input type="button" class="btn btn-danger delete" value="Delete"/>
                         <form:hidden path="deleted[${status.index}]" value="${false}"/>
                     </td>
                 </tr>
             </c:forEach>
             <tr>
-                <td colspan="8" class="text-center"><input id="addPrinter" type="button" class="btn btn-info" value="Add Printer"/></td>
+                <td colspan="8" class="text-center"><input id="addPrinter" type="button" class="btn btn-info"
+                                                           value="Add Printer"/></td>
             </tr>
             <tr>
                 <td colspan="8"><input type="submit" value="Save" class="btn btn-success"/></td>

@@ -19,6 +19,10 @@ body {
     text-align: center;
 }
 
+@-moz-document url-prefix() {
+    fieldset { display: table-cell; }
+}
+
 ::-webkit-input-placeholder {
    text-align: center;
 }

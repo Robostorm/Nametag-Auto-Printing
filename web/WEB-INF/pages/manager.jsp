@@ -76,12 +76,12 @@
                 <thead>
                 <tr>
                     <th><label class="control-label">Name</label></th>
+                    <th><label class="control-label">Printing</label></th>
+                    <th><label class="control-label">Active</label></th>
                     <th><label class="control-label">IP</label></th>
                     <th><label class="control-label">Port</label></th>
                     <th><label class="control-label">API-Key</label></th>
                     <th><label class="control-label">Config File</label></th>
-                    <th><label class="control-label">Printing</label></th>
-                    <th><label class="control-label">Active</label></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -89,6 +89,12 @@
                     <tr class="form-inline">
                         <td>
                             <form:input path="printers[${status.index}].name" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:checkbox path="printers[${status.index}].printing" onclick="return false"/>
+                        </td>
+                        <td>
+                            <form:checkbox path="printers[${status.index}].active" onclick="return false"/>
                         </td>
                         <td>
                             <form:input path="printers[${status.index}].ip" cssClass="form-control" readonly="true"/>
@@ -103,12 +109,6 @@
                         <td>
                             <form:input path="printers[${status.index}].configFile" cssClass="form-control"
                                         readonly="true"/>
-                        </td>
-                        <td>
-                            <form:checkbox path="printers[${status.index}].printing" onclick="return false"/>
-                        </td>
-                        <td>
-                            <form:checkbox path="printers[${status.index}].active" onclick="return false"/>
                         </td>
                     </tr>
                 </c:forEach>

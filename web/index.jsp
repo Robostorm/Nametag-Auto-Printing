@@ -34,7 +34,7 @@
     <p class="lead">Enter your name to get a 3D printed name tag</p>
     <section id="form">
         <div class="jumbotron">
-            <img id="preview-image" src="assets/blank.png" alt="Name Tag Image"/>
+            <img id="preview-image" src="assets/blank.png" alt="Name Tag Image" class="img-responsive"/>
 
             <form id="getNameTag" onsubmit="return false">
                 <div class="form-group">
