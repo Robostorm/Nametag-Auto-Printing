@@ -23,6 +23,7 @@ public class Response implements Runnable {
 
     @Override
     public void run() {
+        System.out.printf("Deleting %s on printer %s", nameTag.toString(), printer.toString());
         String remotePath = String.format("http://%s:%s/api/files/local/%s.gcode", printer.getIp(),
                 Integer.toString(printer.getPort()), nameTag.getName());
         HttpDelete delete = new HttpDelete(remotePath);
