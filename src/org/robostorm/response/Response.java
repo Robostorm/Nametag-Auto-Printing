@@ -23,7 +23,7 @@ public class Response implements Runnable {
 
     @Override
     public void run() {
-        System.out.printf("Deleting %s on printer %s", nameTag.toString(), printer.toString());
+        System.out.printf("Deleting %s on printer %s\n", nameTag.toString(), printer.toString());
         String remotePath = String.format("http://%s:%s/api/files/local/%s.gcode", printer.getIp(),
                 Integer.toString(printer.getPort()), nameTag.getName());
         HttpDelete delete = new HttpDelete(remotePath);
@@ -33,7 +33,7 @@ public class Response implements Runnable {
         try {
             response = client.execute(delete);
         } catch (HttpHostConnectException e) {
-            throw new RuntimeException("Could not connect to printer", e);
+            throw new RuntimeException("Could not connect to printer\n", e);
         } catch (IOException e) {
             e.printStackTrace();
         }

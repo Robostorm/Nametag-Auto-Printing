@@ -23,7 +23,7 @@ import java.io.IOException;
 @Component
 public class PrintServer implements Runnable {
 
-    private boolean isStopped = true;
+    private boolean running = true;
 
     @Autowired
     private Config config;
@@ -39,29 +39,37 @@ public class PrintServer implements Runnable {
 
     @Override
     public void run() {
-        isStopped = false;
+        running = true;
         synchronized (this) {
             thread = Thread.currentThread();
         }
         System.out.println("Starting print server");
-        long time = System.currentTimeMillis();
-        long oldTime = time;
-        while (!isStopped()) {
-            time = System.currentTimeMillis();
-            if (time - oldTime >= config.getLoopTime()) {
+        /*long time = System.currentTimeMillis();
+        long oldTime = time;*/
+        while (!getThread().isInterrupted()) {
+//            time = System.currentTimeMillis();
+//            if (time - oldTime >= config.getLoopTime()) {
                 Printer printer = printerQueue.getNextPrinter();
                 NameTag nameTag = nameTagQueue.getNextNameTag();
-                if (printer != null && nameTag != null) {
-                    if(printer.getNameTag() == null && nameTag.getPrinter() == null) {
-                        System.out.printf("Assigning name tag %s to Printer %s\n", nameTag.toString(), printer.getName());
+                if (printer != null && nameTag != null && printer.getName() != null && nameTag.getName() != null) {
+                    if (printer.getNameTag() != null && printer.getNameTag().getName() == null)
+                        printer.setNameTag(null);
+                    if (nameTag.getPrinter() != null && nameTag.getPrinter().getName() == null)
+                        nameTag.setPrinter(null);
+                    if (printer.getNameTag() == null && nameTag.getPrinter() == null) {
                         printer.setNameTag(nameTag);
+                        printerQueue.set(printer);
                         nameTag.setPrinter(printer);
-                    } else if (printer.getNameTag() != null) {
+                        nameTagQueue.set(nameTag);
+                        System.out.printf("Assigning name tag %s to Printer %s\n", printer.getNameTag().toString(), nameTag.getPrinter().toString());
+                    } else if (printer.getNameTag() != null && printer.getNameTag().getName() != null) {
                         nameTag = printer.getNameTag();
+                        nameTag.setPrinter(printer);
+                        nameTagQueue.set(nameTag);
                     }
                     if (!nameTag.isGenerated()) {
                         System.out.printf("Rendering name tag %s for printer %s\n", nameTag.toString(), printer.getName());
-                        nameTag.export();
+                        nameTag.export(config);
                     }
                     if (!nameTag.isSliced()) {
                         System.out.printf("Slicing name tag %s for printer %s\n", nameTag.toString(), printer.getName());
@@ -142,18 +150,25 @@ public class PrintServer implements Runnable {
                         e.printStackTrace();
                     }
                 }
-                time = System.currentTimeMillis();
-                oldTime = time;
+                /*time = System.currentTimeMillis();
+                oldTime = time;*/
+//            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                System.out.println("Interrupting Sleeping Print Server");
             }
+
         }
     }
 
     public synchronized void stop() {
-        isStopped = true;
+        running = false;
+        getThread().interrupt();
         System.out.println("Stopping print server");
     }
 
-    public synchronized boolean isStopped() {
-        return isStopped;
+    public boolean isRunning() {
+        return running;
     }
 }

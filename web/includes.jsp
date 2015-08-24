@@ -20,3 +20,4 @@
 <script src="${pageContext.request.contextPath}/js/jquery.easing.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/scrolling-nav.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap-notify.min.js"></script>
+<script>var path = '${pageContext.request.contextPath}'</script>

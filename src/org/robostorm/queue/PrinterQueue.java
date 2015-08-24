@@ -129,4 +129,12 @@ public class PrinterQueue {
                 return printer;
         return null;
     }
+
+    public void set(Printer printer) {
+        for(int i = 0; i < printers.size(); i++) {
+            if(printers.get(i).getId() == printer.getId()) {
+                printers.set(i, printer);
+            }
+        }
+    }
 }

@@ -31,6 +31,8 @@ public interface Config {
 
     boolean isLoggedIn();
 
+    char[] getBannedChars();
+
     void setLoggedIn(boolean loggedIn);
 
     void loadPrinters(PrinterQueue printerQueue) throws JDOMException, IOException;

@@ -42,6 +42,8 @@
                     <th><label class="control-label">Name</label></th>
                     <th><label class="control-label">STL</label></th>
                     <th><label class="control-label">GCode</label></th>
+                    <th><label class="control-label">Printer</label></th>
+
                     <th><label class="control-label">Printing</label></th>
                 </tr>
                 </thead>
@@ -56,6 +58,9 @@
                         </td>
                         <td>
                             <form:input path="nameTags[${status.index}].gcode" cssClass="form-control" readonly="true"/>
+                        </td>
+                        <td>
+                            <form:input path="nameTags[${status.index}].printer.name" cssClass="form-control" readonly="true"/>
                         </td>
                         <td>
                             <form:checkbox path="nameTags[${status.index}].printing" onclick="return false"/>
@@ -78,6 +83,8 @@
                     <th><label class="control-label">Name</label></th>
                     <th><label class="control-label">Printing</label></th>
                     <th><label class="control-label">Active</label></th>
+                    <th><label class="control-label">Done</label></th>
+                    <th><label class="control-label">Name Tag</label></th>
                     <th><label class="control-label">IP</label></th>
                     <th><label class="control-label">Port</label></th>
                     <th><label class="control-label">API-Key</label></th>
@@ -95,6 +102,12 @@
                         </td>
                         <td>
                             <form:checkbox path="printers[${status.index}].active" onclick="return false"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info" onclick="donePressed(${status.index})">Done</button>
+                        </td>
+                        <td>
+                            <form:input path="printers[${status.index}].nameTag.name" cssClass="form-control" readonly="true"/>
                         </td>
                         <td>
                             <form:input path="printers[${status.index}].ip" cssClass="form-control" readonly="true"/>
@@ -138,6 +151,8 @@
             <button id="refresh" type="button" class="btn btn-info" aria-label="Refresh">
                 <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span> Refresh
             </button>
+            <button type="button" class="btn btn-warning" onclick="reloadQueue()">Reload Queue</button>
+            <button type="button" class="btn btn-danger" onclick="purgeQueue()">Purge Queue</button>
         </div>
     </div>
 </div>

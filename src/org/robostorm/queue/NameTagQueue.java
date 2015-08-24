@@ -46,8 +46,8 @@ public class NameTagQueue {
 
     public void updateNameTag(NameTag nameTag) throws IOException {
         boolean found = false;
-        if(nameTag.getConfig() == null)
-            nameTag.setConfig(config);
+//        if(nameTag.getConfig() == null)
+//            nameTag.setConfig(config);
         for(int i = 0 ; i < queue.size(); i++) {
             if(queue.get(i).getId() == nameTag.getId()) {
                 queue.set(i, nameTag);
@@ -69,6 +69,10 @@ public class NameTagQueue {
         config.saveQueue(this);
     }
 
+    public void purgeQueue() {
+        queue.clear();
+    }
+
     public List<NameTag> getAllNametags() {
         return queue;
     }
@@ -81,10 +85,32 @@ public class NameTagQueue {
     }
 
     public NameTag getNextNameTag() {
+        NameTag nameTag = null;
+        boolean found = false;
         for(int i = 0; i < queue.size() && queue.size() > 0; i++) {
-            if(!queue.get(i).isSliced() || !queue.get(i).isGenerated() || !queue.get(i).isPrinting())
-                return queue.get(i);
+            if(queue.get(i).getName() == null)
+                queue.remove(i);
+            if((!queue.get(i).isSliced() || !queue.get(i).isGenerated() || !queue.get(i).isPrinting()) && !found) {
+                nameTag = queue.get(i);
+                found = true;
+            }
         }
-        return null;
+        return nameTag;
+    }
+
+    public void set(NameTag nameTag) {
+        for(int i = 0; i < queue.size(); i++) {
+            if(queue.get(i).getId() == nameTag.getId()) {
+                queue.set(i, nameTag);
+            }
+        }
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public void setConfig(Config config) {
+        this.config = config;
     }
 }

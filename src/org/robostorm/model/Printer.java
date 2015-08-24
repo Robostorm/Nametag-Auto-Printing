@@ -92,7 +92,6 @@ public class Printer {
 
             while (p.isAlive()) {
             }
-            tag.setPrinter(this);
             tag.setGcode(new File(String.format("%s/%s.gcode", config.getStlDirectory(), tag.toString())));
             System.out.println("Done");
 

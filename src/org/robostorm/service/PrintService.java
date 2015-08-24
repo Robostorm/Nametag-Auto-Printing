@@ -14,7 +14,5 @@ public interface PrintService {
 
     void stop();
 
-    boolean isStopped();
-
     boolean isRunning();
 }

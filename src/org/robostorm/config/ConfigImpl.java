@@ -31,6 +31,7 @@ public class ConfigImpl implements Config {
     private String gcodeDirectory;
     private long loopTime;
     private boolean loggedIn = false;
+    private char[] bannedChars;
 
     @Override
     public File getPrintersFile() {
@@ -102,6 +103,11 @@ public class ConfigImpl implements Config {
         return loggedIn;
     }
 
+    @Override
+    public char[] getBannedChars() {
+        return bannedChars;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -124,6 +130,10 @@ public class ConfigImpl implements Config {
 
     public void setLoopTime(long loopTime) {
         this.loopTime = loopTime;
+    }
+
+    public void setBannedChars(char[] bannedChars) {
+        this.bannedChars = bannedChars;
     }
 
     @Override

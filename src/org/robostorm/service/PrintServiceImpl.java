@@ -19,12 +19,8 @@ public class PrintServiceImpl implements PrintService {
     }
 
     @Override
-    public boolean isStopped() {
-        return printServer.isStopped();
-    }
-
-    @Override
     public boolean isRunning() {
-        return printServer.getThread() != null && printServer.getThread().isAlive();
+        //boolean t = printServer.getThread().isInterrupted();
+        return printServer.getThread() != null && printServer.isRunning();
     }
 }

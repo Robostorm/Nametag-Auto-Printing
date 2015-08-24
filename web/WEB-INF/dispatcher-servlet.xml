@@ -18,6 +18,19 @@
         <property name="stlDirectory" value="stl/"/>
         <property name="gcodeDirectory" value="gcode/"/>
         <property name="loopTime" value="5000"/>
+        <property name="bannedChars">
+            <list>
+                <value>\</value>
+                <value>/</value>
+                <value>"</value>
+                <value>'</value>
+                <value>*</value>
+                <value>~</value>
+                <value>`</value>
+                <value>|</value>
+                <value>;</value>
+            </list>
+        </property>
     </bean>
 
     <bean id="taskExecutor" class="org.springframework.core.task.SimpleAsyncTaskExecutor"/>

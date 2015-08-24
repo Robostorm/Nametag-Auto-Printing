@@ -20,13 +20,10 @@ public class NameTag {
     private File stl;
     private File gcode;
 
-    private Config config;
-
     public NameTag(){}
 
-    public NameTag(String name, Config config) {
+    public NameTag(String name) {
         this.name = name;
-        this.config = config;
         id = System.identityHashCode(this);
     }
 
@@ -37,21 +34,11 @@ public class NameTag {
         if(!gcode.equals(""))
             this.gcode = new File(config.getGcodeDirectory() + gcode);
         this.printer = printer;
-        this.config = config;
         this.printing = printing;
         id = System.identityHashCode(this);
     }
 
-    public NameTag(NameTag nameTag) {
-        this.id = nameTag.id;
-        this.name = nameTag.name;
-        this.stl = nameTag.stl;
-        this.gcode = nameTag.gcode;
-        this.config = nameTag.config;
-    }
-
-
-    public void export() {
+    public void export(Config config) {
 
         File stlDirectory = new File(config.getStlDirectoryPath());
         if(!stlDirectory.exists())
@@ -111,7 +98,7 @@ public class NameTag {
             nametagElement.setAttribute("gcode", gcode.getName());
         else
             nametagElement.setAttribute("gcode", "");
-        if (printer != null)
+        if (printer != null && printer.getName() != null)
             nametagElement.setAttribute("printer", printer.getName());
         else
             nametagElement.setAttribute("printer", "");
@@ -148,7 +135,8 @@ public class NameTag {
     }
 
     public void setPrinter(Printer printer) {
-        this.printer = printer;
+        if(printer != null)
+            this.printer = printer;
     }
 
     public boolean isGenerated(){
@@ -173,13 +161,5 @@ public class NameTag {
 
     public void setStl(File stl) {
         this.stl = stl;
-    }
-
-    public Config getConfig() {
-        return config;
-    }
-
-    public void setConfig(Config config) {
-        this.config = config;
     }
 }

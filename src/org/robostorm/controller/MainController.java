@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -46,6 +45,17 @@ public class MainController {
     private PrintService printService;
     @Autowired
     TaskExecutor taskExecutor;
+
+    private boolean inputCheck(char[] bannedChars, String input) {
+        if (input.indexOf(' ') != -1)
+            return false;
+        for (char bannedChar : bannedChars) {
+            if (input.indexOf(bannedChar) != -1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     @PostConstruct
     public void init() {
@@ -83,7 +93,9 @@ public class MainController {
     @ResponseBody
     public ResponseEntity<String> preview(@RequestParam("name") String name) {
         String json;
-        if ((json = previewService.preview(name)) == null) {
+        if (!inputCheck(config.getBannedChars(), name)) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if ((json = previewService.preview(name)) == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(json, HttpStatus.OK);
@@ -119,7 +131,7 @@ public class MainController {
                         printerWrapper.getPrinters().get(i).setConfig(config);
                     if (printerWrapper.getPrinters().get(i).getId() == -1)
                         printerWrapper.getPrinters().get(i).setId(System.identityHashCode(printerWrapper.getPrinters().get(i)));
-                    if (printerWrapper.getFiles() != null && printerWrapper.getFiles().get(i) != null && !printerWrapper.getFiles().get(i).getOriginalFilename().equals("")) {
+                    if (printerWrapper.getFiles() != null && printerWrapper.getFiles().size() < i && printerWrapper.getFiles().get(i) != null && !printerWrapper.getFiles().get(i).getOriginalFilename().equals("")) {
                         File configFile = new File(config.getDataDirectoryPath() + "/" + printerWrapper.getPrinters().get(i).getName() + ".ini");
                         printerWrapper.getFiles().get(i).transferTo(configFile);
                         printerWrapper.getPrinters().get(i).setConfigFile(configFile);
@@ -171,9 +183,9 @@ public class MainController {
     @RequestMapping(value = "/queue/add", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> addToQueue(@RequestParam("name") String name) {
-        if (name != null && !name.equals("")) {
+        if (name != null && !name.equals("") && inputCheck(config.getBannedChars(), name)) {
             try {
-                nameTagQueue.addToQueue(new NameTag(name, config));
+                nameTagQueue.addToQueue(new NameTag(name));
                 return new ResponseEntity<>("Success", HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -228,6 +240,32 @@ public class MainController {
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(value = "/queue/reload", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> reloadQueue() {
+        nameTagQueue.purgeQueue();
+        try {
+            config.loadQueue(nameTagQueue, printerQueue);
+        } catch (JDOMException | IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/queue/purge", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> purgeQueue() {
+        nameTagQueue.purgeQueue();
+        try {
+            config.saveQueue(nameTagQueue);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**********/
@@ -331,22 +369,15 @@ public class MainController {
 
     private JSONObject getPrintServerStatus() {
         JSONObject json = new JSONObject();
-        if (printService.isStopped() && !printService.isRunning()) {
+        if (!printService.isRunning()) {
             json.put("code", 0);
             json.put("status", "Stopped");
             return json;
-        } else if (!printService.isStopped() && printService.isRunning()) {
+        } else {
             json.put("code", 1);
             json.put("status", "Running");
             return json;
-        } else if (printService.isStopped()) {
-            json.put("code", 2);
-            json.put("status", "Stopped but still alive");
-            return json;
         }
-        json.put("code", 3);
-        json.put("status", "Dead but not Stopped");
-        return json;
     }
 
     @RequestMapping("/ps/status")
@@ -370,7 +401,7 @@ public class MainController {
     @ResponseBody
     public String stop() {
         JSONObject json = getPrintServerStatus();
-        if (!printService.isStopped() && printService.isRunning()) {
+        if (printService.isRunning()) {
             json.put("action", "Stopping");
             printService.stop();
         }
@@ -387,15 +418,26 @@ public class MainController {
         if (printer != null) {
             NameTag nameTag = printer.getNameTag();
             boolean printerStatus = printer.isPrinting();
-            message = String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
             printer.setPrinting(false);
+            message = String.format("Changed printing status of printer with IP %s form %b to %b", printerIp, printerStatus, printer.isPrinting());
             status = HttpStatus.OK;
             if (nameTag != null) {
                 message += "\nSending delete request to octoprint";
                 new Thread(new Response(nameTag, printer)).start();
-                nameTagQueue.removeFromQueue(printer.getNameTag());
+                nameTagQueue.removeFromQueue(nameTag);
             } else {
-                message += "\nPrinter has no name tag";
+                boolean found = false;
+                for (int i = 0; i < nameTagQueue.getAllNametags().size(); i++) {
+                    if (nameTagQueue.getAllNametags().get(i).getPrinter() == printer) {
+                        found = true;
+                        nameTag = nameTagQueue.getAllNametags().get(i);
+                        message += "\nSending delete request to octoprint";
+                        new Thread(new Response(nameTag, printer)).start();
+                        nameTagQueue.removeFromQueue(nameTag);
+                    }
+                }
+                if (!found)
+                    message += "\nPrinter has no name tag";
             }
             printer.setNameTag(null);
         } else {
