@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nametag Manager</title>
+  </head>
+  <body>
+
+    <nav>
+      <button onclick="showNametags()">Nametags</button>
+      <button onclick="showPrinters()">Printers</button>
+    </nav>
+
+    <div id="nametags">
+      <h2>Nametag Queue</h2>
+      <table id="nametagTable">
+        <tr><td>ID</td><td>Name</td><td>Rendered</td><td>Sliced</td><td>Uploaded</td><td>Printed</td><td>Printer</td></tr>
+      </table>
+    </div>
+
+    <div id="printers">
+      <h2>Printers</h2>
+      <table id="printerTable">
+        <tr><td>ID</td><td>Name</td><td>Active</td><td>Printing</td><td>Nametag</td><td>IP</td><td>ApiKey</td><td>Slicer Profile</td></tr>
+      </table>
+      <button onclick="addPrinter()">Add Printer</button>
+    </div>
+
+    <script src="assets/static/js/manager.js" charset="utf-8"></script>
+
+  </body>
+</html>
