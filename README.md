@@ -5,7 +5,7 @@ So far, I have previewing and submitting working, as well as the nametag queue l
 
 
 #Printer Properties:
-
+<pre>
 type Printer struct {
     ID         int    // Unique ID of the printer
     Name       string // Readable name for the printer
@@ -18,9 +18,9 @@ type Printer struct {
     Slicing    bool   // Slicing or not
     Uploading  bool   // Uploading or not
 }
-
+</pre>
 #Nametag Properties:
-
+<pre>
 type Nametag struct {
     ID        int    // Unique ID of the nametag
     Name      string // Name on the nametag
@@ -33,26 +33,30 @@ type Nametag struct {
     Printed   bool   // Printed or not
     PrinterID int64  // Printer id that nametag will print on
 }
-
+</pre>
 #Summary of the api so far:
 
 GET / - Gets the name entering page, also serves resources such as images and js. Go to /manager.html for the manager.
     Returns the resource specified if available, 404 if not found. If image request has size 0 (therefore not yet done generating), returns a 409 CONFLICT
 
 POST /preview - Previews the nametag
+    <pre>
     {
         "name": "Name on the nametag"
     }
+    </pre>
     Returns that the image will be at once generated
     InternalServerError: Error receiving request
     BadRequest: Bad JSON
     OK: Everything good
     StatusNotAcceptable: No name key or name is empty
-
+    
 POST /submit - Submits a nametag
+    <pre>
     {
         "name": "Name on the nametag"
     }
+    </pre>
     Returns nothing
     InternalServerError: Error receiving request
     BadRequest: Bad JSON
@@ -64,9 +68,11 @@ GET /nametags - Gets the nametag queue
   
 
 POST /nametags/delete - Deletes a nametag
+    <pre>
     {
         "id": "id of on the nametag"
     }
+    </pre>
     Returns nothing
     InternalServerError: Error receiving request
     BadRequest: Bad JSON
