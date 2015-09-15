@@ -4,7 +4,7 @@ import "math/rand"
 
 // Printer for printing nametags
 type Printer struct {
-	ID         int    // Unique ID of the printer, ganerated from current date and time
+	ID         int    // Unique ID of the printer
 	Name       string // Readable name for the printer
 	Nametag    int    // Nametag ID that is currently printing
 	IP         string // IP for the printer

@@ -15,7 +15,7 @@ var (
 
 // Nametag to be printed
 type Nametag struct {
-	ID        int    // Unique ID of the nametag, ganerated from current date and time
+	ID        int    // Unique ID of the nametag
 	Name      string // Name on the nametag
 	StlPath   string // Path to the stl
 	GcodePath string // Path to the gcode
