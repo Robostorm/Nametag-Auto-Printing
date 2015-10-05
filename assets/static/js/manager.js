@@ -9,9 +9,10 @@ var tmpNametag
 var oldNametagJson = "null"
 var printers
 var oldPrinterJson = "null"
+var tmpPrinter
 
 updateNametags();
-//updatePrinters();
+updatePrinters();
 
 window.setInterval("update()", 1000)
 
@@ -21,21 +22,15 @@ function update(){
   //console.log("Updating")
   updateNametags();
 
-  phttp = new XMLHttpRequest()
-  phttp.onreadystatechange = function (e){
-	 if(phttp.readyState == 4){
-	    //processPrinters(phttp.responseText)
-	   }
-  }
-  phttp.open("GET", "printers", true)
-  phttp.send();
+  updatePrinters();
 
 }
 
 function updateNametags(){
+  //console.log("Updating Nametags")
   nhttp = new XMLHttpRequest()
   nhttp.onreadystatechange = function (e){
-    if(nhttp.readyState == 4){
+    if(nhttp.readyState === 4){
       processNametags(nhttp.responseText)
     }
   }
@@ -45,7 +40,7 @@ function updateNametags(){
 
 function processNametags(json){
 
-  if(json !== "[]"){
+  if(json !== "[]" && json !== "null"){
   	if(json != oldNametagJson){
 	    nametags = JSON.parse(json)
 
@@ -64,6 +59,9 @@ function processNametags(json){
     		  cell.innerHTML = "<b>" + key + "</b>"
     		}
   	  }
+
+      hrow.insertCell(-1)
+      hrow.insertCell(-1)
 
       var footer = nametagTable.createTFoot()
 	    var frow = footer.insertRow(-1)
@@ -103,7 +101,18 @@ function processNametags(json){
   		  for(var key in nametags[i]){
   		    if(nametags[i].hasOwnProperty(key)){
   			    var cell = row.insertCell(-1)
-  			    cell.innerHTML = nametags[i][key]
+            var data = nametags[0][key]
+            if(key === "ID"){
+  			         cell.innerHTML = nametags[i][key]
+            }else{
+              if(typeof data === "string"){
+    			         cell.innerHTML = nametags[i][key]
+              }else if(typeof data === "boolean"){
+    			         cell.innerHTML = nametags[i][key]
+              }else if(typeof data === "number"){
+    			         cell.innerHTML = nametags[i][key]
+              }
+            }
   		    }
   		  }
 
@@ -149,8 +158,7 @@ function updateNametag(){
   console.log(body)
   http = new XMLHttpRequest()
   http.onreadystatechange = function (e){
-    console.log("DONE")
-    console.log(http.responseText)
+    updateNametags();
   }
   http.open("POST", "nametags/update", true)
   http.setRequestHeader("Content-type","application/json")
@@ -222,6 +230,207 @@ function deleteNametag(id){
   http.setRequestHeader("Content-type","application/json")
   http.send(body)
 }
+
+
+function updatePrinters(){
+  //console.log("Updating Printers")
+  phttp = new XMLHttpRequest()
+  phttp.onreadystatechange = function (e){
+    if(nhttp.readyState === 4){
+      processPrinters(phttp.responseText)
+    }
+  }
+  phttp.open("GET", "printers", true)
+  phttp.send();
+}
+
+function processPrinters(json){
+
+  if(json !== "[]" && json){
+  	if(json != oldPrinterJson){
+	    printers = JSON.parse(json)
+
+      var l = printerTable.rows.length
+
+	    for(i = 0; i < l; i++){
+		    printerTable.deleteRow(0)
+	    }
+
+	    var header = printerTable.createTHead()
+	    var hrow = header.insertRow(0)
+
+	    for(var key in printers[0]){
+    		if(printers[0].hasOwnProperty(key)){
+    		  var cell = hrow.insertCell(-1)
+    		  cell.innerHTML = "<b>" + key + "</b>"
+    		}
+  	  }
+
+      hrow.insertCell(-1)
+      hrow.insertCell(-1)
+
+      var footer = printerTable.createTFoot()
+	    var frow = footer.insertRow(-1)
+
+      for(var key in printers[0]){
+    		if(printers[0].hasOwnProperty(key)){
+    		  var cell = frow.insertCell(-1)
+          var data = printers[0][key]
+          if(key === "ID"){
+            cell.innerHTML = "<span id=\"" + key + "PrinterInput\"></span>"
+          }else{
+            if(typeof data === "string"){
+              cell.innerHTML = "<input id=\"" + key + "PrinterInput\" type=\"text\">"
+            }else if(typeof data === "boolean"){
+              cell.innerHTML = "<input id=\"" + key + "PrinterInput\" type=\"checkbox\">"
+            }else if(typeof data === "number"){
+              cell.innerHTML = "<input id=\"" + key + "PrinterInput\" type=\"number\">"
+            }
+          }
+    		}
+      }
+
+      frow.insertCell(-1).innerHTML = "<button onclick=\"updatePrinter()\">Update</button>"
+      frow.insertCell(-1).innerHTML = "<button onclick=\"clearTmpPrinter()\">Clear</button>"
+
+  	  for(i = 0; i < printers.length; i++){
+
+  		  var row = printerTable.insertRow(i+1)
+
+  		  for(var key in printers[i]){
+  		    if(printers[i].hasOwnProperty(key)){
+  			    var cell = row.insertCell(-1)
+            var data = printers[0][key]
+            if(key === "ID"){
+  			         cell.innerHTML = printers[i][key]
+            }else{
+              if(typeof data === "string"){
+    			         cell.innerHTML = printers[i][key]
+              }else if(typeof data === "boolean"){
+    			         cell.innerHTML = printers[i][key]
+              }else if(typeof data === "number"){
+    			         cell.innerHTML = printers[i][key]
+              }
+            }
+  		    }
+  		  }
+
+        row.insertCell(-1).innerHTML = "<button onclick=\"editPrinter(" + printers[i].ID + ")\">Edit</button>"
+  	    row.insertCell(-1).innerHTML = "<button onclick=\"deletePrinter(" + printers[i].ID + ")\">Delete</button>"
+
+  	  }
+
+  	  oldPrinterJson = json
+  	}
+  }else{
+    //console.log("No Printers")
+    var l = printerTable.rows.length
+
+    for(i = 0; i < l; i++){
+      printerTable.deleteRow(0)
+    }
+    printerTable.insertRow(0).innerHTML = "No Printers"
+    //printerTable.insertRow(1).innerHTML = "<button onclick=\"updatePrinter(0)\">Add Printer</button>"
+  }
+}
+
+function updatePrinter(){
+  console.log("Submitting")
+
+  for(var key in printers[0]){
+    if(printers[0].hasOwnProperty(key)){
+      var data = printers[0][key]
+      if(key === "ID"){
+        tmpPrinter[key] = Number(document.getElementById(key + "Input").innerHTML);
+      }else{
+        if(typeof data === "string"){
+          tmpPrinter[key] = document.getElementById(key + "Input").value;
+        }else if(typeof data === "boolean"){
+          tmpPrinter[key] = document.getElementById(key + "Input").checked;
+        }else if(typeof data === "number"){
+          tmpPrinter[key] = Number(document.getElementById(key + "Input").value);
+        }
+      }
+    }
+  }
+
+  console.log(tmpPrinter)
+  var body = JSON.stringify(tmpPrinter)
+  console.log(body)
+  http = new XMLHttpRequest()
+  http.onreadystatechange = function (e){
+    updatePrinters();
+  }
+  http.open("POST", "printers/update", true)
+  http.setRequestHeader("Content-type","application/json")
+  http.send(body)
+}
+
+function clearTmpPrinter(){
+  for(var key in printers[0]){
+    if(printers[0].hasOwnProperty(key)){
+      var data = printers[0][key]
+      if(key === "ID"){
+        document.getElementById(key + "PrinterInput").innerHTML = "";
+      }else{
+        if(typeof data === "string"){
+          document.getElementById(key + "PrinterInput").value = "";
+        }else if(typeof data === "boolean"){
+          document.getElementById(key + "PrinterInput").checked = false;
+        }else if(typeof data === "number"){
+          document.getElementById(key + "PrinterInput").value = "";
+        }
+      }
+    }
+  }
+}
+
+function editPrinter(id){
+  //console.log("Editing Nametag: " + id)
+  var l = printers.length
+  for(var i = 0; i < l; i++){
+    if(printers[i].ID === id){
+      tmpPrinter = printers[i];
+    }
+  }
+
+  for(var key in printers[0]){
+    if(printers[0].hasOwnProperty(key)){
+      var data = printers[0][key]
+      console.log(key)
+      if(key === "ID"){
+        document.getElementById(key + "PrinterInput").innerHTML = tmpPrinter[key];
+      }else{
+        if(typeof data === "string"){
+          document.getElementById(key + "PrinterInput").value = tmpPrinter[key];
+        }else if(typeof data === "boolean"){
+          document.getElementById(key + "PrinterInput").checked = tmpPrinter[key];
+        }else if(typeof data === "number"){
+          document.getElementById(key + "PrinterInput").value = tmpPrinter[key];
+        }
+      }
+    }
+  }
+}
+
+function deletePrinter(id){
+  //console.log("Submitting")
+  var printer = {
+    "id": ""
+  }
+  printer.id = id
+  //console.log(nametag.name)
+  var body = JSON.stringify(printer)
+  //console.log(body)
+  http = new XMLHttpRequest()
+  http.onreadystatechange = function (e){
+    updatePrinters();
+  }
+  http.open("POST", "printers/delete", true)
+  http.setRequestHeader("Content-type","application/json")
+  http.send(body)
+}
+
 
 
 function showNametags(){

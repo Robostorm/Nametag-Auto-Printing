@@ -71,6 +71,8 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 
 			if strings.HasSuffix(url, ".png") {
 				w.Header().Set("Content-Type", "image/png; charset=utf-8")
+			} else if strings.HasSuffix(url, ".css") {
+				w.Header().Set("Content-Type", "text/css; charset=utf-8")
 			}
 
 			w.Write(f)

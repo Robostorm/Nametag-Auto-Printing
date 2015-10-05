@@ -1,0 +1,98 @@
+
+body{
+  margin: 0;
+  background-color: white;
+}
+
+nav{
+  background-color: green;
+  height: 2em;
+  border: .2em solid black;
+}
+
+nav span{
+  background-color: green;
+  margin: 0em;
+  padding: 0em 1em 0em 1em;
+  display: inline;
+	font-family: sans-serif;
+	font-size: 16px;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: 0.2em solid black;
+	text-align: center;
+	display: inline-block;
+	text-decoration: none;
+	color: black;
+  height: 2em;
+  float: left;
+  line-height: 1.8;
+  cursor: pointer;
+}
+
+nav span:hover{
+  background-color: yellow;
+}
+
+nav span:focus {
+  outline: none
+}
+
+nav img{
+  margin: 0em;
+  padding: 0em 1em 0em 1em;
+  display: inline;
+  font-family: sans-serif;
+  font-size: 16px;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  border-right: 0.2em solid black;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+  height: 2em;
+  float: left;
+  line-height: 1.8;
+}
+
+table {
+    border-collapse: collapse;
+    width=100%;
+}
+
+thead{
+  background-color: yellowgreen;
+  width: 100%;
+}
+
+tfoot tr:nth-child(odd){
+  background-color: white;
+}
+
+tfoot tr:nth-child(even){
+  background-color: lightgrey;
+}
+
+tfoot tr:last-child{
+  background-color: white;
+}
+
+tr input[type=text]{
+  width: 10em;
+}
+
+tr input[type=number]{
+  width: 3em;
+}
+
+td{
+  border: 0px solid green;
+  padding: 0.2em;
+}
+
+td button{
+  width:100%;
+}
