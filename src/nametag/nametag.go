@@ -13,25 +13,25 @@ var (
 	scadPath  = "openscad"
 )
 
-// Nametag to be printed
+// Nametag to be printed. Will appear in manager in the order defined here
 type Nametag struct {
-	ID        int    // Unique ID of the nametag
-	Name      string // Name on the nametag
-	StlPath   string // Path to the stl
-	GcodePath string // Path to the gcode
-	ImagePath string // Path to the image
-	Rendered  bool   // Exported from Scad or not
-	Sliced    bool   // Sliced or not
-	Uploaded  bool   // Uploaded or not
-	Printed   bool   // Printed or not
-	PrinterID int64  // Printer id that nametag will print on
+	ID        int    `json:"ID"`         // Unique ID of the nametag
+	Name      string `json:"Name"`       // Name on the nametag
+	Rendered  bool   `json:"Rendered"`   // Exported from Scad or not
+	Sliced    bool   `json:"Sliced"`     // Sliced or not
+	Uploaded  bool   `json:"Uploaded"`   // Uploaded or not
+	Printed   bool   `json:"Printed"`    // Printed or not
+	PrinterID int64  `json:"Printer ID"` // Printer id that nametag will print on
+	StlPath   string `json:"Stl Path"`   // Path to the stl
+	GcodePath string `json:"Gcode Path"` // Path to the gcode
 }
 
 func (nametag *Nametag) generateID() int {
 	done := false
 
 	for !done {
-		id := rand.Intn(999)
+		// Zero is special
+		id := rand.Intn(998) + 1
 
 		found := false
 		for _, n := range nametags {

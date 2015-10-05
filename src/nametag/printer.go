@@ -20,7 +20,8 @@ func (printer *Printer) generateID() int {
 	done := false
 
 	for !done {
-		id := rand.Intn(999)
+		// Zero is special
+		id := rand.Intn(998) + 1
 
 		found := false
 		for _, p := range nametags {

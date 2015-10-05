@@ -113,6 +113,7 @@ func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 		var printer Printer
 
 		if id, ok := dat["id"]; ok {
+			Info.Println("Searching for id")
 			for _, p := range printers {
 				if p.ID == int(id.(float64)) {
 					printer = p
@@ -120,6 +121,7 @@ func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		} else {
+			Info.Println("Generating ID")
 			printer.generateID()
 		}
 
@@ -131,28 +133,66 @@ func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 			printer.Active = active.(bool)
 		}
 
-		if printing, ok := dat["name"]; ok {
-			printer.Printing = printing.(bool)
-		}
-
-		if nametag, ok := dat["nametag"]; ok {
-			printer.Nametag = int(nametag.(float64))
-		}
-
-		if ip, ok := dat["name"]; ok {
+		if ip, ok := dat["ip"]; ok {
 			printer.IP = ip.(string)
 		}
 
-		if apikey, ok := dat["name"]; ok {
+		if apikey, ok := dat["apikey"]; ok {
 			printer.APIKey = apikey.(string)
 		}
 
-		if slicer, ok := dat["name"]; ok {
-			printer.SlicerConf = slicer.(string)
+		if conf, ok := dat["slicerconf"]; ok {
+			printer.SlicerConf = conf.(string)
 		}
 
-		append(printers, printer)
+		printers = append(printers, printer)
 
+	}
+}
+
+func handleDeletePrinter(w http.ResponseWriter, r *http.Request) {
+	Info.Println("Delete Printer Requested")
+	body, rerr := ioutil.ReadAll(r.Body)
+	if rerr != nil {
+		Error.Println("Error reciving delete:")
+		Error.Println(rerr)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+
+		var dat map[string]interface{}
+
+		jerr := json.Unmarshal(body, &dat)
+
+		if jerr != nil {
+			Error.Println("Error parsing JSON:", jerr)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		Info.Println(body)
+
+		if id, ok := dat["id"]; ok && id != "" {
+			Info.Println(id)
+
+			var index int
+
+			for i, n := range printers {
+				//Info.Println(i)
+				//Info.Println(n.ID)
+				//Info.Println(id)
+				if n.ID == int(id.(float64)) {
+					//Info.Println("Found Nametag to delete: " + string(i))
+					index = i
+					break
+				}
+			}
+			Info.Println(printers)
+			printers = append(printers[:index], printers[index+1:]...)
+			Info.Println(printers)
+
+			return
+		}
+		w.WriteHeader(http.StatusNotAcceptable)
 	}
 
 }
@@ -168,6 +208,46 @@ func handleNametags(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Write(jsonNametags)
 
+}
+
+func handleUpdateNametag(w http.ResponseWriter, r *http.Request) {
+	Info.Println("Nametag Update Requested")
+	body, rerr := ioutil.ReadAll(r.Body)
+	if rerr != nil {
+		Error.Println("Error reciving addition:")
+		Error.Println(rerr)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+
+		var nametag Nametag
+
+		jerr := json.Unmarshal(body, &nametag)
+
+		if jerr != nil {
+			Error.Println("Error parsing JSON:", jerr)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		Info.Println(nametag)
+
+		if nametag.ID == 0 {
+			Info.Println("Generating ID")
+			nametag.generateID()
+			nametags = append(nametags, nametag)
+		} else {
+			Info.Println("Searching for id")
+			for i, n := range nametags {
+				if n.ID == nametag.ID {
+					nametags[i] = nametag
+					break
+				}
+			}
+		}
+
+		//Info.Println(nametags)
+
+	}
 }
 
 func handleDeleteNametag(w http.ResponseWriter, r *http.Request) {
@@ -325,9 +405,11 @@ func main() {
 
 	http.HandleFunc("/", handleRoot)
 	http.HandleFunc("/nametags", handleNametags)
+	http.HandleFunc("/nametags/update", handleUpdateNametag)
 	http.HandleFunc("/nametags/delete", handleDeleteNametag)
 	http.HandleFunc("/printers", handlePrinters)
 	http.HandleFunc("/printers/update", handleUpdatePrinter)
+	http.HandleFunc("/printers/delete", handleDeletePrinter)
 	http.HandleFunc("/preview", handlePreview)
 	http.HandleFunc("/submit", handleSubmit)
 
