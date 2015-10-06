@@ -4,16 +4,16 @@ import "math/rand"
 
 // Printer for printing nametags
 type Printer struct {
-	ID         int    // Unique ID of the printer
-	Name       string // Readable name for the printer
-	Nametag    int    // Nametag ID that is currently printing
-	IP         string // IP for the printer
-	APIKey     string // API Key to use for the printer
-	SlicerConf string // Slicer config path
-	Active     bool   // Active or not
-	Printing   bool   // Printing or not
-	Slicing    bool   // Slicing or not
-	Uploading  bool   // Uploading or not
+	ID         int    `json:"ID"`            // Unique ID of the printer
+	Name       string `json:"Name"`          // Readable name for the printer
+	Active     bool   `json:"Active"`        // Active or not
+	Printing   bool   `json:"Printing"`      // Printing or not
+	Slicing    bool   `json:"Slicing"`       // Slicing or not
+	Uploading  bool   `json:"Uploading"`     // Uploading or not
+	NametagID  int    `json:"Nametag ID"`    // Nametag ID that is currently printing
+	IP         string `json:"IP"`            // IP for the printer
+	APIKey     string `json:"API Key"`       // API Key to use for the printer
+	SlicerConf string `json:"Slicer Config"` // Slicer config path
 }
 
 func (printer *Printer) generateID() int {

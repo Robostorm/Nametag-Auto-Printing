@@ -94,7 +94,7 @@ func handlePrinters(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
-	Info.Println("Printer Add Requested")
+	Info.Println("Printer Update Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
 		Error.Println("Error reciving addition:")
@@ -102,9 +102,9 @@ func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	} else {
 
-		var dat map[string]interface{}
+		var printer Printer
 
-		jerr := json.Unmarshal(body, &dat)
+		jerr := json.Unmarshal(body, &printer)
 
 		if jerr != nil {
 			Error.Println("Error parsing JSON:", jerr)
@@ -112,42 +112,23 @@ func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		var printer Printer
+		Info.Println(printer)
 
-		if id, ok := dat["id"]; ok {
+		if printer.ID == 0 {
+			Info.Println("Generating ID")
+			printer.generateID()
+			printers = append(printers, printer)
+		} else {
 			Info.Println("Searching for id")
-			for _, p := range printers {
-				if p.ID == int(id.(float64)) {
-					printer = p
+			for i, n := range printers {
+				if n.ID == printer.ID {
+					printers[i] = printer
 					break
 				}
 			}
-		} else {
-			Info.Println("Generating ID")
-			printer.generateID()
 		}
 
-		if name, ok := dat["name"]; ok {
-			printer.Name = name.(string)
-		}
-
-		if active, ok := dat["active"]; ok {
-			printer.Active = active.(bool)
-		}
-
-		if ip, ok := dat["ip"]; ok {
-			printer.IP = ip.(string)
-		}
-
-		if apikey, ok := dat["apikey"]; ok {
-			printer.APIKey = apikey.(string)
-		}
-
-		if conf, ok := dat["slicerconf"]; ok {
-			printer.SlicerConf = conf.(string)
-		}
-
-		printers = append(printers, printer)
+		savePrinters()
 
 	}
 }
@@ -188,9 +169,10 @@ func handleDeletePrinter(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 			}
-			Info.Println(printers)
+			//Info.Println(printers)
 			printers = append(printers[:index], printers[index+1:]...)
-			Info.Println(printers)
+			savePrinters()
+			//Info.Println(printers)
 
 			return
 		}
@@ -247,7 +229,7 @@ func handleUpdateNametag(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
-		//Info.Println(nametags)
+		saveNametags()
 
 	}
 }
@@ -287,9 +269,10 @@ func handleDeleteNametag(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 			}
-			Info.Println(nametags)
+			//Info.Println(nametags)
 			nametags = append(nametags[:index], nametags[index+1:]...)
-			Info.Println(nametags)
+			saveNametags()
+			//Info.Println(nametags)
 
 			return
 		}
@@ -320,7 +303,7 @@ func handlePreview(w http.ResponseWriter, r *http.Request) {
 		if name, ok := dat["name"]; ok && name != "" {
 			Info.Println(name)
 			//w.WriteHeader(http.StatusOK)
-			io.WriteString(w, "/assets/images/"+name.(string)+".png")
+			io.WriteString(w, "/assets/images/nametags/"+name.(string)+".png")
 
 			go previewNametag(name.(string))
 
@@ -355,6 +338,7 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 			nametag.generateID()
 			nametag.Name = name.(string)
 			nametags = append(nametags, nametag)
+			saveNametags()
 			Info.Println(strconv.Itoa(len(nametags)) + " Nametag(s) in queue")
 			w.WriteHeader(http.StatusOK)
 			return
@@ -404,6 +388,9 @@ func main() {
 	}
 
 	Info.Printf("Using %s as root\n", root)
+
+	loadNametags()
+	loadPrinters()
 
 	http.HandleFunc("/", handleRoot)
 	http.HandleFunc("/nametags", handleNametags)

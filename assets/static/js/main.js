@@ -32,6 +32,7 @@ function imgChecker(){
 
 function submit(){
   console.log("Submitting")
+  input.focus()
   var nametag = {
     "name": ""
   }
@@ -46,6 +47,7 @@ function submit(){
     input.value = ""
     currentStatus.innerHTML = "Submitted Sucessfully"
     imgUrl = blankUrl
+    input.focus()
   }
   http.open("POST", "submit", true)
   http.setRequestHeader("Content-type","application/json")
@@ -54,6 +56,7 @@ function submit(){
 
 function preview(){
   console.log("Previewing")
+  input.focus()
 
   if(!nameValid(input.value)){
     console.log("Name not valid!")
@@ -76,6 +79,7 @@ function preview(){
       console.log(http.responseText)
       console.log(http.status)
       imgUrl = http.responseText
+      input.focus()
     }
   }
   http.open("POST", "preview", true)

@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	imagesDir = "assets/images/"
+	imagesDir = "assets/images/nametags/"
 	scadDir   = "openscad/"
 	scadPath  = "openscad"
 )

@@ -236,7 +236,7 @@ function updatePrinters(){
   //console.log("Updating Printers")
   phttp = new XMLHttpRequest()
   phttp.onreadystatechange = function (e){
-    if(nhttp.readyState === 4){
+    if(phttp.readyState === 4){
       processPrinters(phttp.responseText)
     }
   }
@@ -245,8 +245,8 @@ function updatePrinters(){
 }
 
 function processPrinters(json){
-
-  if(json !== "[]" && json){
+  //console.log(json)
+  if(json !== "[]" && json !== "null"){
   	if(json != oldPrinterJson){
 	    printers = JSON.parse(json)
 
@@ -341,14 +341,14 @@ function updatePrinter(){
     if(printers[0].hasOwnProperty(key)){
       var data = printers[0][key]
       if(key === "ID"){
-        tmpPrinter[key] = Number(document.getElementById(key + "Input").innerHTML);
+        tmpPrinter[key] = Number(document.getElementById(key + "PrinterInput").innerHTML);
       }else{
         if(typeof data === "string"){
-          tmpPrinter[key] = document.getElementById(key + "Input").value;
+          tmpPrinter[key] = document.getElementById(key + "PrinterInput").value;
         }else if(typeof data === "boolean"){
-          tmpPrinter[key] = document.getElementById(key + "Input").checked;
+          tmpPrinter[key] = document.getElementById(key + "PrinterInput").checked;
         }else if(typeof data === "number"){
-          tmpPrinter[key] = Number(document.getElementById(key + "Input").value);
+          tmpPrinter[key] = Number(document.getElementById(key + "PrinterInput").value);
         }
       }
     }

@@ -1,0 +1,26 @@
+[
+  {
+    "ID": 282,
+    "Name": "sss",
+    "Nametag": 0,
+    "IP": "",
+    "APIKey": "",
+    "SlicerConf": "",
+    "Active": false,
+    "Printing": false,
+    "Slicing": false,
+    "Uploading": false
+  },
+  {
+    "ID": 540,
+    "Name": "Tim",
+    "Nametag": 0,
+    "IP": "",
+    "APIKey": "",
+    "SlicerConf": "",
+    "Active": false,
+    "Printing": false,
+    "Slicing": false,
+    "Uploading": false
+  }
+]
