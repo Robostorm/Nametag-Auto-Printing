@@ -1,7 +1,5 @@
 package main
 
-import "math/rand"
-
 // Printer for printing nametags
 type Printer struct {
 	ID         int    `json:"ID"`            // Unique ID of the printer
@@ -16,22 +14,19 @@ type Printer struct {
 }
 
 func (printer *Printer) generateID() int {
-	done := false
 
-	for !done {
-		// Zero is special
-		id := rand.Intn(998) + 1
-
-		found := false
-		for _, p := range nametags {
-			if p.ID == id {
-				found = true
+	for id := 10; ; id++ {
+		Info.Printf("Trying ID: %d", id)
+		unique := true
+		for i := range printers {
+			if id == printers[i].ID {
+				unique = false
+				break
 			}
 		}
-
-		if !found {
-			done = true
+		if unique {
 			printer.ID = id
+			break
 		}
 	}
 

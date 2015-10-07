@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os/exec"
 	"strings"
 )
@@ -25,26 +24,24 @@ type Nametag struct {
 }
 
 func (nametag *Nametag) generateID() int {
-	done := false
 
-	for !done {
-		// Zero is special
-		id := rand.Intn(998) + 1
-
-		found := false
-		for _, n := range nametags {
-			if n.ID == id {
-				found = true
+	for id := 100; ; id++ {
+		Info.Printf("Trying ID: %d", id)
+		unique := true
+		for i := range nametags {
+			if id == nametags[i].ID {
+				unique = false
+				break
 			}
 		}
-
-		if !found {
-			done = true
+		if unique {
 			nametag.ID = id
+			break
 		}
 	}
 
 	Info.Println(nametag.ID)
+
 	return nametag.ID
 }
 

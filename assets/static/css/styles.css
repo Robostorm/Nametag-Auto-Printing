@@ -81,11 +81,11 @@ tfoot tr:last-child{
 }
 
 tr input[type=text]{
-  width: 10em;
+  width: 100%;
 }
 
 tr input[type=number]{
-  width: 3em;
+  width: 100%;
 }
 
 td{

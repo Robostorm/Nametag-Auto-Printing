@@ -5,11 +5,11 @@ var nametagTable = document.getElementById("nametagTable")
 var printerTable = document.getElementById("printerTable")
 
 var nametags
-var tmpNametag
+var tmpNametag = {}
 var oldNametagJson = "null"
 var printers
 var oldPrinterJson = "null"
-var tmpPrinter
+var tmpPrinter = {}
 
 updateNametags();
 updatePrinters();
@@ -60,6 +60,7 @@ function processNametags(json){
             key = key.substring(1);
           }
     		  cell.innerHTML = "<b>" + key + "</b>"
+          tmpNametag[key] = ""
     		}
   	  }
 
@@ -278,6 +279,7 @@ function processPrinters(json){
             key = key.substring(1);
           }
     		  cell.innerHTML = "<b>" + key + "</b>"
+          tmpNametag[key] = ""
     		}
   	  }
 

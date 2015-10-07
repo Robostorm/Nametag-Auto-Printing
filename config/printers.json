@@ -1,24 +1,24 @@
 [
   {
-    "ID": 794,
+    "ID": 10,
     "Name": "Ben",
     "_Status": "",
     "Active": true,
     "Available": false,
-    "Nametag ID": 830,
-    "IP": "",
-    "API Key": "",
-    "Slicer Config": ""
+    "Nametag ID": 100,
+    "IP": "192.168.5.110",
+    "API Key": "08723BF9C8EE487CB4B7E3F2D989EA8F",
+    "Slicer Config": "Mendel.ini"
   },
   {
-    "ID": 282,
+    "ID": 11,
     "Name": "Tim",
     "_Status": "",
     "Active": true,
     "Available": false,
-    "Nametag ID": 113,
-    "IP": "",
-    "API Key": "",
-    "Slicer Config": ""
+    "Nametag ID": 0,
+    "IP": "192.168.5.108",
+    "API Key": "08723BF9C8EE487CB4B7E3F2D989EA8F",
+    "Slicer Config": "Tim.ini"
   }
 ]
