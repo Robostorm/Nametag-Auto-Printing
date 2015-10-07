@@ -15,15 +15,13 @@ var (
 
 // Nametag to be printed. Will appear in manager in the order defined here
 type Nametag struct {
-	ID        int    `json:"ID"`         // Unique ID of the nametag
-	Name      string `json:"Name"`       // Name on the nametag
-	Rendered  bool   `json:"Rendered"`   // Exported from Scad or not
-	Sliced    bool   `json:"Sliced"`     // Sliced or not
-	Uploaded  bool   `json:"Uploaded"`   // Uploaded or not
-	Printed   bool   `json:"Printed"`    // Printed or not
-	PrinterID int64  `json:"Printer ID"` // Printer id that nametag will print on
-	StlPath   string `json:"Stl Path"`   // Path to the stl
-	GcodePath string `json:"Gcode Path"` // Path to the gcode
+	ID         int    `json:"ID"`         // Unique ID of the nametag
+	Name       string `json:"Name"`       // Name on the nametag
+	Status     string `json:"_Status"`    // Status of the nametag
+	Processing bool   `json:"Processing"` // Processing or not
+	PrinterID  int    `json:"Printer ID"` // Printer id that nametag will print on
+	StlPath    string `json:"-"`          // Path to the stl
+	GcodePath  string `json:"-"`          // Path to the gcode
 }
 
 func (nametag *Nametag) generateID() int {
@@ -48,6 +46,27 @@ func (nametag *Nametag) generateID() int {
 
 	Info.Println(nametag.ID)
 	return nametag.ID
+}
+
+func (nametag *Nametag) findPrinter() bool {
+	Info.Printf("Finding Printer for %d\n", nametag.ID)
+	for i := range printers {
+		Info.Printf("Considering %d\n", printers[i].ID)
+		if printers[i].Available && printers[i].Active {
+			Info.Println("Printer is available")
+			nametag.PrinterID = printers[i].ID
+			printers[i].NametagID = nametag.ID
+			printers[i].Available = false
+			return true
+		}
+		Info.Println("Printer is not available")
+	}
+	return false
+}
+
+func (nametag *Nametag) process() {
+	nametag.Processing = true
+	Info.Printf("Processing %d for %d\n", nametag.ID, nametag.PrinterID)
 }
 
 func previewNametag(name string) (string, error) {

@@ -1,13 +1,23 @@
 [
   {
-    "ID": 463,
-    "Name": "Tim",
-    "Rendered": false,
-    "Sliced": false,
-    "Uploaded": false,
-    "Printed": false,
-    "Printer ID": 0,
-    "Stl Path": "",
-    "Gcode Path": ""
+    "ID": 438,
+    "Name": "Ben",
+    "_Status": "",
+    "Processing": true,
+    "Printer ID": 282
+  },
+  {
+    "ID": 830,
+    "Name": "Annalise",
+    "_Status": "",
+    "Processing": true,
+    "Printer ID": 794
+  },
+  {
+    "ID": 113,
+    "Name": "Logan",
+    "_Status": "",
+    "Processing": false,
+    "Printer ID": 0
   }
 ]

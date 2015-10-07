@@ -16,7 +16,7 @@ updatePrinters();
 
 window.setInterval("update()", 1000)
 
-showNametags()
+showBoth()
 
 function update(){
   //console.log("Updating")
@@ -39,7 +39,7 @@ function updateNametags(){
 }
 
 function processNametags(json){
-
+  console.log(json)
   if(json !== "[]" && json !== "null"){
   	if(json != oldNametagJson){
 	    nametags = JSON.parse(json)
@@ -56,6 +56,9 @@ function processNametags(json){
 	    for(var key in nametags[0]){
     		if(nametags[0].hasOwnProperty(key)){
     		  var cell = hrow.insertCell(-1)
+          if(key.charAt(0) === "_"){
+            key = key.substring(1);
+          }
     		  cell.innerHTML = "<b>" + key + "</b>"
     		}
   	  }
@@ -70,8 +73,9 @@ function processNametags(json){
     		if(nametags[0].hasOwnProperty(key)){
     		  var cell = frow.insertCell(-1)
           var data = nametags[0][key]
-          if(key === "ID"){
-            console.log(key)
+          if(key.charAt(0) === "_"){
+            cell.innerHTML = "<span id=\"" + key + "Input\"></span>"
+          }else if(key === "ID"){
             cell.innerHTML = "<span id=\"" + key + "Input\"></span>"
           }else{
             if(typeof data === "string"){
@@ -102,8 +106,10 @@ function processNametags(json){
   		    if(nametags[i].hasOwnProperty(key)){
   			    var cell = row.insertCell(-1)
             var data = nametags[0][key]
-            if(key === "ID"){
-  			         cell.innerHTML = nametags[i][key]
+            if(key.charAt(0) === "_"){
+  			       cell.innerHTML = nametags[i][key]
+            }else if(key === "ID"){
+  			       cell.innerHTML = nametags[i][key]
             }else{
               if(typeof data === "string"){
     			         cell.innerHTML = nametags[i][key]
@@ -139,7 +145,9 @@ function updateNametag(){
   for(var key in nametags[0]){
     if(nametags[0].hasOwnProperty(key)){
       var data = nametags[0][key]
-      if(key === "ID"){
+      if(key.charAt(0) === "_"){
+        tmpNametag[key] = document.getElementById(key + "Input").innerHTML;
+      }else if(key === "ID"){
         tmpNametag[key] = Number(document.getElementById(key + "Input").innerHTML);
       }else{
         if(typeof data === "string"){
@@ -169,7 +177,9 @@ function clearTmpNametag(){
   for(var key in nametags[0]){
     if(nametags[0].hasOwnProperty(key)){
       var data = nametags[0][key]
-      if(key === "ID"){
+      if(key.charAt(0) === "_"){
+        document.getElementById(key + "Input").innerHTML = "";
+      }else if(key === "ID"){
         document.getElementById(key + "Input").innerHTML = "";
       }else{
         if(typeof data === "string"){
@@ -185,7 +195,7 @@ function clearTmpNametag(){
 }
 
 function editNametag(id){
-  //console.log("Editing Nametag: " + id)
+  console.log("Editing Nametag: " + id)
   var l = nametags.length
   for(var i = 0; i < l; i++){
     if(nametags[i].ID === id){
@@ -198,7 +208,9 @@ function editNametag(id){
     if(nametags[0].hasOwnProperty(key)){
       var data = nametags[0][key]
       console.log(key)
-      if(key === "ID"){
+      if(key.charAt(0) === "_"){
+        document.getElementById(key + "Input").innerHTML = tmpNametag[key];
+      }else if(key === "ID"){
         document.getElementById(key + "Input").innerHTML = tmpNametag[key];
       }else{
         if(typeof data === "string"){
@@ -262,6 +274,9 @@ function processPrinters(json){
 	    for(var key in printers[0]){
     		if(printers[0].hasOwnProperty(key)){
     		  var cell = hrow.insertCell(-1)
+          if(key.charAt(0) === "_"){
+            key = key.substring(1);
+          }
     		  cell.innerHTML = "<b>" + key + "</b>"
     		}
   	  }
@@ -276,7 +291,9 @@ function processPrinters(json){
     		if(printers[0].hasOwnProperty(key)){
     		  var cell = frow.insertCell(-1)
           var data = printers[0][key]
-          if(key === "ID"){
+          if(key.charAt(0) === "_"){
+            cell.innerHTML = "<span id=\"" + key + "PrinterInput\"></span>"
+          }else if(key === "ID"){
             cell.innerHTML = "<span id=\"" + key + "PrinterInput\"></span>"
           }else{
             if(typeof data === "string"){
@@ -301,8 +318,10 @@ function processPrinters(json){
   		    if(printers[i].hasOwnProperty(key)){
   			    var cell = row.insertCell(-1)
             var data = printers[0][key]
-            if(key === "ID"){
-  			         cell.innerHTML = printers[i][key]
+            if(key.charAt(0) === "_"){
+  			       cell.innerHTML = printers[i][key]
+            }else if(key === "ID"){
+  			       cell.innerHTML = printers[i][key]
             }else{
               if(typeof data === "string"){
     			         cell.innerHTML = printers[i][key]
@@ -340,7 +359,9 @@ function updatePrinter(){
   for(var key in printers[0]){
     if(printers[0].hasOwnProperty(key)){
       var data = printers[0][key]
-      if(key === "ID"){
+      if(key.charAt(0) === "_"){
+        tmpPrinter[key] = document.getElementById(key + "PrinterInput").innerHTML;
+      }else if(key === "ID"){
         tmpPrinter[key] = Number(document.getElementById(key + "PrinterInput").innerHTML);
       }else{
         if(typeof data === "string"){
@@ -370,7 +391,9 @@ function clearTmpPrinter(){
   for(var key in printers[0]){
     if(printers[0].hasOwnProperty(key)){
       var data = printers[0][key]
-      if(key === "ID"){
+      if(key.charAt(0) === "_"){
+        document.getElementById(key + "PrinterInput").innerHTML = "";
+      }else if(key === "ID"){
         document.getElementById(key + "PrinterInput").innerHTML = "";
       }else{
         if(typeof data === "string"){
@@ -398,7 +421,9 @@ function editPrinter(id){
     if(printers[0].hasOwnProperty(key)){
       var data = printers[0][key]
       console.log(key)
-      if(key === "ID"){
+      if(key.charAt(0) === "_"){
+        document.getElementById(key + "PrinterInput").innerHTML = tmpPrinter[key];
+      }else if(key === "ID"){
         document.getElementById(key + "PrinterInput").innerHTML = tmpPrinter[key];
       }else{
         if(typeof data === "string"){
@@ -440,5 +465,10 @@ function showNametags(){
 
 function showPrinters(){
     nametagDiv.style.display = "none"
+    printerDiv.style.display = "block"
+}
+
+function showBoth(){
+    nametagDiv.style.display = "block"
     printerDiv.style.display = "block"
 }

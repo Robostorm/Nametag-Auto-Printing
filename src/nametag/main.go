@@ -392,6 +392,8 @@ func main() {
 	loadNametags()
 	loadPrinters()
 
+	go startManaging()
+
 	http.HandleFunc("/", handleRoot)
 	http.HandleFunc("/nametags", handleNametags)
 	http.HandleFunc("/nametags/update", handleUpdateNametag)

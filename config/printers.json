@@ -1,26 +1,24 @@
 [
   {
-    "ID": 282,
-    "Name": "sss",
-    "Nametag": 0,
+    "ID": 794,
+    "Name": "Ben",
+    "_Status": "",
+    "Active": true,
+    "Available": false,
+    "Nametag ID": 830,
     "IP": "",
-    "APIKey": "",
-    "SlicerConf": "",
-    "Active": false,
-    "Printing": false,
-    "Slicing": false,
-    "Uploading": false
+    "API Key": "",
+    "Slicer Config": ""
   },
   {
-    "ID": 540,
+    "ID": 282,
     "Name": "Tim",
-    "Nametag": 0,
+    "_Status": "",
+    "Active": true,
+    "Available": false,
+    "Nametag ID": 113,
     "IP": "",
-    "APIKey": "",
-    "SlicerConf": "",
-    "Active": false,
-    "Printing": false,
-    "Slicing": false,
-    "Uploading": false
+    "API Key": "",
+    "Slicer Config": ""
   }
 ]
