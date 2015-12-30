@@ -1,24 +1,24 @@
 [
   {
-    "ID": 10,
-    "Name": "Ben",
-    "_Status": "",
-    "Active": true,
-    "Available": false,
-    "Nametag ID": 100,
-    "IP": "192.168.5.110",
-    "API Key": "08723BF9C8EE487CB4B7E3F2D989EA8F",
-    "Slicer Config": "Mendel.ini"
-  },
-  {
     "ID": 11,
     "Name": "Tim",
-    "_Status": "",
+    "_Status": "Idle",
     "Active": true,
-    "Available": false,
-    "Nametag ID": 0,
+    "Available": true,
+    "Nametag ID": 100,
     "IP": "192.168.5.108",
     "API Key": "08723BF9C8EE487CB4B7E3F2D989EA8F",
-    "Slicer Config": "Tim.ini"
+    "Slicer Config": "Robostorm.ini"
+  },
+  {
+    "ID": 10,
+    "Name": "Robostorm",
+    "_Status": "Idle",
+    "Active": true,
+    "Available": true,
+    "Nametag ID": 0,
+    "IP": "192.168.5.104",
+    "API Key": "F7E8EFDCA39147AFB0D1DA07866FBF72",
+    "Slicer Config": "Robostorm.ini"
   }
 ]

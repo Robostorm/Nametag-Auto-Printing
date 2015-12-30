@@ -66,6 +66,7 @@ function processNametags(json){
 
       hrow.insertCell(-1)
       hrow.insertCell(-1)
+      hrow.insertCell(-1)
 
       var footer = nametagTable.createTFoot()
 	    var frow = footer.insertRow(-1)
@@ -96,6 +97,7 @@ function processNametags(json){
     		}
       }
 
+      frow.insertCell(-1)
       frow.insertCell(-1).innerHTML = "<button onclick=\"updateNametag()\">Update</button>"
       frow.insertCell(-1).innerHTML = "<button onclick=\"clearTmpNametag()\">Clear</button>"
 
@@ -123,6 +125,7 @@ function processNametags(json){
   		    }
   		  }
 
+        row.insertCell(-1).innerHTML = "<button onclick=\"doneNametag(" + nametags[i].ID + ")\">Done</button>"
         row.insertCell(-1).innerHTML = "<button onclick=\"editNametag(" + nametags[i].ID + ")\">Edit</button>"
   	    row.insertCell(-1).innerHTML = "<button onclick=\"deleteNametag(" + nametags[i].ID + ")\">Delete</button>"
 
@@ -244,6 +247,24 @@ function deleteNametag(id){
   http.send(body)
 }
 
+function doneNametag(id){
+  //console.log("Submitting")
+  var nametag = {
+    "id": ""
+  }
+  nametag.id = id
+  //console.log(nametag.name)
+  var body = JSON.stringify(nametag)
+  //console.log(body)
+  http = new XMLHttpRequest()
+  http.onreadystatechange = function (e){
+    updateNametags();
+  }
+  http.open("POST", "nametags/done", true)
+  http.setRequestHeader("Content-type","application/json")
+  http.send(body)
+}
+
 
 function updatePrinters(){
   //console.log("Updating Printers")
@@ -285,6 +306,7 @@ function processPrinters(json){
 
       hrow.insertCell(-1)
       hrow.insertCell(-1)
+      hrow.insertCell(-1)
 
       var footer = printerTable.createTFoot()
 	    var frow = footer.insertRow(-1)
@@ -309,6 +331,7 @@ function processPrinters(json){
     		}
       }
 
+      frow.insertCell(-1)
       frow.insertCell(-1).innerHTML = "<button onclick=\"updatePrinter()\">Update</button>"
       frow.insertCell(-1).innerHTML = "<button onclick=\"clearTmpPrinter()\">Clear</button>"
 
@@ -336,6 +359,7 @@ function processPrinters(json){
   		    }
   		  }
 
+        row.insertCell(-1).innerHTML = "<button onclick=\"donePrinter(" + printers[i].ID + ")\">Done</button>"
         row.insertCell(-1).innerHTML = "<button onclick=\"editPrinter(" + printers[i].ID + ")\">Edit</button>"
   	    row.insertCell(-1).innerHTML = "<button onclick=\"deletePrinter(" + printers[i].ID + ")\">Delete</button>"
 
@@ -458,6 +482,23 @@ function deletePrinter(id){
   http.send(body)
 }
 
+function donePrinter(id){
+  //console.log("Submitting")
+  var printer = {
+    "id": ""
+  }
+  printer.id = id
+  //console.log(nametag.name)
+  var body = JSON.stringify(printer)
+  //console.log(body)
+  http = new XMLHttpRequest()
+  http.onreadystatechange = function (e){
+    updatePrinters();
+  }
+  http.open("POST", "printers/done", true)
+  http.setRequestHeader("Content-type","application/json")
+  http.send(body)
+}
 
 
 function showNametags(){
