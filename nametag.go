@@ -19,11 +19,11 @@ const (
 
 // Nametag to be printed. Will appear in manager in the order defined here
 type Nametag struct {
-	ID         int    `json:"ID"`         // Unique ID of the nametag
-	Name       string `json:"Name"`       // Name on the nametag
-	Status     string `json:"_Status"`    // Status of the nametag
-	Processing bool   `json:"Processing"` // Processing or not
-	PrinterID  int    `json:"Printer ID"` // Printer id that nametag will print on
+	ID     int    `json:"ID"`      // Unique ID of the nametag
+	Name   string `json:"Name"`    // Name on the nametag
+	Status string `json:"_Status"` // Status of the nametag
+	//Processing bool   `json:"Processing"` // Processing or not
+	PrinterID int `json:"Printer ID"` // Printer id that nametag will print on
 }
 
 func (nametag *Nametag) generateID() int {
@@ -48,6 +48,7 @@ func (nametag *Nametag) generateID() int {
 	return nametag.ID
 }
 
+/*
 func (nametag *Nametag) findPrinter() bool {
 	for i := range printers {
 		if printers[i].Available && printers[i].Active {
@@ -59,7 +60,7 @@ func (nametag *Nametag) findPrinter() bool {
 	}
 	return false
 }
-
+*/
 func (nametag *Nametag) exists() bool {
 	found := false
 	for i := range nametags {

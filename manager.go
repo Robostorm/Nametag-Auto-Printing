@@ -6,7 +6,7 @@ func startManaging() {
 		for _, printer := range printers {
 			//Manager.Printf("Selecting Printer: %s", printer.Name)
 
-			if printer.Status == PIdle {
+			if printer.Status == PIdle && printer.Active {
 				//Manager.Printf("Printer Available")
 
 				for _, nametag := range nametags {
@@ -25,6 +25,10 @@ func startManaging() {
 							printer.NametagID = 0
 							continue
 						}
+						if nametag.Status == NIdle {
+							nametag.PrinterID = 0
+							continue
+						}
 
 						nametag.Status = NSlicing
 						printer.Status = PSlicing
@@ -34,6 +38,10 @@ func startManaging() {
 							printer.NametagID = 0
 							continue
 						}
+						if nametag.Status == NIdle {
+							nametag.PrinterID = 0
+							continue
+						}
 
 						nametag.Status = NUploading
 						printer.Status = PUploading
@@ -41,6 +49,10 @@ func startManaging() {
 
 						if printer.Status == PIdle {
 							printer.NametagID = 0
+							continue
+						}
+						if nametag.Status == NIdle {
+							nametag.PrinterID = 0
 							continue
 						}
 

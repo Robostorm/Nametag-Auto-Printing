@@ -30,7 +30,7 @@ func loadNametags() {
 
 	for i := range nametags {
 		nametags[i].Status = NIdle
-		nametags[i].Processing = false
+		//nametags[i].Processing = false
 		nametags[i].PrinterID = 0
 	}
 
@@ -60,7 +60,7 @@ func loadPrinters() {
 
 	for i := range printers {
 		printers[i].Status = PIdle
-		printers[i].Available = true
+		//printers[i].Available = true
 		printers[i].NametagID = 0
 	}
 

@@ -153,6 +153,11 @@ func handleDeletePrinter(w http.ResponseWriter, r *http.Request) {
 			p, printer := findPrinter(int(id.(float64)))
 			if printer != nil {
 				printers = append(printers[:p], printers[p+1:]...)
+				_, nametag := findNametag(printer.NametagID)
+				if nametag != nil {
+					nametag.Status = NIdle
+					nametag.PrinterID = 0
+				}
 				savePrinters()
 			} else {
 				Warning.Printf("Tried to delete nonexistent printer at index %d\n", p)
@@ -190,6 +195,7 @@ func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 				if nametag != nil {
 					nametags = append(nametags[:n], nametags[n+1:]...)
 					printer.Status = PIdle
+					printer.NametagID = 0
 					savePrinters()
 					saveNametags()
 				} else {
@@ -278,6 +284,7 @@ func handleDeleteNametag(w http.ResponseWriter, r *http.Request) {
 				_, printer := findPrinter(nametag.PrinterID)
 				if printer != nil {
 					printer.Status = PIdle
+					printer.NametagID = 0
 				}
 				saveNametags()
 			} else {
