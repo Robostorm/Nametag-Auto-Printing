@@ -16,7 +16,7 @@ function imgChecker(){
     if(fileExists(imgUrl)){
       console.log("Image Exists!")
       img.src = imgUrl
-      currentStatus.innerHTML = ""
+      currentStatus.innerHTML = "Ready."
       imgFound = true
     }else{
         console.log("Image Does Not Exist!")
@@ -24,7 +24,7 @@ function imgChecker(){
     oldImgUrl = imgUrl
   }else{
     if(currentStatus.innerHTML == "Loading..."){
-      currentStatus.innerHTML = ""
+      currentStatus.innerHTML = "Ready."
     }
   }
   input.focus()

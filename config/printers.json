@@ -3,8 +3,8 @@
     "ID": 11,
     "Name": "Tim",
     "_Status": "Idle",
-    "Active": false,
-    "Nametag ID": 0,
+    "Active": true,
+    "Nametag ID": 100,
     "IP": "192.168.5.108",
     "API Key": "08723BF9C8EE487CB4B7E3F2D989EA8F",
     "Slicer Config": "Robostorm.ini"

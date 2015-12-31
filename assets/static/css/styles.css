@@ -96,3 +96,48 @@ td{
 td button{
   width:100%;
 }
+
+#title{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+#subtitle{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+#btns{
+  width: 35%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+#input{
+  width: 35%;
+  line-height: 30px;
+  font-size: 24px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#img{
+  width: 35%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#status{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}

@@ -2,15 +2,18 @@
 <html>
   <head>
     <title>Nametag App</title>
+    <link rel="stylesheet" type="text/css" href="assets/static/css/styles.css">
   </head>
   <body>
     <img id="img" src="assets/images/blank.png"/>
-    <p>Enter Name Here:</p>
-    <p>10 characters or less</p>
+    <p id="title">Name:</p>
     <input id="input" autofocus="true" maxLength=10 type="text">
-    <button id="preview" onclick="preview()">Preview</button>
-    <button id="submit" onclick="submit()">Submit</button>
-    <p id="status"></p>
+    <p id="subtitle">(10 characters or less)</p>
+    <div id="btns">
+      <button id="preview" onclick="preview()">Preview</button>
+      <button id="submit" onclick="submit()">Submit</button>
+    </div>
+    <p id="status">Ready.</p>
 
     <script src="assets/static/js/main.js" charset="utf-8"></script>
 

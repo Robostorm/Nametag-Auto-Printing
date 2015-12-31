@@ -72,16 +72,20 @@ func (nametag *Nametag) exists() bool {
 	return found
 }
 
+func sanitize(name string) string {
+	return strings.Replace(name, " ", "", -1)
+}
+
 func previewNametag(name string) (string, error) {
 
-	zoom := 100
+	zoom := 70
 	if len(name) > 8 {
-		zoom = 150
+		zoom = 120
 	} else if len(name) > 5 {
-		zoom = 130
+		zoom = 105
 	}
 
-	scadArgs := fmt.Sprintf(" -o %s%s.png -D name=\"%s\" -D chars=%d "+"--camera=0,0,0,0,0,0,%d %sname.scad", Root+ImagesDir, name, name, len(name), zoom, Root+OpenScadDir)
+	scadArgs := fmt.Sprintf(" -o %s%s.png -D name=\"%s\" -D chars=%d "+"--camera=0,0,0,0,0,0,%d --imgsize=512,400 %sname.scad", Root+ImagesDir, name, name, len(name), zoom, Root+OpenScadDir)
 
 	cmd := OpenScadPath + scadArgs
 
