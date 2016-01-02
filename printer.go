@@ -69,22 +69,29 @@ func (printer *Printer) renderNametag(id int) (err error) {
 	//nametag.Status = NRendering
 	//printer.Status = PRendering
 
-	scadArgs := fmt.Sprintf(" -o %s%s%d.stl -D name=\"%s\" -D chars=%d %s%sname.scad", Root, StlDir, nametag.ID, nametag.Name, len(nametag.Name), Root, OpenScadDir)
+	//scadArgs := fmt.Sprintf(" -o %s%s%d.stl -D name=\"%s\" -D chars=%d %s%sname.scad", Root, StlDir, nametag.ID, nametag.Name, len(nametag.Name), Root, OpenScadDir)
 
-	cmd := OpenScadPath + scadArgs
+	//cmd := OpenScadPath + scadArgs
 
 	//Manager.Println("Running:")
 	//Manager.Println(cmd)
-	parts := strings.Fields(cmd)
-	head := parts[0]
-	parts = parts[1:len(parts)]
+	// parts := strings.Fields(cmd)
+	// head := parts[0]
+	// parts = parts[1:len(parts)]
 
-	//out, err := exec.Command(head, parts...).CombinedOutput()
-	_, err = exec.Command(head, parts...).CombinedOutput()
+	args := []string{
+		fmt.Sprintf("-o%s%d.stl", Root+StlDir, nametag.ID),
+		fmt.Sprintf("-D name=\"%s\"", nametag.Name),
+		fmt.Sprintf("-D chars=%d "+"", len(nametag.Name)),
+		fmt.Sprintf("%sname.scad", Root+OpenScadDir),
+	}
+
+	out, err := exec.Command(OpenScadPath, args...).CombinedOutput()
+	//_, err = exec.Command(head, parts...).CombinedOutput()
 	if err != nil {
 		Error.Printf("%s", err)
 	}
-	//Manager.Printf("Standard Out and Error:\n%s", out)
+	Manager.Printf("Standard Out and Error:\n%s", out)
 
 	return nil
 }
@@ -112,12 +119,12 @@ func (printer *Printer) sliceNametag(id int) error {
 	head := parts[0]
 	parts = parts[1:len(parts)]
 
-	//out, err := exec.Command(head, parts...).CombinedOutput()
-	_, err := exec.Command(head, parts...).CombinedOutput()
+	out, err := exec.Command(head, parts...).CombinedOutput()
+	//_, err := exec.Command(head, parts...).CombinedOutput()
 	if err != nil {
 		Error.Printf("%s", err)
 	}
-	//Manager.Printf("Standard Out and Error:\n%s", out)
+	Manager.Printf("Standard Out and Error:\n%s", out)
 
 	return nil
 }
@@ -130,24 +137,24 @@ func (printer *Printer) uploadNametag(id int) error {
 		return errors.New("Could not find nametag!")
 	}
 
-	//Manager.Printf("Uploading Nametag %d to Printer %d", nametag.ID, printer.ID)
+	Manager.Printf("Uploading Nametag %d to Printer %d", nametag.ID, printer.ID)
 
 	//nametag.Status = NUploading
 	//printer.Status = PUploading
 
 	uri := fmt.Sprintf("http://%s/api/files/local", printer.IP)
 
-	file, err := os.Open(fmt.Sprintf("%s%d.gcode", GcodeDir, nametag.ID))
+	file, err := os.Open(fmt.Sprintf("%s%d.gcode", Root+GcodeDir, nametag.ID))
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	fileContents, err := ioutil.ReadAll(file)
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	fi, err := file.Stat()
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	file.Close()
 
@@ -155,36 +162,37 @@ func (printer *Printer) uploadNametag(id int) error {
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormFile("file", fi.Name())
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	part.Write(fileContents)
 	_ = writer.WriteField("print", "true")
 	err = writer.Close()
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	request, err := http.NewRequest("POST", uri, body)
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	request.Header.Add("X-Api-Key", printer.APIKey)
 	request.Header.Set("Content-Type", writer.FormDataContentType())
 	_, err = httputil.DumpRequest(request, true)
 	if err == nil {
-		//Manager.Println(data)
+		//Warning.Println(data)
 	} else {
 		Error.Println(err)
 	}
 	client := &http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		return err
+		Warning.Println(err)
 	}
 	body = &bytes.Buffer{}
 	_, err = body.ReadFrom(resp.Body)
 	if err != nil {
 		log.Println(err)
 	}
+	//Manager.Println(body)
 	resp.Body.Close()
 
 	return nil

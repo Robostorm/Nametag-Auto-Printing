@@ -13,8 +13,8 @@
     "ID": 11,
     "Name": "Robostorm",
     "_Status": "Idle",
-    "Active": true,
-    "Nametag ID": 101,
+    "Active": false,
+    "Nametag ID": 0,
     "IP": "",
     "API Key": "",
     "Slicer Config": ""

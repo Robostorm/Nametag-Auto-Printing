@@ -46,7 +46,7 @@ var connections = 0
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Serving: " + r.Host + html.EscapeString(r.URL.Path))
 
 	url := r.URL.Path
@@ -91,7 +91,7 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 
 func handlePrinters(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 
 	jsonPrinters, jerr := json.Marshal(printers)
 
@@ -105,7 +105,7 @@ func handlePrinters(w http.ResponseWriter, r *http.Request) {
 
 func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Printer Update Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -140,7 +140,7 @@ func handleUpdatePrinter(w http.ResponseWriter, r *http.Request) {
 
 func handleDeletePrinter(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Delete Printer Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -180,7 +180,7 @@ func handleDeletePrinter(w http.ResponseWriter, r *http.Request) {
 
 func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Done Printer Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -224,7 +224,7 @@ func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 
 func handleNametags(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 
 	jsonNametags, jerr := json.Marshal(nametags)
 
@@ -238,7 +238,7 @@ func handleNametags(w http.ResponseWriter, r *http.Request) {
 
 func handleUpdateNametag(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Nametag Update Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -274,7 +274,7 @@ func handleUpdateNametag(w http.ResponseWriter, r *http.Request) {
 
 func handleDeleteNametag(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Delete Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -316,7 +316,7 @@ func handleDeleteNametag(w http.ResponseWriter, r *http.Request) {
 
 func handleDoneNametag(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Done Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -369,7 +369,7 @@ func handleDoneNametag(w http.ResponseWriter, r *http.Request) {
 
 func handlePreview(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Preview Requested")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
@@ -403,7 +403,7 @@ func handlePreview(w http.ResponseWriter, r *http.Request) {
 
 func handleSubmit(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println(connections)
+	//Server.Println(connections)
 	Server.Println("Nametag Submitted")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
