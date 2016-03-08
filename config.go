@@ -34,7 +34,7 @@ func loadNametags() {
 		nametags[i].PrinterID = 0
 	}
 
-	Main.Println(nametags)
+	//Main.Println(nametags)
 }
 
 func saveNametags() {
@@ -64,7 +64,7 @@ func loadPrinters() {
 		printers[i].NametagID = 0
 	}
 
-	Main.Println(printers)
+	//Main.Println(printers)
 }
 
 func savePrinters() {

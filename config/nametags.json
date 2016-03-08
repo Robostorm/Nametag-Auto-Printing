@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "ID": 102,
+    "Name": "sdsds",
+    "_Status": "Printing",
+    "Printer ID": 10
+  },
+  {
+    "ID": 103,
+    "Name": "sdsd",
+    "_Status": "Idle",
+    "Printer ID": 0
+  },
+  {
+    "ID": 105,
+    "Name": "dfsdafsdf",
+    "_Status": "Idle",
+    "Printer ID": 0
+  }
+]

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"mime/multipart"
 	"net/http"
 	"net/http/httputil"
@@ -64,7 +63,7 @@ func (printer *Printer) renderNametag(id int) (err error) {
 
 	_, nametag := findNametag(id)
 
-	//Manager.Printf("Rendering Nametag %d for Printer %d", nametag.ID, printer.ID)
+	Manager.Printf("Rendering Nametag %d for Printer %d", nametag.ID, printer.ID)
 
 	//nametag.Status = NRendering
 	//printer.Status = PRendering
@@ -89,9 +88,10 @@ func (printer *Printer) renderNametag(id int) (err error) {
 	out, err := exec.Command(OpenScadPath, args...).CombinedOutput()
 	//_, err = exec.Command(head, parts...).CombinedOutput()
 	if err != nil {
-		Error.Printf("%s", err)
+		return err
+		//Error.Printf("%s", err)
 	}
-	Manager.Printf("Standard Out and Error:\n%s", out)
+	Debug.Printf("Standard Out and Error:\n%s", out)
 
 	return nil
 }
@@ -104,7 +104,7 @@ func (printer *Printer) sliceNametag(id int) error {
 		return errors.New("Could not find nametag!")
 	}
 
-	//Manager.Printf("Slicing Nametag %d for Printer %d", nametag.ID, printer.ID)
+	Manager.Printf("Slicing Nametag %d for Printer %d", nametag.ID, printer.ID)
 
 	//nametag.Status = NSlicing
 	//printer.Status = PSlicing
@@ -122,9 +122,9 @@ func (printer *Printer) sliceNametag(id int) error {
 	out, err := exec.Command(head, parts...).CombinedOutput()
 	//_, err := exec.Command(head, parts...).CombinedOutput()
 	if err != nil {
-		Error.Printf("%s", err)
+		return err
 	}
-	Manager.Printf("Standard Out and Error:\n%s", out)
+	Debug.Printf("Standard Out and Error:\n%s", out)
 
 	return nil
 }
@@ -144,53 +144,72 @@ func (printer *Printer) uploadNametag(id int) error {
 
 	uri := fmt.Sprintf("http://%s/api/files/local", printer.IP)
 
+	// Open Gcode file
 	file, err := os.Open(fmt.Sprintf("%s%d.gcode", Root+GcodeDir, nametag.ID))
 	if err != nil {
-		Warning.Println(err)
+		return err
 	}
+
+	// Get file contents
 	fileContents, err := ioutil.ReadAll(file)
 	if err != nil {
-		Warning.Println(err)
+		return err
 	}
+	// Get file stats
 	fi, err := file.Stat()
 	if err != nil {
-		Warning.Println(err)
+		return err
 	}
 	file.Close()
 
+	// Read file
 	body := new(bytes.Buffer)
+
+	// Read file into writer for sending
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormFile("file", fi.Name())
 	if err != nil {
-		Warning.Println(err)
+		return err
 	}
+
+	// Write file
 	part.Write(fileContents)
+
+	// Create print header
 	_ = writer.WriteField("print", "true")
 	err = writer.Close()
 	if err != nil {
-		Warning.Println(err)
+		return err
 	}
+
+	// Create POST request
 	request, err := http.NewRequest("POST", uri, body)
 	if err != nil {
-		Warning.Println(err)
+		return err
 	}
+
+	// Add headers to POST request
 	request.Header.Add("X-Api-Key", printer.APIKey)
 	request.Header.Set("Content-Type", writer.FormDataContentType())
 	_, err = httputil.DumpRequest(request, true)
-	if err == nil {
-		//Warning.Println(data)
-	} else {
-		Error.Println(err)
+	if err != nil {
+		return err
 	}
+
+	// Do request
 	client := &http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		Warning.Println(err)
+		//Warning.Println(err)
+		printer.Active = false
+		return err
 	}
+
+	// Read response
 	body = &bytes.Buffer{}
 	_, err = body.ReadFrom(resp.Body)
 	if err != nil {
-		log.Println(err)
+		return err
 	}
 	//Manager.Println(body)
 	resp.Body.Close()

@@ -477,7 +477,7 @@ func setupLoggers(
 
 func main() {
 
-	setupLoggers(ioutil.Discard, os.Stdout, os.Stdout, os.Stdout, os.Stdout, os.Stderr, os.Stderr)
+	setupLoggers(os.Stdout, os.Stdout, os.Stdout, os.Stdout, os.Stdout, os.Stderr, os.Stderr)
 
 	Main.Println("Starting Nametag App...")
 

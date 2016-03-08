@@ -9,51 +9,90 @@ func startManaging() {
 		for _, printer := range printers {
 			//Manager.Printf("Selecting Printer: %s", printer.Name)
 
-			if printer.Status == PIdle && printer.Active {
+			if printer != nil && printer.Active && (printer.Status == PIdle || printer.Status == PErrored) {
 				//Manager.Printf("Printer Available")
 
 				for _, nametag := range nametags {
 					//Manager.Printf("Selecting Nametag: %s", nametag.Name)
-					if nametag.Status == PIdle {
+					if nametag != nil && nametag.Status == PIdle && printer.Active && (printer.Status == PIdle || printer.Status == PErrored) {
 						Manager.Printf("Processing Nametag: %s", nametag.Name)
 
 						nametag.PrinterID = printer.ID
 						printer.NametagID = nametag.ID
 
+						// Render Nametag
+
 						nametag.Status = NRendering
 						printer.Status = PRendering
-						printer.renderNametag(nametag.ID)
+						err := printer.renderNametag(nametag.ID)
+
+						if err != nil {
+							Warning.Println(err)
+							Debug.Println(printer.Name + " is not active")
+							Warning.Println(printer.Name + " errored rendering " + nametag.Name)
+							printer.Active = false
+							printer.Status = PErrored
+							nametag.Status = NIdle
+							continue
+						}
 
 						if printer.Status == PIdle {
 							printer.NametagID = 0
 							continue
 						}
+
 						if nametag.Status == NIdle {
 							nametag.PrinterID = 0
 							continue
 						}
+
+						// Slice Nametag
 
 						nametag.Status = NSlicing
 						printer.Status = PSlicing
-						printer.sliceNametag(nametag.ID)
+						err = printer.sliceNametag(nametag.ID)
+
+						if err != nil {
+							Warning.Println(err)
+							Debug.Println(printer.Name + " is not active")
+							Warning.Println(printer.Name + " errored slicing " + nametag.Name)
+							printer.Active = false
+							printer.Status = PErrored
+							nametag.Status = NIdle
+							continue
+						}
 
 						if printer.Status == PIdle {
 							printer.NametagID = 0
 							continue
 						}
+
 						if nametag.Status == NIdle {
 							nametag.PrinterID = 0
 							continue
 						}
 
+						// Upload Nametag
+
 						nametag.Status = NUploading
 						printer.Status = PUploading
-						printer.uploadNametag(nametag.ID)
+						err = printer.uploadNametag(nametag.ID)
+
+						if err != nil {
+							Warning.Println(err)
+							Debug.Println(printer.Name + " is not active")
+							Warning.Println(printer.Name + " errored uploading " + nametag.Name)
+							printer.Active = false
+							printer.Status = PErrored
+							nametag.Status = NIdle
+							continue
+						}
 
 						if printer.Status == PIdle {
 							printer.NametagID = 0
 							continue
 						}
+
 						if nametag.Status == NIdle {
 							nametag.PrinterID = 0
 							continue

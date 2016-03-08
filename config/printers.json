@@ -2,21 +2,11 @@
   {
     "ID": 10,
     "Name": "Tim",
-    "_Status": "Idle",
+    "_Status": "Errored!",
     "Active": true,
-    "Nametag ID": 100,
+    "Nametag ID": 102,
     "IP": "192.168.5.36",
     "API Key": "100ED418B2A04F0F81E7252F08BBAFD2",
-    "Slicer Config": ""
-  },
-  {
-    "ID": 11,
-    "Name": "Robostorm",
-    "_Status": "Idle",
-    "Active": false,
-    "Nametag ID": 0,
-    "IP": "",
-    "API Key": "",
-    "Slicer Config": ""
+    "Slicer Config": "sdsds"
   }
 ]

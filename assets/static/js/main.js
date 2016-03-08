@@ -91,7 +91,7 @@ function preview(){
 function nameValid(name){
 
   if(name.length > 10){
-    currentStatus.innerHTML = "Name is too long! Please enter a name that is less than or equal to 10 characters"
+    currentStatus.innerHTML = "Name is too long! Please enter a name that is less than or equal to 10 characters."
     return false
   }
 
@@ -100,7 +100,12 @@ function nameValid(name){
     return false
   }
 
-  return name.length <= 10 && name != ""
+  if(name.indexOf("\\") > -1){
+    currentStatus.innerHTML = "Name has backslashes! Please remove all backslashes (\\)."
+    return false
+  }
+
+  return true
 }
 
 function fileExists(image_url){
