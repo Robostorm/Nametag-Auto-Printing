@@ -4,8 +4,6 @@
 name = "name";
 chars = 4;
 
-echo("Rendering" + name);
-
 // The thicknes of the text (Amount text sticks up by)
 textthick = 1;
 // The height of the text, if looking down from the top
