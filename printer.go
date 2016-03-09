@@ -87,11 +87,13 @@ func (printer *Printer) renderNametag(id int) (err error) {
 
 	out, err := exec.Command(OpenScadPath, args...).CombinedOutput()
 	//_, err = exec.Command(head, parts...).CombinedOutput()
+
+	Debug.Printf("Standard Out and Error:\n%s", out)
+
 	if err != nil {
 		return err
 		//Error.Printf("%s", err)
 	}
-	Debug.Printf("Standard Out and Error:\n%s", out)
 
 	return nil
 }
@@ -121,10 +123,12 @@ func (printer *Printer) sliceNametag(id int) error {
 
 	out, err := exec.Command(head, parts...).CombinedOutput()
 	//_, err := exec.Command(head, parts...).CombinedOutput()
+
+	Debug.Printf("Standard Out and Error:\n%s", out)
+
 	if err != nil {
 		return err
 	}
-	Debug.Printf("Standard Out and Error:\n%s", out)
 
 	return nil
 }
