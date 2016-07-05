@@ -3,6 +3,7 @@ var nametagDiv = document.getElementById("nametags")
 var printerDiv = document.getElementById("printers")
 var nametagTable = document.getElementById("nametagTable")
 var printerTable = document.getElementById("printerTable")
+var managerState = document.getElementById("managerState")
 
 var nametags
 var tmpNametag = {}
@@ -10,6 +11,8 @@ var oldNametagJson = "null"
 var printers
 var oldPrinterJson = "null"
 var tmpPrinter = {}
+var manager
+var oldManagerJson = "null"
 
 updateNametags();
 updatePrinters();
@@ -21,9 +24,46 @@ showBoth()
 function update(){
   //console.log("Updating")
   updateNametags();
-
   updatePrinters();
+  updateManager();
 
+}
+
+/******************************************************************************
+███    ███  █████  ███    ██  █████   ██████  ███████ ██████
+████  ████ ██   ██ ████   ██ ██   ██ ██       ██      ██   ██
+██ ████ ██ ███████ ██ ██  ██ ███████ ██   ███ █████   ██████
+██  ██  ██ ██   ██ ██  ██ ██ ██   ██ ██    ██ ██      ██   ██
+██      ██ ██   ██ ██   ████ ██   ██  ██████  ███████ ██   ██
+******************************************************************************/
+
+function updateManager(){
+  mhttp = new XMLHttpRequest()
+  mhttp.onreadystatechange = function (e){
+    if(mhttp.readyState === 4){
+      processManager(mhttp.responseText)
+    }
+  }
+  mhttp.open("GET", "manager/state", true)
+  mhttp.send();
+}
+
+function processManager(json){
+  if(json !== "[]" && json !== "null"){
+    if(json != oldManagerJson){
+      manager = JSON.parse(json)
+
+      if(manager.managing){
+        managerState.innerHTML = "Manager Running";
+        managerState.style.background = "limegreen";
+      }else{
+        managerState.innerHTML = "Manager Stopped";
+        managerState.style.background = "red";
+      }
+
+      oldManagerJson = json
+    }
+  }
 }
 
 function updateNametags(){

@@ -451,24 +451,32 @@ func handleManagingState(w http.ResponseWriter, r *http.Request) {
 
 		jerr := json.Unmarshal(body, &dat)
 
-		if jerr != nil {
-			Error.Println("Error parsing JSON:", jerr)
-			w.WriteHeader(http.StatusBadRequest)
-			return
+		if jerr == nil {
+
+			if managing, ok := dat["managing"]; ok {
+				if managing == true && !Managing {
+					Server.Println("Starting Manager")
+					Managing = true
+				} else if managing == false && Managing {
+					Server.Println("Stopping Manager")
+					Managing = false
+				}
+			}
+		}
+		manager := struct {
+			Managing bool `json:"managing"`
+		}{
+			Managing,
 		}
 
-		if managing, ok := dat["managing"]; ok {
-			if managing == true && !Managing {
-				Server.Println("Starting Manager")
-				Managing = true
-			} else if managing == false && Managing {
-				Server.Println("Stopping Manager")
-				Managing = false
-			}
-			w.WriteHeader(http.StatusOK)
-			return
+		json, jerr := json.Marshal(manager)
+
+		if jerr != nil {
+			Error.Println(jerr)
 		}
-		w.WriteHeader(http.StatusNotAcceptable)
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Write(json)
 	}
 }
 

@@ -1,17 +1,5 @@
 [
   {
-    "ID": 105,
-    "Name": "dfsdafsdf",
-    "_Status": "Printing",
-    "Printer ID": 10
-  },
-  {
-    "ID": 100,
-    "Name": "ss",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
     "ID": 101,
     "Name": "dd",
     "_Status": "Idle",
