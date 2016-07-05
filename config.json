@@ -1,0 +1,11 @@
+{
+  "Nametag File": "config/nametags.json",
+  "Printer File": "config/printers.json",
+  "Images Directory": "assets/images/nametags/",
+  "OpenSCAD Script": "openscad/",
+  "Stl Direcotory": "stl/",
+  "Gcode Directory": "gcode/",
+  "Slicer Config Directory": "config/",
+  "OpenSCAD Path": "openscad",
+  "Slic3r Path": "slic3r"
+}
