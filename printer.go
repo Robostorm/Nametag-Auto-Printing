@@ -26,11 +26,10 @@ const (
 
 // Printer for printing nametags
 type Printer struct {
-	ID     int    `json:"ID"`      // Unique ID of the printer
-	Name   string `json:"Name"`    // Readable name for the printer
-	Status string `json:"_Status"` // Status of the printer
-	Active bool   `json:"Active"`  // Active or not
-	//Available  bool   `json:"Available"`     // Available or not
+	ID         int    `json:"ID"`            // Unique ID of the printer
+	Name       string `json:"Name"`          // Readable name for the printer
+	Status     string `json:"_Status"`       // Status of the printer
+	Active     bool   `json:"Active"`        // Active or not
 	NametagID  int    `json:"Nametag ID"`    // Nametag ID that is currently printing
 	IP         string `json:"IP"`            // IP for the printer
 	APIKey     string `json:"API Key"`       // API Key to use for the printer
@@ -68,9 +67,9 @@ func (printer *Printer) renderNametag(id int) (err error) {
 	//nametag.Status = NRendering
 	//printer.Status = PRendering
 
-	//scadArgs := fmt.Sprintf(" -o %s%s%d.stl -D name=\"%s\" -D chars=%d %s%sname.scad", Root, StlDir, nametag.ID, nametag.Name, len(nametag.Name), Root, OpenScadDir)
+	//scadArgs := fmt.Sprintf(" -o %s%s%d.stl -D name=\"%s\" -D chars=%d %s%sname.scad", Root, MainConfig.stlDir, nametag.ID, nametag.Name, len(nametag.Name), Root, MainConfig.MainConfig.OpenScadScript)
 
-	//cmd := OpenScadPath + scadArgs
+	//cmd := MainConfig.openscadPath + scadArgs
 
 	//Manager.Println("Running:")
 	//Manager.Println(cmd)
@@ -79,13 +78,13 @@ func (printer *Printer) renderNametag(id int) (err error) {
 	// parts = parts[1:len(parts)]
 
 	args := []string{
-		fmt.Sprintf("-o%s%d.stl", Root+StlDir, nametag.ID),
+		fmt.Sprintf("-o%s%d.stl", Root+MainConfig.StlDir, nametag.ID),
 		fmt.Sprintf("-D name=\"%s\"", nametag.Name),
 		fmt.Sprintf("-D chars=%d "+"", len(nametag.Name)),
-		fmt.Sprintf("%sname.scad", Root+OpenScadDir),
+		fmt.Sprintf("%sname.scad", Root+MainConfig.OpenScadScript),
 	}
 
-	out, err := exec.Command(OpenScadPath, args...).CombinedOutput()
+	out, err := exec.Command(MainConfig.OpenScadPath, args...).CombinedOutput()
 	//_, err = exec.Command(head, parts...).CombinedOutput()
 
 	Debug.Printf("Standard Out and Error:\n%s", out)
@@ -111,9 +110,9 @@ func (printer *Printer) sliceNametag(id int) error {
 	//nametag.Status = NSlicing
 	//printer.Status = PSlicing
 
-	slicerArgs := fmt.Sprintf(" -o %s%s%d.gcode --load %s%s%s %s%s%d.stl", Root, GcodeDir, nametag.ID, Root, ConfigDir, printer.SlicerConf, Root, StlDir, nametag.ID)
+	slicerArgs := fmt.Sprintf(" -o %s%s%d.gcode --load %s%s%s %s%s%d.stl", Root, MainConfig.GcodeDir, nametag.ID, Root, MainConfig.SlicerConfigDir, printer.SlicerConf, Root, MainConfig.StlDir, nametag.ID)
 
-	cmd := SlicerPath + slicerArgs
+	cmd := MainConfig.SlicerPath + slicerArgs
 
 	//Manager.Println("Running:")
 	//Manager.Println(cmd)
@@ -149,7 +148,7 @@ func (printer *Printer) uploadNametag(id int) error {
 	uri := fmt.Sprintf("http://%s/api/files/local", printer.IP)
 
 	// Open Gcode file
-	file, err := os.Open(fmt.Sprintf("%s%d.gcode", Root+GcodeDir, nametag.ID))
+	file, err := os.Open(fmt.Sprintf("%s%d.gcode", Root+MainConfig.GcodeDir, nametag.ID))
 	if err != nil {
 		return err
 	}

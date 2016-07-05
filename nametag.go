@@ -85,9 +85,9 @@ func previewNametag(name string) (string, error) {
 		zoom = 105
 	}
 
-	// scadArgs := fmt.Sprintf(" -o %s%s.png -D name=\"%s\" -D chars=%d "+"--camera=0,0,0,0,0,0,%d --imgsize=512,400 %sname.scad", Root+ImagesDir, name, name, len(name), zoom, Root+OpenScadDir)
+	// scadArgs := fmt.Sprintf(" -o %s%s.png -D name=\"%s\" -D chars=%d "+"--camera=0,0,0,0,0,0,%d --imgsize=512,400 %sname.scad", Root+MainConfig.imagesDir, name, name, len(name), zoom, Root+MainConfig.MainConfig.OpenScadScript)
 	//
-	// cmd := OpenScadPath + scadArgs
+	// cmd := MainConfig.openscadPath + scadArgs
 	//
 	// Manager.Println("Running:")
 	// Manager.Println(cmd)
@@ -103,15 +103,15 @@ func previewNametag(name string) (string, error) {
 	Manager.Printf("sname: %s", sname)
 
 	args := []string{
-		fmt.Sprintf("-o%s%s.png", Root+ImagesDir, name),
+		fmt.Sprintf("-o%s%s.png", Root+MainConfig.ImagesDir, name),
 		fmt.Sprintf("-D name=\"%s\"", sname),
 		fmt.Sprintf("-D chars=%d "+"", len(name)),
 		fmt.Sprintf("--camera=0,0,0,0,0,0,%d", zoom),
 		fmt.Sprintf("--imgsize=512,400"),
-		fmt.Sprintf("%sname.scad", Root+OpenScadDir),
+		fmt.Sprintf("%sname.scad", Root+MainConfig.OpenScadScript),
 	}
 
-	cmd := exec.Command(OpenScadPath, args...)
+	cmd := exec.Command(MainConfig.OpenScadPath, args...)
 
 	Manager.Printf("Executing: %s", cmd.Args)
 
@@ -123,5 +123,5 @@ func previewNametag(name string) (string, error) {
 	Manager.Println("Standard Out:")
 	Manager.Printf("%s", out)
 
-	return fmt.Sprintf("%s/%s", Root+ImagesDir, name), nil
+	return fmt.Sprintf("%s/%s", Root+MainConfig.ImagesDir, name), nil
 }

@@ -493,6 +493,7 @@ func main() {
 
 	Main.Printf("Using %s as Root\n", Root)
 
+	loadMain()
 	loadNametags()
 	loadPrinters()
 
