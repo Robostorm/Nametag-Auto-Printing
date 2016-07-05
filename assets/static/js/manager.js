@@ -39,7 +39,7 @@ function updateNametags(){
 }
 
 function processNametags(json){
-  console.log(json)
+  //console.log(json)
   if(json !== "[]" && json !== "null"){
   	if(json != oldNametagJson){
 	    nametags = JSON.parse(json)
@@ -89,7 +89,7 @@ function processNametags(json){
             }
           }
 
-          console.log(tmpNametag)
+          //console.log(tmpNametag)
 
           //if(tmpNametag){
           //  document.getElementById(key + "Input").value = tmpNametag[key];
@@ -500,6 +500,37 @@ function donePrinter(id){
   http.send(body)
 }
 
+function startManaging(){
+  var manager = {
+    "managing": true
+  }
+  //console.log(nametag.name)
+  var body = JSON.stringify(manager)
+  //console.log(body)
+  http = new XMLHttpRequest()
+  http.onreadystatechange = function (e){
+    updatePrinters();
+  }
+  http.open("POST", "manager/state", true)
+  http.setRequestHeader("Content-type","application/json")
+  http.send(body)
+}
+
+function stopManaging(){
+  var manager = {
+    "managing": false
+  }
+  //console.log(nametag.name)
+  var body = JSON.stringify(manager)
+  //console.log(body)
+  http = new XMLHttpRequest()
+  http.onreadystatechange = function (e){
+    updatePrinters();
+  }
+  http.open("POST", "manager/state", true)
+  http.setRequestHeader("Content-type","application/json")
+  http.send(body)
+}
 
 function showNametags(){
     nametagDiv.style.display = "block"

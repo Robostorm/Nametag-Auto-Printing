@@ -25,20 +25,6 @@ var MainConfig struct {
 	SlicerPath      string `json:"Slic3r Path"`             // path to use to run Slic3r
 }
 
-// To be removed
-/*
-const (
-	NametagFile     = "config/nametags.json"
-	PrinterFile     = "config/printers.json"
-	ImagesDir       = "assets/images/nametags/"
-	OpenScadScript     = "openscad/"
-	StlDir          = "stl/"
-	GcodeDir        = "gcode/"
-	SlicerConfigDir = "config/"
-	OpenScadPath    = "openscad"
-	SlicerPath      = "slic3r"
-)
-*/
 func initMainDefaults() {
 	MainConfig.NametagFile = "config/nametags.json"
 	MainConfig.PrinterFile = "config/printers.json"

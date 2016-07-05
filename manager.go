@@ -5,13 +5,20 @@ import (
 	"time"
 )
 
+// Managing controls whether the manager is running
+var Managing bool
+
 func startManaging() {
-	Manager.Println("Starting manager")
 
 	ticker := time.NewTicker(time.Millisecond * 250)
 
-	for range ticker.C {
-		manage()
+	for {
+		select {
+		case <-ticker.C:
+			if Managing {
+				manage()
+			}
+		}
 	}
 }
 

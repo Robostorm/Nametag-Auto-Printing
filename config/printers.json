@@ -2,11 +2,11 @@
   {
     "ID": 10,
     "Name": "Tim",
-    "_Status": "Errored!",
+    "_Status": "Idle",
     "Active": true,
-    "Nametag ID": 102,
+    "Nametag ID": 0,
     "IP": "192.168.5.36",
     "API Key": "100ED418B2A04F0F81E7252F08BBAFD2",
-    "Slicer Config": "sdsds"
+    "Slicer Config": "Tim.ini"
   }
 ]

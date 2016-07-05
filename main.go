@@ -437,6 +437,47 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleManagingState(w http.ResponseWriter, r *http.Request) {
+	connections++
+	Server.Println("Manager State Change Request")
+	body, rerr := ioutil.ReadAll(r.Body)
+	if rerr != nil {
+		Error.Println("Error reciving submission:")
+		Error.Println(rerr)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+
+		var dat map[string]interface{}
+
+		jerr := json.Unmarshal(body, &dat)
+
+		if jerr != nil {
+			Error.Println("Error parsing JSON:", jerr)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		if managing, ok := dat["managing"]; ok {
+			if managing == true && !Managing {
+				Server.Println("Starting Manager")
+				Managing = true
+			} else if managing == false && Managing {
+				Server.Println("Stopping Manager")
+				Managing = false
+			}
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		w.WriteHeader(http.StatusNotAcceptable)
+	}
+}
+
+func handleStopManaging(w http.ResponseWriter, r *http.Request) {
+	connections++
+	Server.Println("Stopping Manager")
+	Managing = false
+}
+
 func setupLoggers(
 	debugHandle io.Writer,
 	mainHandle io.Writer,
@@ -501,6 +542,8 @@ func main() {
 
 	go startManaging()
 
+	Managing = true
+
 	Main.Println("Started Manager")
 
 	http.HandleFunc("/", handleRoot)
@@ -512,6 +555,7 @@ func main() {
 	http.HandleFunc("/printers/update", handleUpdatePrinter)
 	http.HandleFunc("/printers/delete", handleDeletePrinter)
 	http.HandleFunc("/printers/done", handleDonePrinter)
+	http.HandleFunc("/manager/state", handleManagingState)
 	http.HandleFunc("/preview", handlePreview)
 	http.HandleFunc("/submit", handleSubmit)
 
