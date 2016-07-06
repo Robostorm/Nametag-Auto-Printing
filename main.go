@@ -439,7 +439,7 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 
 func handleManagingState(w http.ResponseWriter, r *http.Request) {
 	connections++
-	Server.Println("Manager State Change Request")
+	//Server.Println("Manager State Change Request")
 	body, rerr := ioutil.ReadAll(r.Body)
 	if rerr != nil {
 		Error.Println("Error reciving submission:")

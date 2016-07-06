@@ -1,0 +1,84 @@
+Nametags
+===
+ID
+Name
+Status (Display only)
+Printer (Display only)
+
+Actions
+===
+Delete
+Change Name
+
+Printers
+===
+ID
+Name
+Status (Display only)
+Active
+
+IP
+API Key
+Slic3r Config
+
+Actions
+===
+Delete
+Change Name/IP/APIKey/SlicerConfig
+Done
+
+Choose Nametag
+Render Nametag
+Slice Nametag
+Upload/Print Nametag
+
+for printer in printers {
+  select {
+  case action := <- printer.Action:
+    switch(action){
+      ...
+    }
+  case <- stopManaging:
+    return
+  }
+}
+
+for printer in printers {
+  select {
+  case <- printer.Delete:
+    ...
+  case name := <- printer.ChangeName:
+    printer.name = name
+  case <- done:
+    printer.chooseNametag <- 0
+  case nametag <- renderNametag:
+    printer.renderNametag(nametag)
+    printer.sliceNametag <- nametag
+  case ...
+
+  case <- stopManaging
+  }
+}
+
+for printer in printers {
+  select {
+  case <- stopManaging:
+    Managing = false
+    return
+  case <- printer.Delete:
+    ...
+  default:
+  }
+
+  select {
+  case name := <- printer.ChangeName:
+    printer.name = name
+  case <- done:
+    printer.chooseNametag <- 0
+  case nametag <- renderNametag:
+    printer.renderNametag(nametag)
+    printer.sliceNametag <- nametag
+  case ...
+
+  }
+}

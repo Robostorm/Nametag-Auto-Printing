@@ -35,12 +35,19 @@ func manage() {
 				for _, nametag := range nametags {
 					//Manager.Printf("Selecting Nametag: %s", nametag.Name)
 					if nametag != nil && nametag.Status == PIdle && printer.Active && (printer.Status == PIdle || printer.Status == PErrored) {
+
 						Manager.Printf("Processing Nametag: %s", nametag.Name)
 
 						nametag.PrinterID = printer.ID
 						printer.NametagID = nametag.ID
 
-						// Render Nametag
+						/******************************************************************************
+						██████  ███████ ███    ██ ██████  ███████ ██████
+						██   ██ ██      ████   ██ ██   ██ ██      ██   ██
+						██████  █████   ██ ██  ██ ██   ██ █████   ██████
+						██   ██ ██      ██  ██ ██ ██   ██ ██      ██   ██
+						██   ██ ███████ ██   ████ ██████  ███████ ██   ██
+						******************************************************************************/
 
 						nametag.Status = NRendering
 						printer.Status = PRendering
@@ -66,7 +73,13 @@ func manage() {
 							continue
 						}
 
-						// Slice Nametag
+						/******************************************************************************
+						███████ ██      ██  ██████ ███████
+						██      ██      ██ ██      ██
+						███████ ██      ██ ██      █████
+						     ██ ██      ██ ██      ██
+						███████ ███████ ██  ██████ ███████
+						******************************************************************************/
 
 						nametag.Status = NSlicing
 						printer.Status = PSlicing
@@ -92,7 +105,13 @@ func manage() {
 							continue
 						}
 
-						// Upload Nametag
+						/******************************************************************************
+						██    ██ ██████  ██       ██████   █████  ██████
+						██    ██ ██   ██ ██      ██    ██ ██   ██ ██   ██
+						██    ██ ██████  ██      ██    ██ ███████ ██   ██
+						██    ██ ██      ██      ██    ██ ██   ██ ██   ██
+						 ██████  ██      ███████  ██████  ██   ██ ██████
+						******************************************************************************/
 
 						nametag.Status = NUploading
 						printer.Status = PUploading
