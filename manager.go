@@ -36,6 +36,10 @@ func manage() {
 					//Manager.Printf("Selecting Nametag: %s", nametag.Name)
 					if nametag != nil && nametag.Status == PIdle && printer.Active && (printer.Status == PIdle || printer.Status == PErrored) {
 
+						if nametag.PrinterID != 0 && nametag.PrinterID != printer.ID {
+							continue
+						}
+
 						Manager.Printf("Processing Nametag: %s", nametag.Name)
 
 						nametag.PrinterID = printer.ID
@@ -49,6 +53,8 @@ func manage() {
 						██   ██ ███████ ██   ████ ██████  ███████ ██   ██
 						******************************************************************************/
 
+						oldNametag := *nametag
+
 						nametag.Status = NRendering
 						printer.Status = PRendering
 						err := printer.renderNametag(nametag.ID)
@@ -61,6 +67,11 @@ func manage() {
 							printer.Status = PErrored
 							nametag.Status = NIdle
 							continue
+						}
+
+						if oldNametag.Name != nametag.Name || oldNametag.PrinterID != nametag.PrinterID {
+							nametag.Status = NIdle
+							printer.Status = PIdle
 						}
 
 						if printer.Status == PIdle {
@@ -81,6 +92,8 @@ func manage() {
 						███████ ███████ ██  ██████ ███████
 						******************************************************************************/
 
+						oldNametag = *nametag
+
 						nametag.Status = NSlicing
 						printer.Status = PSlicing
 						err = printer.sliceNametag(nametag.ID)
@@ -93,6 +106,11 @@ func manage() {
 							printer.Status = PErrored
 							nametag.Status = NIdle
 							continue
+						}
+
+						if oldNametag.Name != nametag.Name || oldNametag.PrinterID != nametag.PrinterID {
+							nametag.Status = NIdle
+							printer.Status = PIdle
 						}
 
 						if printer.Status == PIdle {
@@ -113,6 +131,8 @@ func manage() {
 						 ██████  ██      ███████  ██████  ██   ██ ██████
 						******************************************************************************/
 
+						oldNametag = *nametag
+
 						nametag.Status = NUploading
 						printer.Status = PUploading
 						err = printer.uploadNametag(nametag.ID)
@@ -125,6 +145,11 @@ func manage() {
 							printer.Status = PErrored
 							nametag.Status = NIdle
 							continue
+						}
+
+						if oldNametag.Name != nametag.Name || oldNametag.PrinterID != nametag.PrinterID {
+							nametag.Status = NIdle
+							printer.Status = PIdle
 						}
 
 						if printer.Status == PIdle {

@@ -260,6 +260,7 @@ func handleUpdateNametag(w http.ResponseWriter, r *http.Request) {
 		if nametag.ID == 0 {
 			Server.Println("Generating ID")
 			nametag.generateID()
+			nametag.Status = NIdle
 			nametags = append(nametags, &nametag)
 		} else {
 			Server.Println("Searching for id")
@@ -427,6 +428,7 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 			var nametag Nametag
 			nametag.generateID()
 			nametag.Name = name.(string)
+			nametag.Status = NIdle
 			nametags = append(nametags, &nametag)
 			saveNametags()
 			Server.Println(strconv.Itoa(len(nametags)) + " Nametag(s) in queue")
@@ -478,12 +480,6 @@ func handleManagingState(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.Write(json)
 	}
-}
-
-func handleStopManaging(w http.ResponseWriter, r *http.Request) {
-	connections++
-	Server.Println("Stopping Manager")
-	Managing = false
 }
 
 func setupLoggers(

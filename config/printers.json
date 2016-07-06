@@ -2,11 +2,21 @@
   {
     "ID": 10,
     "Name": "Tim",
+    "_Status": "Printing",
+    "Active": true,
+    "Nametag ID": 2,
+    "IP": "192.168.5.36",
+    "API Key": "100ED418B2A04F0F81E7252F08BBAFD2",
+    "Slicer Config": "Tim.ini"
+  },
+  {
+    "ID": 11,
+    "Name": "Robostorm",
     "_Status": "Idle",
     "Active": true,
     "Nametag ID": 0,
-    "IP": "192.168.5.36",
-    "API Key": "100ED418B2A04F0F81E7252F08BBAFD2",
+    "IP": "",
+    "API Key": "",
     "Slicer Config": "Tim.ini"
   }
 ]
