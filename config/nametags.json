@@ -1,44 +1,8 @@
 [
   {
-    "ID": 101,
-    "Name": "dd",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
-    "ID": 102,
-    "Name": "dsd",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
-    "ID": 103,
-    "Name": "asas",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
-    "ID": 104,
-    "Name": "sdafasdf",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
-    "ID": 106,
-    "Name": "dfdfd",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
-    "ID": 107,
-    "Name": "dfdf",
-    "_Status": "Idle",
-    "Printer ID": 0
-  },
-  {
-    "ID": 108,
-    "Name": "asdasdf",
-    "_Status": "Idle",
+    "ID": 1,
+    "Name": "sdsd",
+    "_Status": "",
     "Printer ID": 0
   }
 ]

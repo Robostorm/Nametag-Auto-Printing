@@ -17,7 +17,10 @@ const (
 	NErrored   = "Errored!"
 )
 
-// Nametag to be printed. Will appear in manager in the order defined here
+// CurrentID is the current max ID of the nametags
+var CurrentID = 0
+
+// Nametag to be printed. Will appear in manager in the order defined here. JSON names that start with a _ will not be editable
 type Nametag struct {
 	ID     int    `json:"ID"`      // Unique ID of the nametag
 	Name   string `json:"Name"`    // Name on the nametag
@@ -27,24 +30,8 @@ type Nametag struct {
 }
 
 func (nametag *Nametag) generateID() int {
-
-	for id := 100; ; id++ {
-		Manager.Printf("Trying ID: %d", id)
-		unique := true
-		for i := range nametags {
-			if id == nametags[i].ID {
-				unique = false
-				break
-			}
-		}
-		if unique {
-			nametag.ID = id
-			break
-		}
-	}
-
-	nametag.Status = NIdle
-	Manager.Println(nametag.ID)
+	CurrentID++
+	nametag.ID = CurrentID
 	return nametag.ID
 }
 

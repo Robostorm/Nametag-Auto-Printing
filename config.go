@@ -74,11 +74,19 @@ func loadNametags() {
 	}
 	json.Unmarshal(in, &nametags)
 
+	maxID := 0
+
 	for i := range nametags {
+		if nametags[i].ID > maxID {
+			maxID = nametags[i].ID
+		}
+
 		nametags[i].Status = NIdle
 		//nametags[i].Processing = false
 		nametags[i].PrinterID = 0
 	}
+
+	CurrentID = maxID
 
 	//Main.Println(nametags)
 }
