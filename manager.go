@@ -8,6 +8,9 @@ import (
 // Managing controls whether the manager is running
 var Managing bool
 
+// CurrentCommand is the command that is currently running
+var CurrentCommand string
+
 func startManaging() {
 
 	ticker := time.NewTicker(time.Millisecond * 250)

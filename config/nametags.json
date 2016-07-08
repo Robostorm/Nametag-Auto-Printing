@@ -1,26 +1,8 @@
 [
   {
-    "id": 4,
-    "name": "Tim",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 5,
-    "name": "Logan",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 6,
-    "name": "Ben",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 7,
-    "name": "Annalise",
-    "status": "Idle",
-    "printer-id": 0
+    "id": 1,
+    "name": "dfdsfs",
+    "status": "Printing",
+    "printer-id": 10
   }
 ]

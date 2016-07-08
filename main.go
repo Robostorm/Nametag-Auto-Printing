@@ -230,6 +230,48 @@ func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleAbortPrinter(w http.ResponseWriter, r *http.Request) {
+	connections++
+	//Server.Println(connections)
+	Server.Println("Abort Printer Requested")
+	body, rerr := ioutil.ReadAll(r.Body)
+	if rerr != nil {
+		Error.Println("Error reciving done:")
+		Error.Println(rerr)
+		w.WriteHeader(http.StatusInternalServerError)
+	} else {
+
+		var dat map[string]interface{}
+
+		jerr := json.Unmarshal(body, &dat)
+
+		if jerr != nil {
+			Error.Println("Error parsing JSON:", jerr)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		if id, ok := dat["id"]; ok && id != "" {
+			p, printer := findPrinter(int(id.(float64)))
+			if printer != nil {
+				_, nametag := findNametag(printer.NametagID)
+				if nametag != nil {
+					nametag.Status = NIdle
+					nametag.PrinterID = 0
+					saveNametags()
+				}
+				printer.Status = PIdle
+				printer.NametagID = 0
+				savePrinters()
+			} else {
+				Warning.Printf("Tried to abort nonexistent printer at index %d\n", p)
+			}
+			return
+		}
+		w.WriteHeader(http.StatusNotAcceptable)
+	}
+}
+
 func handlePrinterColumns(w http.ResponseWriter, r *http.Request) {
 	connections++
 	//Server.Println(connections)
@@ -501,9 +543,11 @@ func handleManagingState(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		manager := struct {
-			Managing bool `json:"managing"`
+			Managing       bool   `json:"managing"`
+			CurrentCommand string `json:"currentCommand"`
 		}{
 			Managing,
+			CurrentCommand,
 		}
 
 		json, jerr := json.Marshal(manager)
@@ -594,6 +638,7 @@ func main() {
 	http.HandleFunc("/printers", handlePrinters)
 	http.HandleFunc("/printers/update", handleUpdatePrinter)
 	http.HandleFunc("/printers/delete", handleDeletePrinter)
+	http.HandleFunc("/printers/abort", handleAbortPrinter)
 	http.HandleFunc("/printers/done", handleDonePrinter)
 	http.HandleFunc("/printers/columns", handlePrinterColumns)
 	http.HandleFunc("/manager/state", handleManagingState)

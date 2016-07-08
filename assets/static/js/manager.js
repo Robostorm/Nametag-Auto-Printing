@@ -88,8 +88,7 @@ nametagColumns.fetch().done(function(){
         })
       },
       render: function () {
-        this.$el.html('<button id=\'nametagDelete'+this.model.get("id")+'\'>Done</button>');
-        this.$el.width("5em")
+        this.$el.html('<button id=\'nametagDelete'+this.model.get("id")+'\'>Done</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -106,8 +105,7 @@ nametagColumns.fetch().done(function(){
         nametags.get(e.target.id.match("[0-9]*$")).destroy()
       },
       render: function () {
-        this.$el.html('<button id=\'nametagDelete'+this.model.get("id")+'\'>Delete</button>');
-        this.$el.width("5em")
+        this.$el.html('<button id=\'nametagDelete'+this.model.get("id")+'\'>Delete</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -130,7 +128,7 @@ nametagColumns.fetch().done(function(){
 })
 
 /*
- █████  ██████  ██████
+█████  ██████  ██████
 ██   ██ ██   ██ ██   ██
 ███████ ██   ██ ██   ██
 ██   ██ ██   ██ ██   ██
@@ -189,6 +187,30 @@ var printerColumns = new PrinterColumns()
 printerColumns.fetch().done(function(){
 
   printerColumns.create({
+    name: 'abort',
+    label: '',
+    cell: Backgrid.Cell.extend({
+      id: 0,
+      events: {
+        'click button': 'abort'
+      },
+      abort: function(e){
+        $.ajax({
+          data: JSON.stringify({
+            "id": Number(e.target.id.match("[0-9]*$")[0])
+          }),
+          type: "POST",
+          url: "printers/abort"
+        })
+      },
+      render: function () {
+        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Abort</button>').addClass("cell-btn");
+        return this;
+      }
+    })
+  })
+
+  printerColumns.create({
     name: 'done',
     label: '',
     cell: Backgrid.Cell.extend({
@@ -206,8 +228,7 @@ printerColumns.fetch().done(function(){
         })
       },
       render: function () {
-        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Done</button>');
-        this.$el.width("5em")
+        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Done</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -225,8 +246,7 @@ printerColumns.fetch().done(function(){
         printers.get(e.target.id.match("[0-9]*$")).destroy()
       },
       render: function () {
-        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Delete</button>');
-        this.$el.width("5em")
+        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Delete</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -243,7 +263,7 @@ printerColumns.fetch().done(function(){
 })
 
 /*
- █████  ██████  ██████
+█████  ██████  ██████
 ██   ██ ██   ██ ██   ██
 ███████ ██   ██ ██   ██
 ██   ██ ██   ██ ██   ██
@@ -279,6 +299,11 @@ setInterval(function(){
           $("#managerState").text("Manager Running").css("background-color", "limegreen")
         }else{
           $("#managerState").text("Manager Stopped").css("background-color", "red")
+        }
+        if(request.responseJSON.currentCommand === ""){
+          $("#currentCommand").text("Idle")
+        }else{
+          $("#currentCommand").text(request.responseJSON.currentCommand.split(' ')[0])
         }
       }
     }

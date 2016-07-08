@@ -136,6 +136,8 @@ func (printer *Printer) renderNametag(id int) (err error) {
 		fmt.Sprintf("%sname.scad", Root+MainConfig.OpenScadScript),
 	}
 
+	CurrentCommand = MainConfig.OpenScadPath + " " + strings.Join(args, " ")
+
 	out, err := exec.Command(MainConfig.OpenScadPath, args...).CombinedOutput()
 	//_, err = exec.Command(head, parts...).CombinedOutput()
 
@@ -145,6 +147,8 @@ func (printer *Printer) renderNametag(id int) (err error) {
 		return err
 		//Error.Printf("%s", err)
 	}
+
+	CurrentCommand = ""
 
 	return nil
 }
@@ -166,6 +170,8 @@ func (printer *Printer) sliceNametag(id int) error {
 
 	cmd := MainConfig.SlicerPath + slicerArgs
 
+	CurrentCommand = cmd
+
 	//Manager.Println("Running:")
 	//Manager.Println(cmd)
 	parts := strings.Fields(cmd)
@@ -180,6 +186,8 @@ func (printer *Printer) sliceNametag(id int) error {
 	if err != nil {
 		return err
 	}
+
+	CurrentCommand = ""
 
 	return nil
 }
@@ -196,6 +204,8 @@ func (printer *Printer) uploadNametag(id int) error {
 
 	//nametag.Status = NUploading
 	//printer.Status = PUploading
+
+	CurrentCommand = "Uploading " + nametag.Name + " to " + printer.Name
 
 	uri := fmt.Sprintf("http://%s/api/files/local", printer.IP)
 
@@ -268,6 +278,8 @@ func (printer *Printer) uploadNametag(id int) error {
 	}
 	//Manager.Println(body)
 	resp.Body.Close()
+
+	CurrentCommand = ""
 
 	return nil
 }

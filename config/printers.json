@@ -2,11 +2,11 @@
   {
     "id": 10,
     "name": "Tim",
-    "status": "Idle",
-    "active": false,
-    "nametag-id": 0,
+    "status": "Printing",
+    "active": true,
+    "nametag-id": 1,
     "ip": "192.168.5.36",
-    "api-key": "",
+    "api-key": "1F6738A3859D4B668935CD0332050F08",
     "slicer-config": "Tim.ini"
   },
   {

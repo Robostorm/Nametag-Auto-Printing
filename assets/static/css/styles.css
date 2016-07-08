@@ -90,6 +90,10 @@ nav img{
   width: 50%;
 }
 
+.backgrid .cell-btn{
+  width: 1%;
+}
+
 .backgrid .string-cell{
   text-align: center;
 }
