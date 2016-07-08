@@ -79,43 +79,23 @@ nav img{
   line-height: 1.8;
 }
 
-table {
-    border-collapse: collapse;
-    width=100%;
+#printers,#nametags{
+  //display: inline-block;
 }
 
-thead{
-  background-color: yellowgreen;
-  width: 100%;
+.backgrid-container{
+  height: auto;
+}
+#nametagTable{
+  width: 50%;
 }
 
-tfoot tr:nth-child(odd){
-  background-color: white;
+.backgrid .string-cell{
+  text-align: center;
 }
 
-tfoot tr:nth-child(even){
-  background-color: lightgrey;
-}
-
-tfoot tr:last-child{
-  background-color: white;
-}
-
-tr input[type=text]{
-  width: 100%;
-}
-
-tr input[type=number]{
-  width: 100%;
-}
-
-td{
-  border: 0px solid green;
-  padding: 0.2em;
-}
-
-td button{
-  width:100%;
+.backgrid .integer-cell{
+  text-align: center;
 }
 
 #title{

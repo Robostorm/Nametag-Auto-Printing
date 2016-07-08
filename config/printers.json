@@ -2,21 +2,21 @@
   {
     "id": 10,
     "name": "Tim",
-    "status": "Printing",
-    "active": true,
-    "nametag-id": 1,
+    "status": "Idle",
+    "active": false,
+    "nametag-id": 0,
     "ip": "192.168.5.36",
     "api-key": "",
-    "slicer-config": ""
+    "slicer-config": "Tim.ini"
   },
   {
     "id": 11,
     "name": "Robostorm",
-    "status": "Printing",
-    "active": true,
-    "nametag-id": 2,
+    "status": "Idle",
+    "active": false,
+    "nametag-id": 0,
     "ip": "192.168.5.36",
     "api-key": "",
-    "slicer-config": ""
+    "slicer-config": "Robostorm.ini"
   }
 ]

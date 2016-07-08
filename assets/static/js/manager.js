@@ -113,6 +113,12 @@ nametagColumns.fetch().done(function(){
     })
   })
 
+  console.log(nametagColumns);
+
+  for(var i = 0; i < nametagColumns.length; i++){
+    console.log(nametagColumns.models[i].attributes);
+  }
+
   // Initialize a new Grid instance
   var grid = new Backgrid.Grid({
     columns: nametagColumns,
