@@ -4,7 +4,9 @@ Webapp to take names and autonametically generate nametags with [Openscad](http:
 
 The name submission page will allow a name to previewed with Openscad, and submitted to the server. it will ensure that names are under ten characters.
 
-The manager page is located at /manager.html and allows veiwing and editing of the nametags in queue and printers.
+The manager page is located at /manager.html and allows veiwing and editing of the nametags in queue and printers. The manager page uses [backgrid.js](http://backgridjs.com/) to make nice, editable tables to show nametags and printers.
+
+This is intended to be used on a private network, and there are no security measures in place
 
 # Installation
 
@@ -17,6 +19,8 @@ Get the source code by running `go get github.com/Robostorm/Nametag-Auto-Printin
 Build and install the server into go's `bin` directory by running `go install github.com/Robostorm/Nametag-Auto-Printing`. Then run the resulting executable in `$GOHOME/bin`.
 
 # REST API
+
+A RESTful API is used to communicate between the server and the client.
 
 `GET /`
 ----
