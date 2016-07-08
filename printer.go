@@ -24,16 +24,68 @@ const (
 	PErrored   = "Errored!"
 )
 
+// PrinterColumns are the Columns that should be shown in the interface for printers
+var PrinterColumns = [8]Column{
+	{
+		Name:     "id",
+		Label:    "ID",
+		Type:     "integer",
+		Editable: false,
+	},
+	{
+		Name:     "name",
+		Label:    "Name",
+		Type:     "string",
+		Editable: true,
+	},
+	{
+		Name:     "status",
+		Label:    "Status",
+		Type:     "string",
+		Editable: false,
+	},
+	{
+		Name:     "active",
+		Label:    "Active",
+		Type:     "boolean",
+		Editable: true,
+	},
+	{
+		Name:     "nametag-id",
+		Label:    "Nametag ID",
+		Type:     "integer",
+		Editable: false,
+	},
+	{
+		Name:     "ip",
+		Label:    "IP",
+		Type:     "string",
+		Editable: true,
+	},
+	{
+		Name:     "api-key",
+		Label:    "API Key",
+		Type:     "string",
+		Editable: true,
+	},
+	{
+		Name:     "slicer-config",
+		Label:    "Slicer Config",
+		Type:     "string",
+		Editable: true,
+	},
+}
+
 // Printer for printing nametags
 type Printer struct {
-	ID         int    `json:"ID"`            // Unique ID of the printer
-	Name       string `json:"Name"`          // Readable name for the printer
-	Status     string `json:"_Status"`       // Status of the printer
-	Active     bool   `json:"Active"`        // Active or not
-	NametagID  int    `json:"Nametag ID"`    // Nametag ID that is currently printing
-	IP         string `json:"IP"`            // IP for the printer
-	APIKey     string `json:"API Key"`       // API Key to use for the printer
-	SlicerConf string `json:"Slicer Config"` // Slicer config path
+	ID         int    `json:"id"`            // Unique ID of the printer
+	Name       string `json:"name"`          // Readable name for the printer
+	Status     string `json:"status"`        // Status of the printer
+	Active     bool   `json:"active"`        // Active or not
+	NametagID  int    `json:"nametag-id"`    // Nametag ID that is currently printing
+	IP         string `json:"ip"`            // IP for the printer
+	APIKey     string `json:"api-key"`       // API Key to use for the printer
+	SlicerConf string `json:"slicer-config"` // Slicer config path
 }
 
 func (printer *Printer) generateID() int {
@@ -73,7 +125,7 @@ func (printer *Printer) renderNametag(id int) (err error) {
 
 	//Manager.Println("Running:")
 	//Manager.Println(cmd)
-	// parts := strings.Fields(cmd)
+	// parts := strings.Columns(cmd)
 	// head := parts[0]
 	// parts = parts[1:len(parts)]
 

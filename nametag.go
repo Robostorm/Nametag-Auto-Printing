@@ -20,13 +20,40 @@ const (
 // CurrentID is the current max ID of the nametags
 var CurrentID = 0
 
+// NametagColumns are the Columns that should be shown in the interface for printers. Must match json tags for Columns that get exported
+var NametagColumns = [4]Column{
+	{
+		Name:     "id",
+		Label:    "ID",
+		Type:     "integer",
+		Editable: false,
+	},
+	{
+		Name:     "name",
+		Label:    "Name",
+		Type:     "string",
+		Editable: true,
+	},
+	{
+		Name:     "status",
+		Label:    "Status",
+		Type:     "string",
+		Editable: false,
+	},
+	{
+		Name:     "printer-id",
+		Label:    "Printer ID",
+		Type:     "integer",
+		Editable: true,
+	},
+}
+
 // Nametag to be printed. Will appear in manager in the order defined here. JSON names that start with a _ will not be editable
 type Nametag struct {
-	ID     int    `json:"ID"`      // Unique ID of the nametag
-	Name   string `json:"Name"`    // Name on the nametag
-	Status string `json:"_Status"` // Status of the nametag
-	//Processing bool   `json:"Processing"` // Processing or not
-	PrinterID int `json:"Printer ID"` // Printer id that nametag will print on
+	ID        int    `json:"id"`         // Unique ID of the nametag
+	Name      string `json:"name"`       // Name on the nametag
+	Status    string `json:"status"`     // Status of the nametag
+	PrinterID int    `json:"printer-id"` // Printer id that nametag will print on
 }
 
 func (nametag *Nametag) generateID() int {

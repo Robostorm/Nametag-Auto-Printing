@@ -1,0 +1,3 @@
+[submodule "assets/editablegrid"]
+	path = assets/editablegrid
+	url = https://github.com/webismymind/editablegrid.git

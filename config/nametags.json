@@ -1,20 +1,20 @@
 [
   {
-    "ID": 2,
-    "Name": "sdsd",
-    "_Status": "Printing",
-    "Printer ID": 10
+    "id": 1,
+    "name": "sdas",
+    "status": "Printing",
+    "printer-id": 10
   },
   {
-    "ID": 5,
-    "Name": "sdsd",
-    "_Status": "Rendering",
-    "Printer ID": 11
+    "id": 2,
+    "name": "sdsd",
+    "status": "Printing",
+    "printer-id": 11
   },
   {
-    "ID": 6,
-    "Name": "",
-    "_Status": "Idle",
-    "Printer ID": 0
+    "id": 3,
+    "name": "sdsdsdsd",
+    "status": "Idle",
+    "printer-id": 0
   }
 ]

@@ -44,6 +44,14 @@ var (
 
 var connections = 0
 
+// Column should be used to to define a list of columns for the interface for printers and nametags
+type Column struct {
+	Name     string `json:"name"`     // The name of the field in the struct
+	Label    string `json:"label"`    // The name of the header of the column
+	Type     string `json:"cell"`     // The type of the data
+	Editable bool   `json:"editable"` // If the column is editable
+}
+
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	connections++
 	//Server.Println(connections)
@@ -222,6 +230,20 @@ func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handlePrinterColumns(w http.ResponseWriter, r *http.Request) {
+	connections++
+	//Server.Println(connections)
+
+	jsonPrinterColumns, jerr := json.Marshal(PrinterColumns)
+
+	if jerr != nil {
+		Error.Println(jerr)
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(jsonPrinterColumns)
+}
+
 func handleNametags(w http.ResponseWriter, r *http.Request) {
 	connections++
 	//Server.Println(connections)
@@ -365,7 +387,20 @@ func handleDoneNametag(w http.ResponseWriter, r *http.Request) {
 		// }
 		w.WriteHeader(http.StatusNotAcceptable)
 	}
+}
 
+func handleNametagColumns(w http.ResponseWriter, r *http.Request) {
+	connections++
+	//Server.Println(connections)
+
+	jsonNametagColumns, jerr := json.Marshal(NametagColumns)
+
+	if jerr != nil {
+		Error.Println(jerr)
+	}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(jsonNametagColumns)
 }
 
 func handlePreview(w http.ResponseWriter, r *http.Request) {
@@ -555,10 +590,12 @@ func main() {
 	http.HandleFunc("/nametags/update", handleUpdateNametag)
 	http.HandleFunc("/nametags/delete", handleDeleteNametag)
 	http.HandleFunc("/nametags/done", handleDoneNametag)
+	http.HandleFunc("/nametags/columns", handleNametagColumns)
 	http.HandleFunc("/printers", handlePrinters)
 	http.HandleFunc("/printers/update", handleUpdatePrinter)
 	http.HandleFunc("/printers/delete", handleDeletePrinter)
 	http.HandleFunc("/printers/done", handleDonePrinter)
+	http.HandleFunc("/printers/columns", handlePrinterColumns)
 	http.HandleFunc("/manager/state", handleManagingState)
 	http.HandleFunc("/preview", handlePreview)
 	http.HandleFunc("/submit", handleSubmit)
