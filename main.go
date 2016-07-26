@@ -624,9 +624,9 @@ func main() {
 
 	Main.Println("Loaded Configs")
 
-	go startManaging()
+	Managing = false
 
-	Managing = true
+	go startManaging()
 
 	Main.Println("Started Manager")
 
