@@ -37,7 +37,7 @@ func manage() {
 
 				for _, nametag := range nametags {
 					//Manager.Printf("Selecting Nametag: %s", nametag.Name)
-					if nametag != nil && nametag.Status == PIdle && printer.Active && (printer.Status == PIdle || printer.Status == PErrored) {
+					if nametag != nil && nametag.Status == NIdle && printer.Active && (printer.Status == PIdle || printer.Status == PErrored) {
 
 						if nametag.PrinterID != 0 && nametag.PrinterID != printer.ID {
 							continue
@@ -79,12 +79,12 @@ func manage() {
 
 						if printer.Status == PIdle {
 							printer.NametagID = 0
-							continue
+							break
 						}
 
 						if nametag.Status == NIdle {
 							nametag.PrinterID = 0
-							continue
+							break
 						}
 
 						/******************************************************************************
@@ -118,12 +118,12 @@ func manage() {
 
 						if printer.Status == PIdle {
 							printer.NametagID = 0
-							continue
+							break
 						}
 
 						if nametag.Status == NIdle {
 							nametag.PrinterID = 0
-							continue
+							break
 						}
 
 						/******************************************************************************

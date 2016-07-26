@@ -16,6 +16,8 @@ width = 10;
 // Thickness of the flat part
 thickness = 2;
 
+$fn = 50;
+
 translate([-(length+width)/2, -width/2, 0]){
 	difference(){
 		union(){
@@ -23,7 +25,7 @@ translate([-(length+width)/2, -width/2, 0]){
 			cube([length + width/2, width, thickness]);
 
 			translate([length + width/2, width/2, 0]){
-				cylinder(r=width/2, h=thickness, $fn=100);
+				cylinder(r=width/2, h=thickness);
 			}
 
 			//Move above the flat part
@@ -37,7 +39,7 @@ translate([-(length+width)/2, -width/2, 0]){
 		}
 
 		translate([length + width/2, width/2, -1]){
-			cylinder(r=width/2-thickness, h=thickness+2, $fn=100);
+			cylinder(r=width/2-thickness, h=thickness+2);
 		}
 	}
 }

@@ -262,6 +262,7 @@ func handleAbortPrinter(w http.ResponseWriter, r *http.Request) {
 				}
 				printer.Status = PIdle
 				printer.NametagID = 0
+				printer.Active = false
 				savePrinters()
 			} else {
 				Warning.Printf("Tried to abort nonexistent printer at index %d\n", p)
