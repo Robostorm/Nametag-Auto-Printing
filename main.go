@@ -226,6 +226,7 @@ func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 			}
 			return
 		}
+		Warning.Println("Done requested, but no ID found!")
 		w.WriteHeader(http.StatusNotAcceptable)
 	}
 }

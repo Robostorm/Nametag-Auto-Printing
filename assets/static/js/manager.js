@@ -73,6 +73,7 @@ nametagColumns.fetch().done(function(){
   nametagColumns.create({
     name: 'done',
     label: '',
+    editable: false,
     cell: Backgrid.Cell.extend({
       id: 0,
       events: {
@@ -96,6 +97,7 @@ nametagColumns.fetch().done(function(){
   nametagColumns.create({
     name: 'delete',
     label: '',
+    editable: false,
     cell: Backgrid.Cell.extend({
       id: 0,
       events: {
@@ -189,6 +191,7 @@ printerColumns.fetch().done(function(){
   printerColumns.create({
     name: 'abort',
     label: '',
+    editable: false,
     cell: Backgrid.Cell.extend({
       id: 0,
       events: {
@@ -213,6 +216,7 @@ printerColumns.fetch().done(function(){
   printerColumns.create({
     name: 'done',
     label: '',
+    editable: false,
     cell: Backgrid.Cell.extend({
       id: 0,
       events: {
@@ -237,6 +241,7 @@ printerColumns.fetch().done(function(){
   printerColumns.create({
     name: 'delete',
     label: '',
+    editable: false,
     cell: Backgrid.Cell.extend({
       id: 0,
       events: {

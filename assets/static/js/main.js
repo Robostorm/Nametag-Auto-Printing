@@ -100,8 +100,8 @@ function nameValid(name){
     return false
   }
 
-  if(name.indexOf("\\") > -1){
-    currentStatus.innerHTML = "Name has backslashes! Please remove all backslashes (\\)."
+  if(name.indexOf("\\") > -1 || name.indexOf("#") > -1 || name.indexOf("%") > -1){
+    currentStatus.innerHTML = "Name has \\, #, or %. Please remove all \\, #, and %"
     return false
   }
 

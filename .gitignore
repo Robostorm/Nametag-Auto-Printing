@@ -4,3 +4,4 @@ pkg/*
 assets/images/nametags/*
 gcode/*
 stl/*
+log
