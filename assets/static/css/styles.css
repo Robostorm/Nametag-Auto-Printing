@@ -1,8 +1,4 @@
 
-.sumbission {
-  background-color: green;
-}
-
 body{
   margin: 0;
   background-color: white;
@@ -125,6 +121,8 @@ nav img{
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
   text-align: center;
 }
 
