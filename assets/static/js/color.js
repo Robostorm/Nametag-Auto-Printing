@@ -3,7 +3,7 @@ var input = document.getElementById("input")
 var img = document.getElementById("img")
 var currentStatus = document.getElementById("status")
 var colors = document.getElementById("colors")
-var colorRadios = document.getElementsByName('color');
+var colorRadios = document.getElementsByName("color");
 var defaultColor = document.getElementById("defaultColor")
 
 var blankUrl = "assets/images/blank.png"
@@ -12,6 +12,7 @@ var oldImgUrl = imgUrl
 var imgFound = false
 
 var printers = {}
+var oldJsonPrinters = ""
 
 window.setInterval("imgChecker()", 1000);
 
@@ -20,32 +21,34 @@ window.onload = function(){
 }
 
 function getPrinters(){
-  console.log("Getting Colors")
-  //console.log(nametag.name)
 
   http = new XMLHttpRequest()
+
   http.onreadystatechange = function (e){
     if(http.readyState == 4){
-      console.log("Got Colors: ")
-      console.log(http.readyState)
-      console.log(http.responseText)
-      console.log(http.status)
-      printers = JSON.parse(http.responseText)
-      console.log(printers)
 
-      colors.innerHTML = "<input type=radio name=color value=0 checked=true id=defaultColor class=color>Any</input>"
+      if(http.responseText != oldJsonPrinters){
+        printers = JSON.parse(http.responseText)
 
-      for(var i = 0; i < printers.length; i++){
-        colors.innerHTML += "<input type=radio name=color value=" + printers[i].id + " class=color>" + printers[i].color + "</input>"
+        colors.innerHTML = "<input type=radio name=color value=0 checked=true id=defaultColor class=color>Any</input>"
+
+        for(var i = 0; i < printers.length; i++){
+          if(printers[i].active === true){
+            colors.innerHTML += "<input type=radio name=color value=" + printers[i].id + " class=color>" + printers[i].color + "</input>"
+          }
+        }
+        oldJsonPrinters = http.responseText
       }
     }
   }
+
   http.open("GET", "printers", true)
-  //http.setRequestHeader("Content-type","application/json")
   http.send()
 }
 
 function imgChecker(){
+
+  getPrinters()
 
   if(imgUrl != oldImgUrl || !imgFound){
     imgFound = false
@@ -99,7 +102,7 @@ function submit(){
     imgUrl = blankUrl
     input.focus()
     getPrinters()
-    defaultColor.checked = true
+    document.getElementById("defaultColor").checked = true
   }
   http.open("POST", "submit", true)
   http.setRequestHeader("Content-type","application/json")
