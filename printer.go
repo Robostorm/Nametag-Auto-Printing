@@ -51,6 +51,12 @@ var PrinterColumns = []Column{
 		Editable: true,
 	},
 	{
+		Name:     "selectable",
+		Label:    "Selectable",
+		Type:     "boolean",
+		Editable: true,
+	},
+	{
 		Name:     "nametag-id",
 		Label:    "Nametag ID",
 		Type:     "integer",
@@ -88,6 +94,7 @@ type Printer struct {
 	Name       string `json:"name"`          // Readable name for the printer
 	Status     string `json:"status"`        // Status of the printer
 	Active     bool   `json:"active"`        // Active or not
+	Selectable bool   `json:"selectable"`    // Selectable or not
 	NametagID  int    `json:"nametag-id"`    // Nametag ID that is currently printing
 	Color      string `json:"color"`         // The color that the printer prints
 	IP         string `json:"ip"`            // IP for the printer

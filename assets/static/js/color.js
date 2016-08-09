@@ -33,7 +33,7 @@ function getPrinters(){
         colors.innerHTML = "<input type=radio name=color value=0 checked=true id=defaultColor class=color>Any</input>"
 
         for(var i = 0; i < printers.length; i++){
-          if(printers[i].active === true){
+          if(printers[i].selectable === true){
             colors.innerHTML += "<input type=radio name=color value=" + printers[i].id + " class=color>" + printers[i].color + "</input>"
           }
         }
