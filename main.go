@@ -507,6 +507,16 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 			var nametag Nametag
 			nametag.generateID()
 			nametag.Name = name.(string)
+
+			if printerID, ok := dat["printer-id"]; ok && printerID != "" {
+				id, perr := strconv.ParseInt(printerID.(string), 10, 0)
+				if perr != nil {
+					Warning.Println(perr)
+				} else {
+					nametag.PrinterID = int(id)
+				}
+			}
+
 			nametag.Status = NIdle
 			nametags = append(nametags, &nametag)
 			saveNametags()

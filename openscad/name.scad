@@ -16,7 +16,7 @@ width = 10;
 // Thickness of the flat part
 thickness = 2;
 
-$fn = 50;
+$fn = 20;
 
 translate([-(length+width)/2, -width/2, 0]){
 	difference(){

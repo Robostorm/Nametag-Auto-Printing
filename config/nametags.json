@@ -1,116 +1,14 @@
 [
   {
-    "id": 18,
-    "name": "f",
+    "id": 1,
+    "name": "\"",
     "status": "Idle",
     "printer-id": 0
   },
   {
-    "id": 19,
-    "name": "f",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 20,
+    "id": 2,
     "name": "d",
     "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 21,
-    "name": "dgf",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 22,
-    "name": "j",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 23,
-    "name": "hj",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 24,
-    "name": "s",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 25,
-    "name": "g",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 26,
-    "name": "ewfc",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 27,
-    "name": "W",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 28,
-    "name": "c",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 29,
-    "name": "rv",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 30,
-    "name": "ty",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 31,
-    "name": "j",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 32,
-    "name": "ymn",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 33,
-    "name": "rdzvfZEswf",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 34,
-    "name": "tyj",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 35,
-    "name": "uy",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 36,
-    "name": "oi",
-    "status": "Idle",
-    "printer-id": 0
+    "printer-id": 11
   }
 ]

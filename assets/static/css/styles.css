@@ -116,7 +116,7 @@ nav img{
   text-align: center;
 }
 
-#btns{
+.btns{
   width: 35%;
   display: block;
   margin-left: auto;
@@ -139,6 +139,12 @@ nav img{
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+#colors{
+  //text-align: center;
+  //width: 35%;
+  //margin: 0 auto;
 }
 
 #status{

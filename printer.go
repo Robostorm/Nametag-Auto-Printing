@@ -25,7 +25,7 @@ const (
 )
 
 // PrinterColumns are the Columns that should be shown in the interface for printers
-var PrinterColumns = [8]Column{
+var PrinterColumns = []Column{
 	{
 		Name:     "id",
 		Label:    "ID",
@@ -57,6 +57,12 @@ var PrinterColumns = [8]Column{
 		Editable: false,
 	},
 	{
+		Name:     "color",
+		Label:    "Color",
+		Type:     "string",
+		Editable: true,
+	},
+	{
 		Name:     "ip",
 		Label:    "IP",
 		Type:     "string",
@@ -83,6 +89,7 @@ type Printer struct {
 	Status     string `json:"status"`        // Status of the printer
 	Active     bool   `json:"active"`        // Active or not
 	NametagID  int    `json:"nametag-id"`    // Nametag ID that is currently printing
+	Color      string `json:"color"`         // The color that the printer prints
 	IP         string `json:"ip"`            // IP for the printer
 	APIKey     string `json:"api-key"`       // API Key to use for the printer
 	SlicerConf string `json:"slicer-config"` // Slicer config path

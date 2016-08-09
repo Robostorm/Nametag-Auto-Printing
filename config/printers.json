@@ -3,20 +3,22 @@
     "id": 10,
     "name": "Tim",
     "status": "Idle",
-    "active": true,
+    "active": false,
     "nametag-id": 0,
-    "ip": "192.168.5.36",
-    "api-key": "",
-    "slicer-config": "Tim.ini"
+    "color": "White",
+    "ip": "tricolour.local",
+    "api-key": "1F6738A3859D4B668935CD0332050F08no",
+    "slicer-config": "TimFine.ini"
   },
   {
     "id": 11,
     "name": "Robostorm",
     "status": "Idle",
-    "active": true,
+    "active": false,
     "nametag-id": 0,
-    "ip": "192.168.5.36",
-    "api-key": "",
+    "color": "Red",
+    "ip": "benprinter.local:5000",
+    "api-key": "BCE4C9604E81419CA9310987B5EF8F99no",
     "slicer-config": "Robostorm.ini"
   }
 ]
