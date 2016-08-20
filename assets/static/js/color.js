@@ -1,4 +1,3 @@
-
 var input = document.getElementById("input")
 var img = document.getElementById("img")
 var currentStatus = document.getElementById("status")
@@ -16,25 +15,28 @@ var oldJsonPrinters = ""
 
 window.setInterval("imgChecker()", 1000);
 
-window.onload = function(){
+window.onload = function() {
   getPrinters()
 }
 
-function getPrinters(){
+function getPrinters() {
 
   http = new XMLHttpRequest()
 
-  http.onreadystatechange = function (e){
-    if(http.readyState == 4){
+  http.onreadystatechange = function(e) {
+    if (http.readyState == 4) {
 
-      if(http.responseText != oldJsonPrinters){
+      if (http.responseText != oldJsonPrinters) {
         printers = JSON.parse(http.responseText)
 
-        colors.innerHTML = "<input type=radio name=color value=0 checked=true id=defaultColor class=color>Any</input>"
+        colors.innerHTML = ""
 
-        for(var i = 0; i < printers.length; i++){
-          if(printers[i].selectable === true){
-            colors.innerHTML += "<input type=radio name=color value=" + printers[i].id + " class=color>" + printers[i].color + "</input>"
+        createColor(0, "Any")
+
+        for (var i = 0; i < printers.length; i++) {
+          if (printers[i].selectable === true) {
+
+            createColor(printers[i].id, printers[i].color)
           }
         }
         oldJsonPrinters = http.responseText
@@ -46,32 +48,47 @@ function getPrinters(){
   http.send()
 }
 
-function imgChecker(){
+function createColor(id, color) {
+  var radio = document.createElement("input");
+  radio.type = "radio";
+  radio.name = "color";
+  radio.value = id;
+
+  var label = document.createElement("label");
+  label.style.whiteSpace = "nowrap"
+  label.onClick = input.focus
+  label.appendChild(radio);
+  label.appendChild(document.createTextNode(color));
+
+  colors.appendChild(label)
+}
+
+function imgChecker() {
 
   getPrinters()
 
-  if(imgUrl != oldImgUrl || !imgFound){
+  if (imgUrl != oldImgUrl || !imgFound) {
     imgFound = false
-    if(fileExists(imgUrl)){
+    if (fileExists(imgUrl)) {
       console.log("Image Exists!")
       img.src = imgUrl
       currentStatus.innerHTML = "Ready."
       imgFound = true
-    }else{
+    } else {
       console.log("Image Does Not Exist!")
     }
     oldImgUrl = imgUrl
-  }else{
-    if(currentStatus.innerHTML == "Loading..."){
+  } else {
+    if (currentStatus.innerHTML == "Loading...") {
       currentStatus.innerHTML = "Ready."
     }
   }
   input.focus()
 }
 
-function submit(){
+function submit() {
   console.log("Submitting")
-  if(!nameValid(input.value)){
+  if (!nameValid(input.value)) {
     console.log("Name not valid!")
     return;
   }
@@ -84,17 +101,17 @@ function submit(){
 
   for (var i = 0, length = colorRadios.length; i < length; i++) {
     if (colorRadios[i].checked) {
-        console.log(colorRadios[i].value)
-        nametag["printer-id"] = colorRadios[i].value
-        break
+      console.log(colorRadios[i].value)
+      nametag["printer-id"] = colorRadios[i].value
+      break
     }
-}
+  }
 
   //console.log(nametag.name)
   var body = JSON.stringify(nametag)
   console.log(body)
   http = new XMLHttpRequest()
-  http.onreadystatechange = function (e){
+  http.onreadystatechange = function(e) {
     console.log("DONE")
     console.log(http.responseText)
     input.value = ""
@@ -105,15 +122,15 @@ function submit(){
     document.getElementById("defaultColor").checked = true
   }
   http.open("POST", "submit", true)
-  http.setRequestHeader("Content-type","application/json")
+  http.setRequestHeader("Content-type", "application/json")
   http.send(body)
 }
 
-function preview(){
+function preview() {
   console.log("Previewing")
   input.focus()
 
-  if(!nameValid(input.value)){
+  if (!nameValid(input.value)) {
     console.log("Name not valid!")
     return;
   }
@@ -122,13 +139,13 @@ function preview(){
     "name": ""
   }
   nametag.name = input.value
-  //console.log(nametag.name)
+    //console.log(nametag.name)
 
   var body = JSON.stringify(nametag)
   console.log(body)
   http = new XMLHttpRequest()
-  http.onreadystatechange = function (e){
-    if(http.readyState == 4){
+  http.onreadystatechange = function(e) {
+    if (http.readyState == 4) {
       console.log("DONE")
       console.log(http.readyState)
       console.log(http.responseText)
@@ -138,24 +155,24 @@ function preview(){
     }
   }
   http.open("POST", "preview", true)
-  http.setRequestHeader("Content-type","application/json")
+  http.setRequestHeader("Content-type", "application/json")
   http.send(body)
   currentStatus.innerHTML = "Loading..."
 }
 
-function nameValid(name){
+function nameValid(name) {
 
-  if(name.length > 10){
+  if (name.length > 10) {
     currentStatus.innerHTML = "Name is too long! Please enter a name that is less than or equal to 10 characters."
     return false
   }
 
-  if(name == ""){
+  if (name == "") {
     currentStatus.innerHTML = "Name is empty. Please enter a name."
     return false
   }
 
-  if(name.indexOf("\\") > -1 || name.indexOf("#") > -1 || name.indexOf("%") > -1){
+  if (name.indexOf("\\") > -1 || name.indexOf("#") > -1 || name.indexOf("%") > -1) {
     currentStatus.innerHTML = "Name has \\, #, or %. Please remove all \\, #, and %"
     return false
   }
@@ -163,7 +180,7 @@ function nameValid(name){
   return true
 }
 
-function fileExists(image_url){
+function fileExists(image_url) {
 
   var http = new XMLHttpRequest();
 
