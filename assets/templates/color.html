@@ -10,15 +10,19 @@
   <body>
     <img id="img" src="assets/images/blank.png" />
 
-    <p class="title">Name:</p>
+    <div class=section>
+      <p class="title">Type in your name:</p>
 
-    <input class="input" id="input" autofocus="true" maxLength=10 type="text">
+      <input class="input" id="input" autofocus="true" maxLength=10 type="text">
 
-    <p id="subtitle">(10 characters or less, no \, #, or %)</p>
+      <p id="subtitle">(10 characters or less, no \, #, or %)</p>
+    </div>
 
-    <p class="title">Color:</p>
+    <div class=section>
+      <p class="title">Select color:</p>
 
-    <div class="btns" id="colors"></div>
+      <div class="btns" id="colors"></div>
+    </div>
 
     <div class="btns">
       <button id="preview" onclick="preview()">Preview</button>

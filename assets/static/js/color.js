@@ -21,41 +21,45 @@ window.onload = function() {
 
 function getPrinters() {
 
-  http = new XMLHttpRequest()
+  printerhttp = new XMLHttpRequest()
 
-  http.onreadystatechange = function(e) {
-    if (http.readyState == 4) {
+  printerhttp.onreadystatechange = function(e) {
+    if (printerhttp.readyState == 4) {
 
-      if (http.responseText != oldJsonPrinters) {
-        printers = JSON.parse(http.responseText)
+      if (printerhttp.responseText != oldJsonPrinters) {
+        printers = JSON.parse(printerhttp.responseText)
 
         colors.innerHTML = ""
 
-        createColor(0, "Any")
+        createColor(0, "Any", true)
 
         for (var i = 0; i < printers.length; i++) {
           if (printers[i].selectable === true) {
-
-            createColor(printers[i].id, printers[i].color)
+            createColor(printers[i].id, printers[i].color, false)
           }
         }
-        oldJsonPrinters = http.responseText
+        oldJsonPrinters = printerhttp.responseText
       }
     }
   }
 
-  http.open("GET", "printers", true)
-  http.send()
+  printerhttp.open("GET", "printers", true)
+  printerhttp.send()
 }
 
-function createColor(id, color) {
+function createColor(id, color, d) {
   var radio = document.createElement("input");
   radio.type = "radio";
   radio.name = "color";
   radio.value = id;
 
+  if(d){
+    radio.id = "defaultColor"
+    radio.checked = true
+  }
+
   var label = document.createElement("label");
-  label.style.whiteSpace = "nowrap"
+  label.className = "colorbtn"
   label.onClick = input.focus
   label.appendChild(radio);
   label.appendChild(document.createTextNode(color));
@@ -110,10 +114,11 @@ function submit() {
   //console.log(nametag.name)
   var body = JSON.stringify(nametag)
   console.log(body)
-  http = new XMLHttpRequest()
-  http.onreadystatechange = function(e) {
+  sumbithttp = new XMLHttpRequest()
+  sumbithttp.onreadystatechange = function(e) {
     console.log("DONE")
-    console.log(http.responseText)
+    console.log(sumbithttp.responseText)
+    console.log(sumbithttp.status)
     input.value = ""
     currentStatus.innerHTML = "Submitted Sucessfully"
     imgUrl = blankUrl
@@ -121,9 +126,9 @@ function submit() {
     getPrinters()
     document.getElementById("defaultColor").checked = true
   }
-  http.open("POST", "submit", true)
-  http.setRequestHeader("Content-type", "application/json")
-  http.send(body)
+  sumbithttp.open("POST", "submit", true)
+  sumbithttp.setRequestHeader("Content-type", "application/json")
+  sumbithttp.send(body)
 }
 
 function preview() {
@@ -143,20 +148,20 @@ function preview() {
 
   var body = JSON.stringify(nametag)
   console.log(body)
-  http = new XMLHttpRequest()
-  http.onreadystatechange = function(e) {
-    if (http.readyState == 4) {
+  previewhttp = new XMLHttpRequest()
+  previewhttp.onreadystatechange = function(e) {
+    if (previewhttp.readyState == 4) {
       console.log("DONE")
-      console.log(http.readyState)
-      console.log(http.responseText)
-      console.log(http.status)
-      imgUrl = http.responseText
+      console.log(previewhttp.readyState)
+      console.log(previewhttp.responseText)
+      console.log(previewhttp.status)
+      imgUrl = previewhttp.responseText
       input.focus()
     }
   }
-  http.open("POST", "preview", true)
-  http.setRequestHeader("Content-type", "application/json")
-  http.send(body)
+  previewhttp.open("POST", "preview", true)
+  previewhttp.setRequestHeader("Content-type", "application/json")
+  previewhttp.send(body)
   currentStatus.innerHTML = "Loading..."
 }
 

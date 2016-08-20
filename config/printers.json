@@ -3,10 +3,10 @@
     "id": 10,
     "name": "Tim",
     "status": "Idle",
-    "active": true,
+    "active": false,
     "selectable": true,
     "nametag-id": 0,
-    "color": "Whity White",
+    "color": "Red",
     "ip": "tricolour.local",
     "api-key": "1F6738A3859D4B668935CD0332050F08no",
     "slicer-config": "TimFine.ini"
@@ -18,7 +18,7 @@
     "active": false,
     "selectable": true,
     "nametag-id": 0,
-    "color": "Reddy Red",
+    "color": "White",
     "ip": "benprinter.local:5000",
     "api-key": "BCE4C9604E81419CA9310987B5EF8F99no",
     "slicer-config": "Robostorm.ini"
@@ -30,7 +30,7 @@
     "active": false,
     "selectable": true,
     "nametag-id": 0,
-    "color": "Glow in the Dark",
+    "color": "Green",
     "ip": "",
     "api-key": "",
     "slicer-config": ""
@@ -42,7 +42,31 @@
     "active": false,
     "selectable": true,
     "nametag-id": 0,
-    "color": "Buey Blue",
+    "color": "Blue",
+    "ip": "",
+    "api-key": "",
+    "slicer-config": ""
+  },
+  {
+    "id": 14,
+    "name": "Tag",
+    "status": "Idle",
+    "active": false,
+    "selectable": true,
+    "nametag-id": 0,
+    "color": "Yellow",
+    "ip": "",
+    "api-key": "",
+    "slicer-config": ""
+  },
+  {
+    "id": 15,
+    "name": "Danny",
+    "status": "Idle",
+    "active": false,
+    "selectable": true,
+    "nametag-id": 0,
+    "color": "Black",
     "ip": "",
     "api-key": "",
     "slicer-config": ""
