@@ -1,32 +1,14 @@
 [
   {
-    "id": 1,
-    "name": "sdsd",
-    "status": "Idle",
-    "printer-id": 0
+    "id": 7,
+    "name": "Logan",
+    "status": "Printing",
+    "printer-id": 10
   },
   {
-    "id": 2,
-    "name": "sdsd",
+    "id": 8,
+    "name": "ll",
     "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 3,
-    "name": "sdsd",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 4,
-    "name": "asdasd",
-    "status": "Idle",
-    "printer-id": 0
-  },
-  {
-    "id": 5,
-    "name": "jkjk",
-    "status": "Idle",
-    "printer-id": 11
+    "printer-id": 14
   }
 ]

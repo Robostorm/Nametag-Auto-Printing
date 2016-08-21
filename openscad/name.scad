@@ -9,7 +9,7 @@ textthick = 1;
 // The height of the text, if looking down from the top
 textheight = 7;
 
-// Lenght of the flat part
+// Length of the flat part
 length = (textheight*(2/3))*chars+1;
 // Width of the flat part
 width = 10;
@@ -18,18 +18,20 @@ thickness = 2;
 
 $fn = 20;
 
-translate([-(length+width)/2, -width/2, 0]){
+translate([-(width + length)/2, -width/2, 0]){
 	difference(){
 		union(){
 			// Make the flat part
-			cube([length + width/2, width, thickness]);
+            translate([width/2, 0, 0]){
+                cube([length + width/2, width, thickness]);
+            }
 
-			translate([length + width/2, width/2, 0]){
+			translate([width/2, width/2, 0]){
 				cylinder(r=width/2, h=thickness);
 			}
 
 			//Move above the flat part
-			translate([1, width/2, thickness]){
+			translate([width-1, width/2, thickness]){
 				// Make the text 3d
 				color("yellow") linear_extrude(textthick, convexity=10){
 					// Draw the text
@@ -38,9 +40,8 @@ translate([-(length+width)/2, -width/2, 0]){
 			}
 		}
 
-		translate([length + width/2, width/2, -1]){
+		translate([width/2, width/2, -1]){
 			cylinder(r=width/2-thickness, h=thickness+2);
 		}
 	}
 }
-//s
