@@ -1,8 +1,8 @@
 // Name plate generator. Feel free to edit any of the values!
-
+//Harsh
 // Your name
-name = "Name";
-chars = 4;
+name = "Kevin";
+chars = 5;
 
 // The thicknes of the text (Amount text sticks up by)
 textthick = 1;
@@ -31,7 +31,7 @@ translate([-(length+width)/2, -width/2, 0]){
 				// Make the text 3d
 				color("yellow") linear_extrude(textthick, convexity=10){
 					// Draw the text
-					text(name, textheight, valign="center", font="Ubuntu Mono, Bold");
+					text(name, textheight, valign="center", font="Ubuntu Mono:style=Bold");
 				}
 			}
 		}

@@ -120,11 +120,15 @@ public class PrintMaster {
                         if(printer.isAvailable()){
                             if(!currentTag.isGenerated()) currentTag.export();
                             if(!currentTag.isSliced()) printer.slice(currentTag);
-                            printer.upload(currentTag);
-                            printer.setNametag(currentTag);
-                            printer.setPrinting(true);
-                            currentTag.setPrinter(printer);
-                            currentTag.setPrinting(true);
+                            boolean good = printer.upload(currentTag);
+                            if(good){
+                                printer.setNametag(currentTag);
+                                printer.setPrinting(true);
+                                currentTag.setPrinter(printer);
+                                currentTag.setPrinting(true);
+                            }else{
+                                printer.setActive(false);
+                            }
                         }else{
                             System.out.println("Printer is not available");
                         }
