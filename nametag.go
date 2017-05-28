@@ -21,7 +21,7 @@ const (
 var CurrentID = 0
 
 // NametagColumns are the Columns that should be shown in the interface for printers. Must match json tags for Columns that get exported
-var NametagColumns = [4]Column{
+var NametagColumns = [5]Column{
 	{
 		Name:     "id",
 		Label:    "ID",
@@ -46,6 +46,12 @@ var NametagColumns = [4]Column{
 		Type:     "integer",
 		Editable: true,
 	},
+  {
+    Name:     "comments",
+    Label:    "Comments",
+    Type:     "string",
+    Editable: true,
+  },
 }
 
 // Nametag to be printed. Will appear in manager in the order defined here. JSON names that start with a _ will not be editable
@@ -54,6 +60,7 @@ type Nametag struct {
 	Name      string `json:"name"`       // Name on the nametag
 	Status    string `json:"status"`     // Status of the nametag
 	PrinterID int    `json:"printer-id"` // Printer id that nametag will print on
+	Comments  string `json:"comments"`   // Comments about the nametag
 }
 
 func (nametag *Nametag) generateID() int {

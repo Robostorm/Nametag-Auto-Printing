@@ -52,6 +52,7 @@ function createColor(id, color, d) {
   radio.type = "radio";
   radio.name = "color";
   radio.value = id;
+  radio.color = color;
 
   if(d){
     radio.id = "defaultColor"
@@ -99,7 +100,8 @@ function submit() {
   input.focus()
   var nametag = {
     "name": "",
-    "printer-id": ""
+    "printer-id": "",
+    "color": ""
   }
   nametag.name = input.value
 
@@ -107,6 +109,8 @@ function submit() {
     if (colorRadios[i].checked) {
       console.log(colorRadios[i].value)
       nametag["printer-id"] = colorRadios[i].value
+      nametag["color"] = colorRadios[i].color;
+      console.log(nametag);
       break
     }
   }

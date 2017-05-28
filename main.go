@@ -517,6 +517,10 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
+      if color, ok := dat["color"]; ok && color != "" {
+        nametag.Comments = color.(string)
+      }
+
 			nametag.Status = NIdle
 			nametags = append(nametags, &nametag)
 			saveNametags()
@@ -657,7 +661,7 @@ func main() {
 	http.HandleFunc("/preview", handlePreview)
 	http.HandleFunc("/submit", handleSubmit)
 
-	Main.Println("Serving")
+	Main.Println("Serving on port 8080")
 
 	err := http.ListenAndServe(":8080", nil)
 
