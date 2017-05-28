@@ -13,7 +13,8 @@ var CurrentCommand string
 
 func startManaging() {
 
-	ticker := time.NewTicker(time.Millisecond * 250)
+	//ticker := time.NewTicker(time.Millisecond * 250)
+	ticker := time.NewTicker(time.Second)
 
 	for {
 		select {
