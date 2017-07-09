@@ -72,6 +72,8 @@ func loadNametags() {
 	if err != nil {
 		panic(err)
 	}
+
+	nametagsMux.Lock()
 	json.Unmarshal(in, &nametags)
 
 	maxID := 0
@@ -85,6 +87,7 @@ func loadNametags() {
 		//nametags[i].Processing = false
 		nametags[i].PrinterID = 0
 	}
+	nametagsMux.Unlock()
 
 	CurrentID = maxID
 
@@ -93,7 +96,9 @@ func loadNametags() {
 
 func saveNametags() {
 
+	nametagsMux.Lock()
 	out, jerr := json.MarshalIndent(nametags, "", "  ")
+	nametagsMux.Unlock()
 
 	if jerr != nil {
 		Error.Println(jerr)

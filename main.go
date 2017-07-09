@@ -12,9 +12,11 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 var nametags []*Nametag
+var nametagsMux sync.Mutex
 var printers []*Printer
 
 var client http.Client
@@ -73,7 +75,7 @@ func handleRoot(w http.ResponseWriter, r *http.Request) {
 				//Error.Println("Error Finding Files:")
 				//Error.Println(terr)
 			}
-			t.Execute(w, nametags)
+			t.Execute(w, nil)
 		} else {
 			f, e := ioutil.ReadFile(Root + url)
 			if e != nil {
@@ -213,7 +215,9 @@ func handleDonePrinter(w http.ResponseWriter, r *http.Request) {
 				Server.Println(printer.NametagID)
 				n, nametag := findNametag(printer.NametagID)
 				if nametag != nil {
+					nametagsMux.Lock()
 					nametags = append(nametags[:n], nametags[n+1:]...)
+					nametagsMux.Unlock()
 					printer.Status = PIdle
 					printer.NametagID = 0
 					savePrinters()
@@ -292,7 +296,9 @@ func handleNametags(w http.ResponseWriter, r *http.Request) {
 	connections++
 	//Server.Println(connections)
 
+	nametagsMux.Lock()
 	jsonNametags, jerr := json.Marshal(nametags)
+	nametagsMux.Unlock()
 
 	if jerr != nil {
 		Error.Println(jerr)
@@ -327,7 +333,9 @@ func handleUpdateNametag(w http.ResponseWriter, r *http.Request) {
 			Server.Println("Generating ID")
 			nametag.generateID()
 			nametag.Status = NIdle
+			nametagsMux.Lock()
 			nametags = append(nametags, &nametag)
+			nametagsMux.Unlock()
 		} else {
 			Server.Println("Searching for id")
 			_, newNametag := findNametag(nametag.ID)
@@ -361,10 +369,11 @@ func handleDeleteNametag(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if id, ok := dat["id"]; ok && id != "" {
-
 			n, nametag := findNametag(int(id.(float64)))
 			if nametag != nil {
+				nametagsMux.Lock()
 				nametags = append(nametags[:n], nametags[n+1:]...)
+				nametagsMux.Unlock()
 				_, printer := findPrinter(nametag.PrinterID)
 				if printer != nil {
 					printer.Status = PIdle
@@ -408,7 +417,9 @@ func handleDoneNametag(w http.ResponseWriter, r *http.Request) {
 				Server.Println(nametag.PrinterID)
 				p, printer := findPrinter(nametag.PrinterID)
 				if printer != nil {
+					nametagsMux.Lock()
 					nametags = append(nametags[:n], nametags[n+1:]...)
+					nametagsMux.Unlock()
 					printer.Status = PIdle
 					savePrinters()
 					saveNametags()
@@ -517,14 +528,15 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
-      if color, ok := dat["color"]; ok && color != "" {
-        nametag.Comments = color.(string)
-      }
+			if color, ok := dat["color"]; ok && color != "" {
+				nametag.Comments = color.(string)
+			}
 
 			nametag.Status = NIdle
+			nametagsMux.Lock()
 			nametags = append(nametags, &nametag)
-			saveNametags()
 			Server.Println(strconv.Itoa(len(nametags)) + " Nametag(s) in queue")
+			saveNametags()
 			w.WriteHeader(http.StatusOK)
 			return
 		}

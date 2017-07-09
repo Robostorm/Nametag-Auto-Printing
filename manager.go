@@ -29,6 +29,7 @@ func startManaging() {
 func manage() {
 	runtime.Gosched()
 
+	nametagsMux.Lock()
 	if len(nametags) > 0 {
 		for _, printer := range printers {
 			//Manager.Printf("Selecting Printer: %s", printer.Name)
@@ -177,65 +178,12 @@ func manage() {
 	} else {
 		CurrentID = 0
 	}
+	nametagsMux.Unlock()
 }
 
-//
-// func processNametag(id int) {
-// 	_, nametag := findNametag(id)
-// 	_, printer := findPrinter(nametag.PrinterID)
-// 	nametag.Processing = true
-//
-// 	Manager.Printf("Processing Nametag %d for Printer %d\n", nametag.ID, printer.ID)
-//
-// 	for {
-// 		switch nametag.Status {
-// 		case NIdle:
-// 			nametag.Status = NRendering
-// 		case NRendering:
-// 			if !nametag.exists() {
-// 				Manager.Printf("Nametag %d dissapeared! Returning\n", nametag.ID)
-// 				printer.Status = PIdle
-// 				return
-// 			}
-// 			printer.renderNametag(id)
-// 			nametag.Status = NSlicing
-// 		case NSlicing:
-// 			if !nametag.exists() {
-// 				Manager.Printf("Nametag %d dissapeared! Returning\n", nametag.ID)
-// 				printer.Status = PIdle
-// 				return
-// 			}
-// 			printer.sliceNametag(id)
-// 			nametag.Status = NUploading
-// 		case NUploading:
-// 			if !nametag.exists() {
-// 				Manager.Printf("Nametag %d dissapeared! Returning\n", nametag.ID)
-// 				printer.Status = PIdle
-// 				return
-// 			}
-// 			printer.uploadNametag(id)
-// 			nametag.Status = NPrinting
-// 			printer.Status = PPrinting
-// 			Manager.Printf("Printing %d\n", nametag.ID)
-// 		case NPrinting:
-// 			if !nametag.exists() {
-// 				Manager.Printf("Nametag %d dissapeared! Returning\n", nametag.ID)
-// 				printer.Status = PIdle
-// 				return
-// 			}
-// 		case NDone:
-// 			Manager.Printf("Done %d\n", nametag.ID)
-// 			printer.Status = PIdle
-// 			printer.Available = true
-// 			printer.NametagID = 0
-// 			_ = "breakpoint"
-// 			//nametags = append(nametags[:index], nametags[index+1:]...)
-// 			return
-// 		}
-// 	}
-//}
-
 func findNametag(id int) (int, *Nametag) {
+	nametagsMux.Lock()
+	defer nametagsMux.Unlock()
 	for i := range nametags {
 		if nametags[i].ID == id {
 			return i, nametags[i]

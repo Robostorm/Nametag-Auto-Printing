@@ -46,12 +46,12 @@ var NametagColumns = [5]Column{
 		Type:     "integer",
 		Editable: true,
 	},
-  {
-    Name:     "comments",
-    Label:    "Comments",
-    Type:     "string",
-    Editable: true,
-  },
+	{
+		Name:     "comments",
+		Label:    "Comments",
+		Type:     "string",
+		Editable: true,
+	},
 }
 
 // Nametag to be printed. Will appear in manager in the order defined here. JSON names that start with a _ will not be editable
@@ -84,12 +84,14 @@ func (nametag *Nametag) findPrinter() bool {
 */
 func (nametag *Nametag) exists() bool {
 	found := false
+	nametagsMux.Lock()
 	for i := range nametags {
 		if nametags[i].ID == nametag.ID {
 			found = true
 			break
 		}
 	}
+	nametagsMux.Unlock()
 	return found
 }
 

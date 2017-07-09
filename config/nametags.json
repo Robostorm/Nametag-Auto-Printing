@@ -1,30 +1,9 @@
 [
   {
-    "id": 4,
-    "name": "aa",
+    "id": 8,
+    "name": "Garage",
     "status": "Idle",
-    "printer-id": 0,
-    "comments": ""
-  },
-  {
-    "id": 5,
-    "name": "t",
-    "status": "Idle",
-    "printer-id": 0,
-    "comments": ""
-  },
-  {
-    "id": 6,
-    "name": "d",
-    "status": "Idle",
-    "printer-id": 0,
-    "comments": ""
-  },
-  {
-    "id": 7,
-    "name": "dd",
-    "status": "Idle",
-    "printer-id": 0,
-    "comments": "Red"
+    "printer-id": 11,
+    "comments": "White"
   }
 ]

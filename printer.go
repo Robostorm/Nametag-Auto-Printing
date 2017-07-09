@@ -130,19 +130,6 @@ func (printer *Printer) renderNametag(id int) (err error) {
 
 	Manager.Printf("Rendering Nametag %d for Printer %d", nametag.ID, printer.ID)
 
-	//nametag.Status = NRendering
-	//printer.Status = PRendering
-
-	//scadArgs := fmt.Sprintf(" -o %s%s%d.stl -D name=\"%s\" -D chars=%d %s%sname.scad", Root, MainConfig.stlDir, nametag.ID, nametag.Name, len(nametag.Name), Root, MainConfig.MainConfig.OpenScadScript)
-
-	//cmd := MainConfig.openscadPath + scadArgs
-
-	//Manager.Println("Running:")
-	//Manager.Println(cmd)
-	// parts := strings.Columns(cmd)
-	// head := parts[0]
-	// parts = parts[1:len(parts)]
-
 	args := []string{
 		fmt.Sprintf("-o%s%d.stl", Root+MainConfig.StlDir, nametag.ID),
 		fmt.Sprintf("-D name=\"%s\"", nametag.Name),
