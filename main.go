@@ -536,6 +536,7 @@ func handleSubmit(w http.ResponseWriter, r *http.Request) {
 			nametagsMux.Lock()
 			nametags = append(nametags, &nametag)
 			Server.Println(strconv.Itoa(len(nametags)) + " Nametag(s) in queue")
+			nametagsMux.Unlock()
 			saveNametags()
 			w.WriteHeader(http.StatusOK)
 			return

@@ -29,7 +29,6 @@ func startManaging() {
 func manage() {
 	runtime.Gosched()
 
-	nametagsMux.Lock()
 	if len(nametags) > 0 {
 		for _, printer := range printers {
 			//Manager.Printf("Selecting Printer: %s", printer.Name)
@@ -178,7 +177,6 @@ func manage() {
 	} else {
 		CurrentID = 0
 	}
-	nametagsMux.Unlock()
 }
 
 func findNametag(id int) (int, *Nametag) {
