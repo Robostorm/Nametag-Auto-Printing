@@ -159,7 +159,7 @@ func (printer *Printer) sliceNametag(id int) error {
 	_, nametag := findNametag(id)
 
 	if nametag == nil {
-		return errors.New("Could not find nametag!")
+		return errors.New("Could not find nametag")
 	}
 
 	Manager.Printf("Slicing Nametag %d for Printer %d", nametag.ID, printer.ID)
@@ -198,7 +198,7 @@ func (printer *Printer) uploadNametag(id int) error {
 	_, nametag := findNametag(id)
 
 	if nametag == nil {
-		return errors.New("Could not find nametag!")
+		return errors.New("Could not find nametag")
 	}
 
 	Manager.Printf("Uploading Nametag %d to Printer %d", nametag.ID, printer.ID)
