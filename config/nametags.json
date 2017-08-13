@@ -1,8 +1,8 @@
 [
   {
     "id": 2,
-    "name": "gg",
-    "status": "Printing",
+    "name": "ll",
+    "status": "Idle",
     "printer-id": 10,
     "comments": ""
   }

@@ -273,6 +273,7 @@ func (printer *Printer) uploadNametag(id int) error {
 		printer.Active = false
 		return err
 	}
+	defer resp.Body.Close()
 
 	Debug.Println("Reading response")
 	// Read response
@@ -281,9 +282,13 @@ func (printer *Printer) uploadNametag(id int) error {
 	if err != nil {
 		return err
 	}
+
 	Manager.Println(resp.Status)
 	Manager.Println(body)
-	resp.Body.Close()
+
+	if resp.StatusCode != 201 {
+		return errors.New("Wrong status code: " + resp.Status)
+	}
 
 	CurrentCommand = ""
 
@@ -331,9 +336,13 @@ func (printer *Printer) selectNametag(id int) error {
 		printer.Active = false
 		return err
 	}
+	defer resp.Body.Close()
 
 	Manager.Println(resp.Status)
-	resp.Body.Close()
+
+	if resp.StatusCode != 204 {
+		return errors.New("Wrong status code: " + resp.Status)
+	}
 
 	CurrentCommand = ""
 
@@ -375,9 +384,13 @@ func (printer *Printer) print() error {
 		printer.Active = false
 		return err
 	}
+	defer resp.Body.Close()
 
-	Manager.Println(resp.Status)
-	resp.Body.Close()
+	Manager.Println(resp.StatusCode)
+
+	if resp.StatusCode != 204 {
+		return errors.New("Wrong status code: " + resp.Status)
+	}
 
 	CurrentCommand = ""
 

@@ -2,8 +2,8 @@
   {
     "id": 10,
     "name": "Test",
-    "status": "Printing",
-    "active": true,
+    "status": "Errored!",
+    "active": false,
     "selectable": false,
     "nametag-id": 2,
     "color": "testy",
