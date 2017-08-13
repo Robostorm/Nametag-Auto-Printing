@@ -259,13 +259,16 @@ func handleAbortPrinter(w http.ResponseWriter, r *http.Request) {
 		if id, ok := dat["id"]; ok && id != "" {
 			p, printer := findPrinter(int(id.(float64)))
 			if printer != nil {
+				if printer.Status == PPrinting {
+					printer.cancel()
+				}
 				_, nametag := findNametag(printer.NametagID)
 				if nametag != nil {
 					nametag.Status = NIdle
-					nametag.PrinterID = 0
+					//nametag.PrinterID = 0
 					saveNametags()
 				}
-				printer.Status = PIdle
+				printer.Status = PErrored
 				printer.NametagID = 0
 				printer.Active = false
 				savePrinters()

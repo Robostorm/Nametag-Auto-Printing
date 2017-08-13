@@ -82,6 +82,7 @@ func (nametag *Nametag) findPrinter() bool {
 	return false
 }
 */
+
 func (nametag *Nametag) exists() bool {
 	found := false
 	nametagsMux.Lock()

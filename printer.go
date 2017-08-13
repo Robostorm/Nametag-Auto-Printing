@@ -396,3 +396,51 @@ func (printer *Printer) print() error {
 
 	return nil
 }
+
+func (printer *Printer) cancel() error {
+
+	Manager.Printf("Canceling on Printer %d", printer.ID)
+
+	//nametag.Status = NUploading
+	//printer.Status = PUploading
+
+	CurrentCommand = "Canceling on" + printer.Name
+
+	uri := fmt.Sprintf("http://%s/api/job", printer.IP)
+
+	var json = []byte(`{"command":"cancel"}`)
+
+	// Create POST request
+	request, err := http.NewRequest("POST", uri, bytes.NewBuffer(json))
+	if err != nil {
+		return err
+	}
+
+	// Add headers to POST request
+	request.Header.Add("X-Api-Key", printer.APIKey)
+	request.Header.Set("Content-Type", "application/json")
+	_, err = httputil.DumpRequest(request, true)
+	if err != nil {
+		return err
+	}
+
+	// Do request
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		//Warning.Println(err)
+		printer.Active = false
+		return err
+	}
+	defer resp.Body.Close()
+
+	Manager.Println(resp.StatusCode)
+
+	if resp.StatusCode != 204 {
+		return errors.New("Wrong status code: " + resp.Status)
+	}
+
+	CurrentCommand = ""
+
+	return nil
+}
