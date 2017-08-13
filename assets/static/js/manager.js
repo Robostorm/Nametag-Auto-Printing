@@ -89,7 +89,7 @@ nametagColumns.fetch().done(function(){
         })
       },
       render: function () {
-        this.$el.html('<button id=\'nametagDelete'+this.model.get("id")+'\'>Done</button>').addClass("cell-btn");
+        this.$el.html('<button class=\'done\' id=\'nametagDelete'+this.model.get("id")+'\'>Done</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -107,7 +107,7 @@ nametagColumns.fetch().done(function(){
         nametags.get(e.target.id.match("[0-9]*$")).destroy()
       },
       render: function () {
-        this.$el.html('<button id=\'nametagDelete'+this.model.get("id")+'\'>Delete</button>').addClass("cell-btn");
+        this.$el.html('<button class=\'delete\' id=\'nametagDelete'+this.model.get("id")+'\'>Delete</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -207,7 +207,7 @@ printerColumns.fetch().done(function(){
         })
       },
       render: function () {
-        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Abort</button>').addClass("cell-btn");
+        this.$el.html('<button class=\'abort\' id=\'printerDelete'+this.model.get("id")+'\'>Abort</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -232,7 +232,7 @@ printerColumns.fetch().done(function(){
         })
       },
       render: function () {
-        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Done</button>').addClass("cell-btn");
+        this.$el.html('<button class=\'done\' id=\'printerDelete'+this.model.get("id")+'\'>Done</button>').addClass("cell-btn");
         return this;
       }
     })
@@ -251,7 +251,7 @@ printerColumns.fetch().done(function(){
         printers.get(e.target.id.match("[0-9]*$")).destroy()
       },
       render: function () {
-        this.$el.html('<button id=\'printerDelete'+this.model.get("id")+'\'>Delete</button>').addClass("cell-btn");
+        this.$el.html('<button class=\'delete\' id=\'printerDelete'+this.model.get("id")+'\'>Delete</button>').addClass("cell-btn");
         return this;
       }
     })

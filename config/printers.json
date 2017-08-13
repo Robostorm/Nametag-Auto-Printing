@@ -1,14 +1,26 @@
 [
   {
     "id": 10,
-    "name": "Test",
-    "status": "Printing",
-    "active": true,
-    "selectable": true,
-    "nametag-id": 5,
-    "color": "testy",
-    "ip": "192.168.5.109",
-    "api-key": "229A6AC63A904B379F1078A3A6B8152C",
-    "slicer-config": "Robostorm.ini"
+    "name": "dd",
+    "status": "Idle",
+    "active": false,
+    "selectable": false,
+    "nametag-id": 0,
+    "color": "",
+    "ip": "",
+    "api-key": "",
+    "slicer-config": ""
+  },
+  {
+    "id": 11,
+    "name": "",
+    "status": "Idle",
+    "active": false,
+    "selectable": false,
+    "nametag-id": 0,
+    "color": "",
+    "ip": "",
+    "api-key": "",
+    "slicer-config": ""
   }
 ]

@@ -1,21 +1,7 @@
 [
   {
-    "id": 5,
-    "name": "dd",
-    "status": "Printing",
-    "printer-id": 10,
-    "comments": "Any"
-  },
-  {
     "id": 6,
     "name": "gg",
-    "status": "Idle",
-    "printer-id": 0,
-    "comments": "Any"
-  },
-  {
-    "id": 22,
-    "name": "xx",
     "status": "Idle",
     "printer-id": 0,
     "comments": "Any"

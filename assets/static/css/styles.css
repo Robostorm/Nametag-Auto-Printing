@@ -1,6 +1,7 @@
 body {
   margin: 0;
   background-color: white;
+  font-family: sans-serif;
 }
 nav {
   background-color: green;
@@ -71,9 +72,34 @@ nav img {
   float: left;
   line-height: 1.8;
 }
-#printers, #nametags {
-  //display: inline-block;
+
+.abort {
+  background-color: red;
 }
+
+.done {
+  background-color: #4CAF50;
+}
+
+.delete {
+  background-color: darkgrey;
+}
+
+button {
+  background-color: #555555;
+  border: none;
+  color: white;
+  padding: 6px 6px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+button:hover {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.24), 0 5px 5px 0 rgba(0,0,0,0.19);
+}
+
 .backgrid-container {
   height: auto;
 }
