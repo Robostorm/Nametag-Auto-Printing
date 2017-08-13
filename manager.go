@@ -151,6 +151,28 @@ func manage() {
 							continue
 						}
 
+						err = printer.selectNametag(nametag.ID)
+						if err != nil {
+							Warning.Println(err)
+							Debug.Println(printer.Name + " is not active")
+							Warning.Println(printer.Name + " errored selecting " + nametag.Name)
+							printer.Active = false
+							printer.Status = PErrored
+							nametag.Status = NIdle
+							continue
+						}
+
+						err = printer.print()
+						if err != nil {
+							Warning.Println(err)
+							Debug.Println(printer.Name + " is not active")
+							Warning.Println(printer.Name + " errored printing " + nametag.Name)
+							printer.Active = false
+							printer.Status = PErrored
+							nametag.Status = NIdle
+							continue
+						}
+
 						if oldNametag.Name != nametag.Name || oldNametag.PrinterID != nametag.PrinterID {
 							nametag.Status = NIdle
 							printer.Status = PIdle

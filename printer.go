@@ -242,21 +242,82 @@ func (printer *Printer) uploadNametag(id int) error {
 	part.Write(fileContents)
 
 	// Create print header
-	_ = writer.WriteField("print", "true")
+	//_ = writer.WriteField("print", "true")
 	err = writer.Close()
 	if err != nil {
 		return err
 	}
 
+	Debug.Println("Creating request")
 	// Create POST request
 	request, err := http.NewRequest("POST", uri, body)
 	if err != nil {
 		return err
 	}
 
+	Debug.Println("Adding headers")
 	// Add headers to POST request
 	request.Header.Add("X-Api-Key", printer.APIKey)
 	request.Header.Set("Content-Type", writer.FormDataContentType())
+	_, err = httputil.DumpRequest(request, true)
+	if err != nil {
+		return err
+	}
+
+	Debug.Println("Doing request")
+	// Do request
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		//Warning.Println(err)
+		printer.Active = false
+		return err
+	}
+
+	Debug.Println("Reading response")
+	// Read response
+	body = &bytes.Buffer{}
+	_, err = body.ReadFrom(resp.Body)
+	if err != nil {
+		return err
+	}
+	Manager.Println(resp.Status)
+	Manager.Println(body)
+	resp.Body.Close()
+
+	CurrentCommand = ""
+
+	return nil
+}
+
+func (printer *Printer) selectNametag(id int) error {
+
+	_, nametag := findNametag(id)
+
+	if nametag == nil {
+		return errors.New("Could not find nametag")
+	}
+
+	Manager.Printf("Selecting Nametag %d on Printer %d", nametag.ID, printer.ID)
+
+	//nametag.Status = NUploading
+	//printer.Status = PUploading
+
+	CurrentCommand = "Selecting " + nametag.Name + " no " + printer.Name
+
+	uri := fmt.Sprintf("http://%s/api/files/local/%d.gcode", printer.IP, id)
+
+	var json = []byte(`{"command":"select"}`)
+
+	// Create POST request
+	request, err := http.NewRequest("POST", uri, bytes.NewBuffer(json))
+	if err != nil {
+		return err
+	}
+
+	// Add headers to POST request
+	request.Header.Add("X-Api-Key", printer.APIKey)
+	request.Header.Set("Content-Type", "application/json")
 	_, err = httputil.DumpRequest(request, true)
 	if err != nil {
 		return err
@@ -271,13 +332,51 @@ func (printer *Printer) uploadNametag(id int) error {
 		return err
 	}
 
-	// Read response
-	body = &bytes.Buffer{}
-	_, err = body.ReadFrom(resp.Body)
+	Manager.Println(resp.Status)
+	resp.Body.Close()
+
+	CurrentCommand = ""
+
+	return nil
+}
+
+func (printer *Printer) print() error {
+
+	Manager.Printf("Printing on Printer %d", printer.ID)
+
+	//nametag.Status = NUploading
+	//printer.Status = PUploading
+
+	CurrentCommand = "Printing on" + printer.Name
+
+	uri := fmt.Sprintf("http://%s/api/job", printer.IP)
+
+	var json = []byte(`{"command":"start"}`)
+
+	// Create POST request
+	request, err := http.NewRequest("POST", uri, bytes.NewBuffer(json))
 	if err != nil {
 		return err
 	}
-	//Manager.Println(body)
+
+	// Add headers to POST request
+	request.Header.Add("X-Api-Key", printer.APIKey)
+	request.Header.Set("Content-Type", "application/json")
+	_, err = httputil.DumpRequest(request, true)
+	if err != nil {
+		return err
+	}
+
+	// Do request
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		//Warning.Println(err)
+		printer.Active = false
+		return err
+	}
+
+	Manager.Println(resp.Status)
 	resp.Body.Close()
 
 	CurrentCommand = ""
