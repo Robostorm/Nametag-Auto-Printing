@@ -677,9 +677,9 @@ func main() {
 	http.HandleFunc("/preview", handlePreview)
 	http.HandleFunc("/submit", handleSubmit)
 
-	Main.Println("Serving on port 8000")
+	Main.Println("Serving on port 8080")
 
-	err := http.ListenAndServe(":8000", nil)
+	err := http.ListenAndServe(":8080", nil)
 
 	if err != nil {
 		Main.Fatal(err)
